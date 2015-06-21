@@ -2,6 +2,8 @@
 
 [![Join the chat at https://gitter.im/ramsey/uuid-doctrine](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/ramsey/uuid-doctrine?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
+[![Join the chat at https://gitter.im/ramsey/uuid-doctrine](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/ramsey/uuid-doctrine?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 [![Build Status](https://travis-ci.org/ramsey/uuid-doctrine.svg?branch=master)](https://travis-ci.org/ramsey/uuid-doctrine)
 [![Coverage Status](https://coveralls.io/repos/ramsey/uuid-doctrine/badge.svg?branch=master)](https://coveralls.io/r/ramsey/uuid-doctrine)
 [![Latest Stable Version](https://poser.pugx.org/ramsey/uuid-doctrine/v/stable)](https://packagist.org/packages/ramsey/uuid-doctrine)
