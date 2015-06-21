@@ -19,3 +19,11 @@ script:
 
 after_script:
   - php vendor/bin/coveralls
+
+notifications:
+  webhooks:
+    urls:
+      - 'https://webhooks.gitter.im/e/aaf2dd731ff9d9bf7710'
+    on_success: change
+    on_failure: always
+    on_start: false
