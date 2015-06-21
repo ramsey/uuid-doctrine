@@ -1,6 +1,6 @@
 {
     "name": "ramsey/uuid-doctrine",
-    "description": "",
+    "description": "Allow the use of a ramsey/uuid UUID as Doctrine field type.",
     "type": "library",
     "keywords": [
         "uuid",
