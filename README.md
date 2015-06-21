@@ -11,7 +11,7 @@
 
 ## About
 
-TBD
+The ramsey/uuid-doctrine package provides the ability to use [ramsey/uuid](https://github.com/ramsey/uuid) as a [Doctrine field type](http://doctrine-dbal.readthedocs.org/en/latest/reference/types.html).
 
 ## Examples
 
