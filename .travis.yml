@@ -9,7 +9,7 @@ php:
 
 before_script:
   - travis_retry composer self-update
-  - travis_retry composer install --no-interaction --prefer-source
+  - travis_retry composer install --no-interaction --prefer-dist
 
 script:
   - mkdir -p build/logs
