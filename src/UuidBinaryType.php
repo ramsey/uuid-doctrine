@@ -86,7 +86,7 @@ class UuidBinaryType extends Type
         }
 
         if ($value instanceof Uuid || Uuid::isValid($value)) {
-            return hex2bin(str_replace('-', '', (string) $value));
+            return $value->getBytes();
         }
 
         throw ConversionException::conversionFailed($value, self::NAME);
