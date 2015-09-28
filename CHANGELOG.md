@@ -2,6 +2,6 @@
 
 ## 1.0.0
 
-_Released: TBD_
+_Released: 2015-09-28_
 
-    * Separated from Ramsey\Uuid into a separate package
+* Separated from [ramsey/uuid](https://github.com/ramsey/uuid) library into a stand-alone package
