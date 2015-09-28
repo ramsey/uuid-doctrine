@@ -28,7 +28,7 @@ composer require ramsey/uuid-doctrine
 ## Examples
 
 To configure Doctrine to use ramsey/uuid as a field type, you'll need to set up
-the following in you bootstrap:
+the following in your bootstrap:
 
 ``` php
 \Doctrine\DBAL\Types\Type::addType('uuid', 'Ramsey\Uuid\Doctrine\UuidType');
@@ -37,8 +37,8 @@ $entityManager->getConnection()->getDatabasePlatform()->registerDoctrineTypeMapp
 
 Then, in your models, you may annotate properties by setting the `@Column`
 type to `uuid`. Depending on your database engine, you may not be able to
-auto-generate a UUID when inserting into the database, but this isn't a problem.
-In your model's constructor (or elsewhere, depending on how you create instances
+auto-generate a UUID when inserting into the database, but this isn't a problem;
+in your model's constructor (or elsewhere, depending on how you create instances
 of your model), generate a `Ramsey\Uuid\Uuid` object for the property. Doctrine
 will handle the rest.
 
