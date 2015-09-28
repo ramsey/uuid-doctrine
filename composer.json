@@ -27,7 +27,7 @@
     },
     "require": {
         "php": ">=5.4",
-        "ramsey/uuid": "3.0.*@dev",
+        "ramsey/uuid": "^3.0",
         "doctrine/dbal": "^2.5"
     },
     "require-dev": {
