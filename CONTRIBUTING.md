@@ -12,7 +12,7 @@ Contributions are welcome. We accept pull requests on [GitHub](https://github.co
 
 You can find help and discussion in the following places:
 
-* Gitter chat: <https://gitter.im/ramsey/uuid-doctrine>
+* Gitter chat: <https://gitter.im/ramsey/uuid>
 * GitHub Issues: <https://github.com/ramsey/uuid-doctrine/issues>
 * Wiki: <https://github.com/ramsey/uuid-doctrine/wiki>
 
