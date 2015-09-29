@@ -122,7 +122,7 @@ information.
 [badge-hhvm]: https://img.shields.io/hhvm/ramsey/uuid-doctrine.svg?style=flat-square
 [badge-quality]: https://img.shields.io/scrutinizer/g/ramsey/uuid-doctrine/master.svg?style=flat-square
 [badge-coverage]: https://img.shields.io/coveralls/ramsey/uuid-doctrine/master.svg?style=flat-square
-[badge-downloads]: https://img.shields.io/packagist/dt/ramsey-doctrine/uuid.svg?style=flat-square
+[badge-downloads]: https://img.shields.io/packagist/dt/ramsey/uuid-doctrine.svg?style=flat-square
 
 [gitter]: https://gitter.im/ramsey/uuid
 [source]: https://github.com/ramsey/uuid-doctrine
