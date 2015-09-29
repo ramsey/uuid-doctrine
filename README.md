@@ -101,7 +101,7 @@ Contributions are welcome! Please read [CONTRIBUTING][] for details.
 
 ## Copyright and License
 
-The ramsey/uuid library is copyright © [Ben Ramsey](https://benramsey.com/) and
+The ramsey/uuid-doctrine library is copyright © [Ben Ramsey](https://benramsey.com/) and
 licensed for use under the MIT License (MIT). Please see [LICENSE][] for more
 information.
 
