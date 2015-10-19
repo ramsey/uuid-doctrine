@@ -85,11 +85,17 @@ class UuidBinaryType extends Type
             return null;
         }
 
-        if ($value instanceof Uuid || Uuid::isValid($value)) {
+        if ($value instanceof Uuid) {
             return $value->getBytes();
         }
 
-        throw ConversionException::conversionFailed($value, self::NAME);
+        try {
+            $uuid = Uuid::fromString($value);
+        } catch (InvalidArgumentException $e) {
+            throw ConversionException::conversionFailed($value, self::NAME);
+        }
+
+        return $uuid->getBytes();
     }
 
     /**
