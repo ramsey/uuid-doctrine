@@ -43,6 +43,19 @@ class UuidBinaryTypeTest extends \PHPUnit_Framework_TestCase
     /**
      * @covers Ramsey\Uuid\Doctrine\UuidBinaryType::convertToDatabaseValue
      */
+    public function testStringUuidConvertsToDatabaseValue()
+    {
+        $uuid = 'ff6f8cb0-c57d-11e1-9b21-0800200c9a66';
+
+        $expected = hex2bin('ff6f8cb0c57d11e19b210800200c9a66');
+        $actual = $this->type->convertToDatabaseValue($uuid, $this->platform);
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * @covers Ramsey\Uuid\Doctrine\UuidBinaryType::convertToDatabaseValue
+     */
     public function testInvalidUuidConversionForDatabaseValue()
     {
         $this->setExpectedException('Doctrine\DBAL\Types\ConversionException');
