@@ -116,7 +116,7 @@ information.
 
 [badge-gitter]: https://img.shields.io/badge/gitter-join_chat-brightgreen.svg?style=flat-square
 [badge-source]: http://img.shields.io/badge/source-ramsey/uuid--doctrine-blue.svg?style=flat-square
-[badge-release]: https://img.shields.io/github/release/ramsey/uuid-doctrine.svg?style=flat-square
+[badge-release]: https://img.shields.io/packagist/v/ramsey/uuid-doctrine.svg?style=flat-square
 [badge-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
 [badge-build]: https://img.shields.io/travis/ramsey/uuid-doctrine/master.svg?style=flat-square
 [badge-hhvm]: https://img.shields.io/hhvm/ramsey/uuid-doctrine.svg?style=flat-square
@@ -126,7 +126,7 @@ information.
 
 [gitter]: https://gitter.im/ramsey/uuid
 [source]: https://github.com/ramsey/uuid-doctrine
-[release]: https://github.com/ramsey/uuid-doctrine/releases
+[release]: https://packagist.org/packages/ramsey/uuid-doctrine
 [license]: https://github.com/ramsey/uuid-doctrine/blob/master/LICENSE
 [build]: https://travis-ci.org/ramsey/uuid-doctrine
 [hhvm]: http://hhvm.h4cc.de/package/ramsey/uuid-doctrine
