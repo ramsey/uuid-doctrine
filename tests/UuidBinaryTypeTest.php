@@ -21,7 +21,7 @@ class UuidBinaryTypeTest extends \PHPUnit_Framework_TestCase
     {
         $this->platform = $this->getPlatformMock();
         $this->platform->expects($this->any())
-            ->method('getBinaryTypeDeclarationSQL')
+            ->method('getBinaryTypeDeclarationSQLSnippet')
             ->will($this->returnValue('DUMMYBINARY(16)'));
 
         $this->type = Type::getType('uuid_binary');
@@ -136,7 +136,7 @@ class UuidBinaryTypeTest extends \PHPUnit_Framework_TestCase
     private function getPlatformMock()
     {
         return $this->getMockBuilder('Doctrine\DBAL\Platforms\AbstractPlatform')
-            ->setMethods(array('getBinaryTypeDeclarationSQL'))
+            ->setMethods(array('getBinaryTypeDeclarationSQLSnippet'))
             ->getMockForAbstractClass();
     }
 }
