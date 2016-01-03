@@ -23,6 +23,9 @@ class UuidBinaryTypeTest extends \PHPUnit_Framework_TestCase
         $this->platform->expects($this->any())
             ->method('getBinaryTypeDeclarationSQLSnippet')
             ->will($this->returnValue('DUMMYBINARY(16)'));
+        $this->platform->expects($this->any())
+            ->method('getBlobTypeDeclarationSQL')
+            ->will($this->returnValue('DUMMYBLOB(16)'));
 
         $this->type = Type::getType('uuid_binary');
     }
@@ -117,9 +120,25 @@ class UuidBinaryTypeTest extends \PHPUnit_Framework_TestCase
     /**
      * @covers Ramsey\Uuid\Doctrine\UuidBinaryType::getSqlDeclaration
      */
-    public function testGetGuidTypeDeclarationSQL()
+    public function testGetGuidTypeDeclarationSQLWithDoctrineDbal25()
     {
-        $this->assertEquals('DUMMYBINARY(16)', $this->type->getSqlDeclaration(array('length' => 36), $this->platform));
+        if (!\method_exists($this->platform, 'getBinaryTypeDeclarationSQL')) {
+            $this->markTestSkipped('running with doctrine/dbal < 2.5.0');
+        }
+
+        $this->assertEquals('DUMMYBINARY(16)', $this->type->getSqlDeclaration(array('length' => 16), $this->platform));
+    }
+
+    /**
+     * @covers Ramsey\Uuid\Doctrine\UuidBinaryType::getSqlDeclaration
+     */
+    public function testGetGuidTypeDeclarationSQLWithDoctrineDbal23()
+    {
+        if (\method_exists($this->platform, 'getBinaryTypeDeclarationSQL')) {
+            $this->markTestSkipped('running with doctrine/dbal >= 2.5.0');
+        }
+
+        $this->assertEquals('DUMMYBLOB(16)', $this->type->getSqlDeclaration(array('length' => 16), $this->platform));
     }
 
     /**
@@ -136,7 +155,10 @@ class UuidBinaryTypeTest extends \PHPUnit_Framework_TestCase
     private function getPlatformMock()
     {
         return $this->getMockBuilder('Doctrine\DBAL\Platforms\AbstractPlatform')
-            ->setMethods(array('getBinaryTypeDeclarationSQLSnippet'))
+            ->setMethods(array(
+                'getBinaryTypeDeclarationSQLSnippet',
+                'getBlobTypeDeclarationSQL'
+            ))
             ->getMockForAbstractClass();
     }
 }

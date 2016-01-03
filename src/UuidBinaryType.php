@@ -40,12 +40,16 @@ class UuidBinaryType extends Type
      */
     public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform)
     {
-        return $platform->getBinaryTypeDeclarationSQL(
-            array(
+        if (\method_exists($platform, 'getBinaryTypeDeclarationSQL')) {
+            return $platform->getBinaryTypeDeclarationSQL([
                 'length' => '16',
                 'fixed' => true,
-            )
-        );
+            ]);
+        }
+
+        return $platform->getBlobTypeDeclarationSQL([
+            'length' => '16',
+        ]);
     }
 
     /**
