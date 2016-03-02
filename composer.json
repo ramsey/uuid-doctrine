@@ -34,7 +34,8 @@
         "phpunit/phpunit": "^4.7|^5.0",
         "squizlabs/php_codesniffer": "^2.3",
         "jakub-onderka/php-parallel-lint": "^0.9.0",
-        "satooshi/php-coveralls": "^0.6.1"
+        "satooshi/php-coveralls": "^0.6.1",
+        "doctrine/orm": "^2.5"
     },
     "autoload": {
         "psr-4": {"Ramsey\\Uuid\\Doctrine\\": "src/"}
