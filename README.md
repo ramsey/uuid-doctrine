@@ -52,7 +52,7 @@ class Product
      * @Id
      * @Column(type="uuid")
      * @GeneratedValue(strategy="CUSTOM")
-     * @CustomIdGenerator(class="AppBundle\ORM\UuidGenerator")
+     * @CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
      */
     protected $id;
 
