@@ -36,14 +36,8 @@ $entityManager->getConnection()->getDatabasePlatform()->registerDoctrineTypeMapp
 ```
 
 Then, in your models, you may annotate properties by setting the `@Column`
-type to `uuid`. Depending on your database engine, you may not be able to
-auto-generate a UUID when inserting into the database, but this isn't a problem;
-in your model's constructor (or elsewhere, depending on how you create instances
-of your model), generate a `Ramsey\Uuid\Uuid` object for the property. Doctrine
-will handle the rest.
-
-For example, here we annotate an `@Id` column with the `uuid` type, and in the
-constructor, we generate a version 4 UUID to store for this entity.
+type to `uuid`, and defining a custom generator of `Ramsey\Uuid\UuidGenerator`.
+Doctrine will handle the rest.
 
 ``` php
 /**
@@ -57,14 +51,10 @@ class Product
      *
      * @Id
      * @Column(type="uuid")
-     * @GeneratedValue(strategy="NONE")
+     * @GeneratedValue(strategy="CUSTOM")
+     * @CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
      */
     protected $id;
-
-    public function __construct()
-    {
-        $this->id = \Ramsey\Uuid\Uuid::uuid4();
-    }
 
     public function getId()
     {

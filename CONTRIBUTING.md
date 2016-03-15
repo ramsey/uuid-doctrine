@@ -9,6 +9,7 @@ This project adheres to a [Contributor Code of Conduct](https://github.com/ramse
 * [Ben Ramsey](https://github.com/ramsey) - original author and maintainer
 * [Marijn Huizendveld](https://github.com/marijn) - contributor, author of UUID type definition for Doctrine DBAL
 * [Thibaud Fabre](https://github.com/aztech-dev) - contributor, lead developer for version 3.0.0 re-architecture
+* [Jaik Dean](https://github.com/jaikdean) - contributor, author of UUID generator for Doctrine ORM
 
 ## Communication Channels
 
