@@ -97,7 +97,7 @@ information.
 
 
 [ramsey-uuid]: https://github.com/ramsey/uuid
-[conduct]: https://github.com/ramsey/uuid-doctrine/blob/master/CONDUCT.md
+[conduct]: https://github.com/ramsey/uuid-doctrine/blob/master/CODE_OF_CONDUCT.md
 [doctrine-field-type]: http://doctrine-dbal.readthedocs.org/en/latest/reference/types.html
 [packagist]: https://packagist.org/packages/ramsey/uuid-doctrine
 [composer]: http://getcomposer.org/
