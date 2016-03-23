@@ -1,5 +1,11 @@
 # Ramsey\Uuid\Doctrine Changelog
 
+## 1.2.0
+
+_Released: 2016-03-23_
+
+* Add UuidGenerator class to make Doctrine integration easier
+
 ## 1.1.0
 
 _Released: 2016-01-01_
