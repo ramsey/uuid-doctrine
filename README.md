@@ -32,7 +32,6 @@ the following in your bootstrap:
 
 ``` php
 \Doctrine\DBAL\Types\Type::addType('uuid', 'Ramsey\Uuid\Doctrine\UuidType');
-$entityManager->getConnection()->getDatabasePlatform()->registerDoctrineTypeMapping('uuid', 'uuid');
 ```
 
 Then, in your models, you may annotate properties by setting the `@Column`
