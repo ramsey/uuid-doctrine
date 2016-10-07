@@ -62,6 +62,14 @@ class Product
 }
 ```
 
+If you use the XML Mapping instead of PHP annotations.
+``` XML
+<id name="id" column="id" type="uuid">
+    <generator strategy="CUSTOM"/>
+    <custom-id-generator class="Ramsey\Uuid\Doctrine\UuidGenerator"/>
+</id>
+```
+
 ### Binary Database Columns
 
 In the previous example, Doctrine will create a database column of type `CHAR(36)`,
