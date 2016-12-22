@@ -33,7 +33,8 @@ the following in your bootstrap:
 ``` php
 \Doctrine\DBAL\Types\Type::addType('uuid', 'Ramsey\Uuid\Doctrine\UuidType');
 ```
- ``` symfony
+In Symfony:
+ ``` yaml
 # app/config/config.yml
 doctrine:
     dbal:
@@ -89,6 +90,17 @@ In your bootstrap, place the following:
 \Doctrine\DBAL\Types\Type::addType('uuid_binary', 'Ramsey\Uuid\Doctrine\UuidBinaryType');
 $entityManager->getConnection()->getDatabasePlatform()->registerDoctrineTypeMapping('uuid_binary', 'binary');
 ```
+
+In Symfony:
+ ``` yaml
+# app/config/config.yml
+doctrine:
+    dbal:
+        types:
+            uuid:  Ramsey\Uuid\Doctrine\UuidType
+        mapping_types:
+            uuid_binary: binary
+```     
 
 Then, when annotating model class properties, use `uuid_binary` instead of `uuid`:
 
