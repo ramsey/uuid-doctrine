@@ -97,7 +97,7 @@ In Symfony:
 doctrine:
     dbal:
         types:
-            uuid:  Ramsey\Uuid\Doctrine\UuidType
+            uuid_binary:  Ramsey\Uuid\Doctrine\UuidBinaryType
         mapping_types:
             uuid_binary: binary
 ```     
