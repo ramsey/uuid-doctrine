@@ -33,6 +33,13 @@ the following in your bootstrap:
 ``` php
 \Doctrine\DBAL\Types\Type::addType('uuid', 'Ramsey\Uuid\Doctrine\UuidType');
 ```
+ ``` symfony
+# app/config/config.yml
+doctrine:
+    dbal:
+        types:
+            uuid:  Ramsey\Uuid\Doctrine\UuidType
+```
 
 Then, in your models, you may annotate properties by setting the `@Column`
 type to `uuid`, and defining a custom generator of `Ramsey\Uuid\UuidGenerator`.
