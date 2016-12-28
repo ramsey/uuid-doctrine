@@ -33,6 +33,14 @@ the following in your bootstrap:
 ``` php
 \Doctrine\DBAL\Types\Type::addType('uuid', 'Ramsey\Uuid\Doctrine\UuidType');
 ```
+In Symfony:
+ ``` yaml
+# app/config/config.yml
+doctrine:
+    dbal:
+        types:
+            uuid:  Ramsey\Uuid\Doctrine\UuidType
+```
 
 Then, in your models, you may annotate properties by setting the `@Column`
 type to `uuid`, and defining a custom generator of `Ramsey\Uuid\UuidGenerator`.
@@ -82,6 +90,17 @@ In your bootstrap, place the following:
 \Doctrine\DBAL\Types\Type::addType('uuid_binary', 'Ramsey\Uuid\Doctrine\UuidBinaryType');
 $entityManager->getConnection()->getDatabasePlatform()->registerDoctrineTypeMapping('uuid_binary', 'binary');
 ```
+
+In Symfony:
+ ``` yaml
+# app/config/config.yml
+doctrine:
+    dbal:
+        types:
+            uuid_binary:  Ramsey\Uuid\Doctrine\UuidBinaryType
+        mapping_types:
+            uuid_binary: binary
+```     
 
 Then, when annotating model class properties, use `uuid_binary` instead of `uuid`:
 
