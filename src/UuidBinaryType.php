@@ -67,7 +67,7 @@ class UuidBinaryType extends Type
         try {
             $uuid = Uuid::fromBytes($value);
         } catch (InvalidArgumentException $e) {
-            throw ConversionException::conversionFailed($value, self::NAME);
+            throw ConversionException::conversionFailed($value, static::NAME);
         }
 
         return $uuid;
@@ -92,7 +92,7 @@ class UuidBinaryType extends Type
         try {
             $uuid = Uuid::fromString($value);
         } catch (InvalidArgumentException $e) {
-            throw ConversionException::conversionFailed($value, self::NAME);
+            throw ConversionException::conversionFailed($value, static::NAME);
         }
 
         return $uuid->getBytes();
@@ -105,7 +105,7 @@ class UuidBinaryType extends Type
      */
     public function getName()
     {
-        return self::NAME;
+        return static::NAME;
     }
 
     /**
