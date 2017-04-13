@@ -5,27 +5,30 @@ php:
   - 5.5
   - 5.6
   - 7.0
+  - 7.1
+  - nightly
   - hhvm
+
+matrix:
+  fast_finish: true
+  allow_failures:
+    - php: nightly
 
 sudo: false
 
-before_script:
+before_install:
   - travis_retry composer self-update
+
+install:
   - travis_retry composer install --no-interaction --prefer-dist
 
-script:
+before_script:
   - mkdir -p build/logs
+
+script:
   - ./vendor/bin/parallel-lint src tests
-  - ./vendor/bin/phpunit --verbose
+  - ./vendor/bin/phpunit --verbose --coverage-clover build/logs/clover.xml
   - ./vendor/bin/phpcs src tests --standard=psr2 -sp
 
-after_script:
-  - php vendor/bin/coveralls
-
-notifications:
-  webhooks:
-    urls:
-      - 'https://webhooks.gitter.im/e/aaf2dd731ff9d9bf7710'
-    on_success: change
-    on_failure: always
-    on_start: false
+after_success:
+  - travis_retry php vendor/bin/coveralls

@@ -38,5 +38,15 @@
     },
     "autoload": {
         "psr-4": {"Ramsey\\Uuid\\Doctrine\\": "src/"}
+    },
+    "scripts": {
+       "lint": "parallel-lint src tests",
+       "phpunit": "phpunit --verbose --colors=always",
+       "phpcs": "phpcs src tests --standard=psr2 -sp --colors",
+       "test": [
+            "@lint",
+            "@phpunit",
+            "@phpcs"
+       ]
     }
 }
