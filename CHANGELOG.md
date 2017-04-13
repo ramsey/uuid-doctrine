@@ -1,5 +1,13 @@
 # Ramsey\Uuid\Doctrine Changelog
 
+## 1.3.0
+
+_Released: 2017-04-13_
+
+* Add `UuidBinaryOrderedTimeType` to store UUIDv1 in MySQL-optimized format ([#14](https://github.com/ramsey/uuid-doctrine/issues/14))
+* Use `static::NAME` instead of `self::NAME` ([#25](https://github.com/ramsey/uuid-doctrine/issues/25))
+* Various documentation updates
+
 ## 1.2.0
 
 _Released: 2016-03-23_
