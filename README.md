@@ -1,12 +1,9 @@
 # ramsey/uuid-doctrine
 
-[![Gitter Chat][badge-gitter]][gitter]
 [![Source Code][badge-source]][source]
 [![Latest Version][badge-release]][release]
 [![Software License][badge-license]][license]
 [![Build Status][badge-build]][build]
-[![HHVM Status][badge-hhvm]][hhvm]
-[![Scrutinizer][badge-quality]][quality]
 [![Coverage Status][badge-coverage]][coverage]
 [![Total Downloads][badge-downloads]][downloads]
 
@@ -147,22 +144,16 @@ information.
 [contributing]: https://github.com/ramsey/uuid-doctrine/blob/master/CONTRIBUTING.md
 [doctrine-getting-started]: http://doctrine-orm.readthedocs.org/en/latest/tutorials/getting-started.html
 
-[badge-gitter]: https://img.shields.io/badge/gitter-join_chat-brightgreen.svg?style=flat-square
 [badge-source]: http://img.shields.io/badge/source-ramsey/uuid--doctrine-blue.svg?style=flat-square
 [badge-release]: https://img.shields.io/packagist/v/ramsey/uuid-doctrine.svg?style=flat-square
 [badge-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
 [badge-build]: https://img.shields.io/travis/ramsey/uuid-doctrine/master.svg?style=flat-square
-[badge-hhvm]: https://img.shields.io/hhvm/ramsey/uuid-doctrine.svg?style=flat-square
-[badge-quality]: https://img.shields.io/scrutinizer/g/ramsey/uuid-doctrine/master.svg?style=flat-square
 [badge-coverage]: https://img.shields.io/coveralls/ramsey/uuid-doctrine/master.svg?style=flat-square
 [badge-downloads]: https://img.shields.io/packagist/dt/ramsey/uuid-doctrine.svg?style=flat-square
 
-[gitter]: https://gitter.im/ramsey/uuid
 [source]: https://github.com/ramsey/uuid-doctrine
 [release]: https://packagist.org/packages/ramsey/uuid-doctrine
 [license]: https://github.com/ramsey/uuid-doctrine/blob/master/LICENSE
 [build]: https://travis-ci.org/ramsey/uuid-doctrine
-[hhvm]: http://hhvm.h4cc.de/package/ramsey/uuid-doctrine
-[quality]: https://scrutinizer-ci.com/g/ramsey/uuid-doctrine/
 [coverage]: https://coveralls.io/r/ramsey/uuid-doctrine?branch=master
 [downloads]: https://packagist.org/packages/ramsey/uuid-doctrine
