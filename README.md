@@ -27,6 +27,8 @@ composer require ramsey/uuid-doctrine
 
 ## Examples
 
+### Configuration
+
 To configure Doctrine to use ramsey/uuid as a field type, you'll need to set up
 the following in your bootstrap:
 
@@ -41,6 +43,21 @@ doctrine:
         types:
             uuid:  Ramsey\Uuid\Doctrine\UuidType
 ```
+In Zend Framework:
+```php
+<?php 
+// module.config.php
+use Ramsey\Uuid\Doctrine\UuidType;
+
+return [
+    'doctrine' => [
+        'configuration' => [
+            'orm_default' => [
+                'types' => [
+                    UuidType::NAME => UuidType::class,
+```
+
+### Usage
 
 Then, in your models, you may annotate properties by setting the `@Column`
 type to `uuid`, and defining a custom generator of `Ramsey\Uuid\UuidGenerator`.
