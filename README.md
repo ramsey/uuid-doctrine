@@ -120,6 +120,67 @@ Then, when annotating model class properties, use `uuid_binary` instead of `uuid
 
     @Column(type="uuid_binary")
 
+### InnoDB-optimised binary UUIDs
+More suitable if you want to use UUIDs as primary key. Note that this can cause unintended effects if
+
+* decoding bytes that were not generated using this method
+* another code (that isn't aware of this method) attempts to decode the resulting bytes
+
+More information in this [Percona article][percona-optimized-uuids]
+and [UUID Talk by Ben Ramesy][benramesy-com-uuid-talk] (starts at slide 61).
+
+``` php
+\Doctrine\DBAL\Types\Type::addType('uuid_binary_ordered_time', 'Ramsey\Uuid\Doctrine\UuidBinaryType');
+$entityManager->getConnection()->getDatabasePlatform()->registerDoctrineTypeMapping('uuid_binary_ordered_time', 'binary');
+```
+
+In Symfony:
+ ``` yaml
+# app/config/config.yml
+doctrine:
+    dbal:
+        types:
+            uuid_binary_ordered_time: Ramsey\Uuid\Doctrine\UuidBinaryOrderedTimeType
+        mapping_types:
+            uuid_binary_ordered_time: binary
+```     
+
+Then, in your models, you may annotate properties by setting the `@Column`
+type to `uuid_binary_ordered_time`, and defining a custom generator of `Ramsey\Uuid\UuidOrderedTimeGenerator`.
+Doctrine will handle the rest.
+
+``` php
+/**
+ * @Entity
+ * @Table(name="products")
+ */
+class Product
+{
+    /**
+     * @var \Ramsey\Uuid\Uuid
+     *
+     * @Id
+     * @Column(type="uuid_binary_ordered_time")
+     * @GeneratedValue(strategy="CUSTOM")
+     * @CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidOrderedTimeGenerator")
+     */
+    protected $id;
+
+    public function getId()
+    {
+        return $this->id;
+    }
+}
+```
+
+If you use the XML Mapping instead of PHP annotations.
+``` XML
+<id name="id" column="id" type="uuid_binary_ordered_time">
+    <generator strategy="CUSTOM"/>
+    <custom-id-generator class="Ramsey\Uuid\Doctrine\UuidOrderedTimeGenerator"/>
+</id>
+```
+
 ### More Information
 
 For more information on getting started with Doctrine, check out the "[Getting
@@ -135,6 +196,8 @@ The ramsey/uuid-doctrine library is copyright © [Ben Ramsey](https://benramsey.
 licensed for use under the MIT License (MIT). Please see [LICENSE][] for more
 information.
 
+[percona-optimized-uuids]: https://www.percona.com/blog/2014/12/19/store-uuid-optimized-way/
+[benramesy-com-uuid-talk]: https://benramsey.com/talks/2016/11/tnphp-uuid/
 
 [ramsey-uuid]: https://github.com/ramsey/uuid
 [conduct]: https://github.com/ramsey/uuid-doctrine/blob/master/CODE_OF_CONDUCT.md
