@@ -2,7 +2,6 @@
 namespace Ramsey\Uuid\Doctrine;
 
 use Doctrine\ORM\Mapping\Entity;
-use Ramsey\Uuid\UuidInterface;
 
 class UuidOrderedTimeGeneratorTest extends \PHPUnit_Framework_TestCase
 {
@@ -35,7 +34,7 @@ class UuidOrderedTimeGeneratorTest extends \PHPUnit_Framework_TestCase
     {
         $uuid = $this->generator->generate($this->em, $this->entity);
 
-        $this->assertInstanceOf(UuidInterface::class, $uuid);
+        $this->assertInstanceOf('Ramsey\Uuid\UuidInterface', $uuid);
         $this->assertEquals(1, $uuid->getVersion());
     }
 }
