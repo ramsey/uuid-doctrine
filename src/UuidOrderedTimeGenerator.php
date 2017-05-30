@@ -13,7 +13,7 @@ class UuidOrderedTimeGenerator extends AbstractIdGenerator
      */
     protected $factory;
 
-    public function __construct ()
+    public function __construct()
     {
         $this->factory = new UuidFactory();
 
@@ -32,7 +32,7 @@ class UuidOrderedTimeGenerator extends AbstractIdGenerator
      *
      * @return \Ramsey\Uuid\UuidInterface
      */
-    public function generate (EntityManager $em, $entity)
+    public function generate(EntityManager $em, $entity)
     {
         return $this->factory->uuid1();
     }
