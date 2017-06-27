@@ -92,6 +92,17 @@ If you use the XML Mapping instead of PHP annotations.
 </id>
 ```
 
+You can also use the YAML Mapping.
+``` yaml
+id:
+    id:
+        type: uuid
+        generator:
+            strategy: CUSTOM
+        customIdGenerator:
+            class: Ramsey\Uuid\Doctrine\UuidGenerator
+```
+
 ### Binary Database Columns
 
 In the previous example, Doctrine will create a database column of type `CHAR(36)`,
