@@ -4,7 +4,7 @@
 
 _Released: 2017-07-05_
 
-* Add generator for time-optimized UUIDs ([#33](https://github.com/ramsey/uuid-doctrine/pull/33)]
+* Add generator for time-optimized UUIDs ([#33](https://github.com/ramsey/uuid-doctrine/pull/33))
 * Remove HHVM testing on Travis CI
 
 ## 1.3.0
