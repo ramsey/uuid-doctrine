@@ -1,5 +1,12 @@
 # Ramsey\Uuid\Doctrine Changelog
 
+## 1.4.0
+
+_Released: 2017-07-05_
+
+* Add generator for time-optimized UUIDs ([#33](https://github.com/ramsey/uuid-doctrine/pull/33)]
+* Remove HHVM testing on Travis CI
+
 ## 1.3.0
 
 _Released: 2017-04-13_
