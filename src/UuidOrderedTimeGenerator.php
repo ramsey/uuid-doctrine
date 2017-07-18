@@ -4,7 +4,7 @@ namespace Ramsey\Uuid\Doctrine;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Id\AbstractIdGenerator;
 use Ramsey\Uuid\Codec\OrderedTimeCodec;
-use Ramsey\Uuid\UuidFactory;
+use Ramsey\Uuid\Uuid;
 
 class UuidOrderedTimeGenerator extends AbstractIdGenerator
 {
@@ -15,7 +15,7 @@ class UuidOrderedTimeGenerator extends AbstractIdGenerator
 
     public function __construct()
     {
-        $this->factory = new UuidFactory();
+        $this->factory = clone Uuid::getFactory();
 
         $codec = new OrderedTimeCodec(
             $this->factory->getUuidBuilder()
