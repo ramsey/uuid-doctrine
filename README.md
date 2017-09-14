@@ -138,7 +138,7 @@ More suitable if you want to use UUIDs as primary key. Note that this can cause 
 * another code (that isn't aware of this method) attempts to decode the resulting bytes
 
 More information in this [Percona article][percona-optimized-uuids]
-and [UUID Talk by Ben Ramesy][benramesy-com-uuid-talk] (starts at slide 61).
+and [UUID Talk by Ben Ramsey][benramsey-com-uuid-talk] (starts at slide 61).
 
 ``` php
 \Doctrine\DBAL\Types\Type::addType('uuid_binary_ordered_time', 'Ramsey\Uuid\Doctrine\UuidBinaryType');
@@ -208,7 +208,7 @@ licensed for use under the MIT License (MIT). Please see [LICENSE][] for more
 information.
 
 [percona-optimized-uuids]: https://www.percona.com/blog/2014/12/19/store-uuid-optimized-way/
-[benramesy-com-uuid-talk]: https://benramsey.com/talks/2016/11/tnphp-uuid/
+[benramsey-com-uuid-talk]: https://benramsey.com/talks/2016/11/tnphp-uuid/
 
 [ramsey-uuid]: https://github.com/ramsey/uuid
 [conduct]: https://github.com/ramsey/uuid-doctrine/blob/master/CODE_OF_CONDUCT.md
