@@ -26,7 +26,7 @@ class UuidGenerator extends AbstractIdGenerator
      *
      * @param \Doctrine\ORM\EntityManager  $em
      * @param \Doctrine\ORM\Mapping\Entity $entity
-     * @return Ramsey\Uuid\Uuid
+     * @return \Ramsey\Uuid\UuidInterface
      */
     public function generate(EntityManager $em, $entity)
     {
