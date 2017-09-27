@@ -15,6 +15,7 @@ namespace Ramsey\Uuid\Doctrine;
 
 use InvalidArgumentException;
 use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\UuidInterface;
 use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
@@ -71,7 +72,7 @@ class UuidType extends Type
     /**
      * {@inheritdoc}
      *
-     * @param Uuid|null                                 $value
+     * @param UuidInterface|null                        $value
      * @param \Doctrine\DBAL\Platforms\AbstractPlatform $platform
      */
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
