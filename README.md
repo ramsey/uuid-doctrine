@@ -71,7 +71,7 @@ class Product
      * @var \Ramsey\Uuid\Uuid
      *
      * @Id
-     * @Column(type="uuid")
+     * @Column(type="uuid", unique=true)
      * @GeneratedValue(strategy="CUSTOM")
      * @CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
      */
@@ -171,7 +171,7 @@ class Product
      * @var \Ramsey\Uuid\Uuid
      *
      * @Id
-     * @Column(type="uuid_binary_ordered_time")
+     * @Column(type="uuid_binary_ordered_time", unique=true)
      * @GeneratedValue(strategy="CUSTOM")
      * @CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidOrderedTimeGenerator")
      */
