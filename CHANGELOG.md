@@ -1,5 +1,11 @@
 # Ramsey\Uuid\Doctrine Changelog
 
+## 1.4.2
+
+_Released: 2017-11-06_
+
+* Add `getBindingType()` method to binary types ([#45](https://github.com/ramsey/uuid-doctrine/pull/45)); this fixes issues where binary UUIDs were not treated properly by certain database clients when binding query parameters
+
 ## 1.4.1
 
 _Released: 2017-07-18_
