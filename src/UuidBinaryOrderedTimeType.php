@@ -120,16 +120,6 @@ class UuidBinaryOrderedTimeType extends Type
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * @return integer
-     */
-    public function getBindingType()
-    {
-        return \PDO::PARAM_LOB;
-    }
-
-    /**
      * Creates/returns a UuidFactory instance that uses a specific codec
      * that creates a binary that can be time-ordered
      *

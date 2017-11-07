@@ -119,14 +119,4 @@ class UuidBinaryType extends Type
     {
         return true;
     }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @return integer
-     */
-    public function getBindingType()
-    {
-        return \PDO::PARAM_LOB;
-    }
 }
