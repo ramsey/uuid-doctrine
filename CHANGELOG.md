@@ -1,5 +1,11 @@
 # Ramsey\Uuid\Doctrine Changelog
 
+## 1.4.3
+
+_Released: 2017-11-07_
+
+* Revert `getBindingType()` ([#45](https://github.com/ramsey/uuid-doctrine/pull/45)) work until a solution can be implemented for the "array to string conversion" notice reported in [#47](https://github.com/ramsey/uuid-doctrine/issues/47)
+
 ## 1.4.2
 
 _Released: 2017-11-06_
