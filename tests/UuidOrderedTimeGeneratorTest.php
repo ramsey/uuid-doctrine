@@ -2,8 +2,9 @@
 namespace Ramsey\Uuid\Doctrine;
 
 use Doctrine\ORM\Mapping\Entity;
+use PHPUnit\Framework\TestCase;
 
-class UuidOrderedTimeGeneratorTest extends \PHPUnit_Framework_TestCase
+class UuidOrderedTimeGeneratorTest extends TestCase
 {
     /**
      * @var \Ramsey\Uuid\Doctrine\TestEntityManager

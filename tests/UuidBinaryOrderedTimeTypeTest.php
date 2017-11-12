@@ -3,9 +3,10 @@
 namespace Ramsey\Uuid\Doctrine;
 
 use Doctrine\DBAL\Types\Type;
+use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
 
-class UuidBinaryOrderedTimeTypeTest extends \PHPUnit_Framework_TestCase
+class UuidBinaryOrderedTimeTypeTest extends TestCase
 {
     private $platform;
 
@@ -54,9 +55,11 @@ class UuidBinaryOrderedTimeTypeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $actual);
     }
 
+    /**
+     * @expectedException Doctrine\DBAL\Types\ConversionException
+     */
     public function testInvalidUuidConversionForDatabaseValue()
     {
-        $this->setExpectedException('Doctrine\DBAL\Types\ConversionException');
         $this->type->convertToDatabaseValue('abcdefg', $this->platform);
     }
 
@@ -72,25 +75,29 @@ class UuidBinaryOrderedTimeTypeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('ff6f8cb0-c57d-11e1-9b21-0800200c9a66', $uuid->toString());
     }
 
+    /**
+     * @expectedException Doctrine\DBAL\Types\ConversionException
+     */
     public function testInvalidUuidConversionForPHPValue()
     {
-        $this->setExpectedException('Doctrine\DBAL\Types\ConversionException');
         $this->type->convertToPHPValue('abcdefg', $this->platform);
     }
 
+    /**
+     * @expectedException Doctrine\DBAL\Types\ConversionException
+     */
     public function testUnsupportedUuidConversionToDatabaseValue()
     {
-        $this->setExpectedException('Doctrine\DBAL\Types\ConversionException');
         $this->type->convertToDatabaseValue(Uuid::uuid4(), $this->platform);
     }
 
     /**
+     * @expectedException Doctrine\DBAL\Types\ConversionException
      * @dataProvider provideUnsupportedDatabaseValues
      * @param string $databaseValue
      */
     public function testUnsupportedUuidConversionToPHPValue($databaseValue)
     {
-        $this->setExpectedException('Doctrine\DBAL\Types\ConversionException');
         $this->type->convertToPHPValue(hex2bin($databaseValue), $this->platform);
     }
 
