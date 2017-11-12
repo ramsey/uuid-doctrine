@@ -3,9 +3,10 @@ namespace Ramsey\Uuid\Doctrine;
 
 use Doctrine\DBAL\Types\Type;
 use Doctrine\Tests\DBAL\Mocks\MockPlatform;
+use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
 
-class UuidBinaryTypeTest extends \PHPUnit_Framework_TestCase
+class UuidBinaryTypeTest extends TestCase
 {
     private $platform;
     private $type;
@@ -54,11 +55,11 @@ class UuidBinaryTypeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @expectedException Doctrine\DBAL\Types\ConversionException
      * @covers Ramsey\Uuid\Doctrine\UuidBinaryType::convertToDatabaseValue
      */
     public function testInvalidUuidConversionForDatabaseValue()
     {
-        $this->setExpectedException('Doctrine\DBAL\Types\ConversionException');
         $this->type->convertToDatabaseValue('abcdefg', $this->platform);
     }
 
@@ -81,11 +82,11 @@ class UuidBinaryTypeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @expectedException Doctrine\DBAL\Types\ConversionException
      * @covers Ramsey\Uuid\Doctrine\UuidBinaryType::convertToPHPValue
      */
     public function testInvalidUuidConversionForPHPValue()
     {
-        $this->setExpectedException('Doctrine\DBAL\Types\ConversionException');
         $this->type->convertToPHPValue('abcdefg', $this->platform);
     }
 

@@ -3,9 +3,10 @@ namespace Ramsey\Uuid\Doctrine;
 
 use Doctrine\DBAL\Types\Type;
 use Doctrine\Tests\DBAL\Mocks\MockPlatform;
+use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
 
-class UuidGeneratorTest extends \PHPUnit_Framework_TestCase
+class UuidGeneratorTest extends TestCase
 {
     private $em;
     private $entity;

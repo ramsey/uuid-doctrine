@@ -32,7 +32,7 @@
     },
     "require-dev": {
         "jakub-onderka/php-parallel-lint": "^0.9.0",
-        "phpunit/phpunit": "^4.7 || ^5.0",
+        "phpunit/phpunit": "^4.8.35 || ^5.7 || ^6.4",
         "satooshi/php-coveralls": "^0.6.1",
         "squizlabs/php_codesniffer": "^2.3"
     },
