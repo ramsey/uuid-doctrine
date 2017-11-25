@@ -143,7 +143,7 @@ More information in this [Percona article][percona-optimized-uuids]
 and [UUID Talk by Ben Ramsey][benramsey-com-uuid-talk] (starts at slide 61).
 
 ``` php
-\Doctrine\DBAL\Types\Type::addType('uuid_binary_ordered_time', 'Ramsey\Uuid\Doctrine\UuidBinaryType');
+\Doctrine\DBAL\Types\Type::addType('uuid_binary_ordered_time', 'Ramsey\Uuid\Doctrine\UuidBinaryOrderedTimeType');
 $entityManager->getConnection()->getDatabasePlatform()->registerDoctrineTypeMapping('uuid_binary_ordered_time', 'binary');
 ```
 
