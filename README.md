@@ -70,7 +70,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Product
 {
     /**
-     * @var \Ramsey\Uuid\Uuid
+     * @var \Ramsey\Uuid\UuidInterface
      *
      * @ORM\Id
      * @ORM\Column(type="uuid", unique=true)
@@ -170,7 +170,7 @@ Doctrine will handle the rest.
 class Product
 {
     /**
-     * @var \Ramsey\Uuid\Uuid
+     * @var \Ramsey\Uuid\UuidInterface
      *
      * @Id
      * @Column(type="uuid_binary_ordered_time", unique=true)
