@@ -5,7 +5,6 @@ use Doctrine\DBAL\Types\Type;
 use Doctrine\Tests\DBAL\Mocks\MockPlatform;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
-use Ramsey\Uuid\UuidInterface;
 
 class UuidTypeTest extends TestCase
 {
@@ -48,7 +47,7 @@ class UuidTypeTest extends TestCase
     public function testUuidInterfaceConvertsToDatabaseValue()
     {
         if (method_exists($this, 'createMock')) {
-            $uuid = $this->createMock(UuidInterface::class);
+            $uuid = $this->createMock('Ramsey\Uuid\UuidInterface');
         } else {
             $uuid = $this->getMock('Ramsey\Uuid\UuidInterface');
         }
