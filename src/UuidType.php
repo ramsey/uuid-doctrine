@@ -82,7 +82,7 @@ class UuidType extends Type
         }
         
         if ($value instanceof UuidInterface) {
-            reutn $value->toString();
+            return $value->toString();
         }
 
         if ($value instanceof Uuid || Uuid::isValid($value)) {
