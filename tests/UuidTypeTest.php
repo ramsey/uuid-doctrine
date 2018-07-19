@@ -63,6 +63,18 @@ class UuidTypeTest extends TestCase
     }
 
     /**
+     * @covers Ramsey\Uuid\Doctrine\UuidType::convertToDatabaseValue
+     */
+    public function testUuidStringConvertsToDatabaseValue()
+    {
+        $uuid = 'ff6f8cb0-c57d-11e1-9b21-0800200c9a66';
+
+        $actual = $this->type->convertToDatabaseValue($uuid, $this->platform);
+
+        $this->assertEquals($uuid, $actual);
+    }
+
+    /**
      * @expectedException Doctrine\DBAL\Types\ConversionException
      * @covers Ramsey\Uuid\Doctrine\UuidType::convertToDatabaseValue
      */
