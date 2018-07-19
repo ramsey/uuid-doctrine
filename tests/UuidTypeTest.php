@@ -47,7 +47,12 @@ class UuidTypeTest extends TestCase
      */
     public function testUuidInterfaceConvertsToDatabaseValue()
     {
-        $uuid = $this->createMock(UuidInterface::class);
+        if (method_exists($this, 'createMock')) {
+            $uuid = $this->createMock(UuidInterface::class);
+        } else {
+            $uuid = $this->getMock('Ramsey\Uuid\UuidInterface');
+        }
+
         $uuid
             ->expects($this->once())
             ->method('toString')
