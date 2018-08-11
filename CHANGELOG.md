@@ -1,5 +1,11 @@
 # Ramsey\Uuid\Doctrine Changelog
 
+## 1.5.0
+
+_Released: 2018-08-11_
+
+* Check whether values are `UuidInterface` objects or strings, rather than specific `Uuid` objects. This allows more flexibility in supporting alternate types of UUID objects.
+
 ## 1.4.3
 
 _Released: 2017-11-07_
