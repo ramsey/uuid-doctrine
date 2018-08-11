@@ -5,7 +5,6 @@ use Doctrine\DBAL\Types\Type;
 use Doctrine\Tests\DBAL\Mocks\MockPlatform;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
-use Ramsey\Uuid\UuidInterface;
 
 class UuidTypeTest extends TestCase
 {
@@ -47,7 +46,7 @@ class UuidTypeTest extends TestCase
      */
     public function testUuidInterfaceConvertsToDatabaseValue()
     {
-        $uuid = \Mockery::mock(UuidInterface::class . ',' . StringableInterface::class);
+        $uuid = \Mockery::mock('Ramsey\\Uuid\\UuidInterface,Ramsey\\Uuid\\Doctrine\\StringableInterface');
 
         $uuid
             ->shouldReceive('__toString')
