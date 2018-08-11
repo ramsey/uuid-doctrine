@@ -80,6 +80,10 @@ class UuidType extends Type
         if (empty($value)) {
             return null;
         }
+        
+        if ($value instanceof UuidInterface) {
+            return $value->toString();
+        }
 
         if (
             $value instanceof Uuid

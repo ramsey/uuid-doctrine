@@ -42,6 +42,39 @@ class UuidTypeTest extends TestCase
     }
 
     /**
+     * @covers Ramsey\Uuid\Doctrine\UuidType::convertToDatabaseValue
+     */
+    public function testUuidInterfaceConvertsToDatabaseValue()
+    {
+        if (method_exists($this, 'createMock')) {
+            $uuid = $this->createMock('Ramsey\Uuid\UuidInterface');
+        } else {
+            $uuid = $this->getMock('Ramsey\Uuid\UuidInterface');
+        }
+
+        $uuid
+            ->expects($this->once())
+            ->method('toString')
+            ->willReturn('foo');
+
+        $actual = $this->type->convertToDatabaseValue($uuid, $this->platform);
+
+        $this->assertEquals('foo', $actual);
+    }
+
+    /**
+     * @covers Ramsey\Uuid\Doctrine\UuidType::convertToDatabaseValue
+     */
+    public function testUuidStringConvertsToDatabaseValue()
+    {
+        $uuid = 'ff6f8cb0-c57d-11e1-9b21-0800200c9a66';
+
+        $actual = $this->type->convertToDatabaseValue($uuid, $this->platform);
+
+        $this->assertEquals($uuid, $actual);
+    }
+
+    /**
      * @expectedException Doctrine\DBAL\Types\ConversionException
      * @covers Ramsey\Uuid\Doctrine\UuidType::convertToDatabaseValue
      */
