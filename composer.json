@@ -45,7 +45,7 @@
     "scripts": {
        "lint": "parallel-lint src tests",
        "phpunit": "phpunit --verbose --colors=always",
-       "phpcs": "phpcs src tests --standard=psr12 -sp --colors",
+       "phpcs": "phpcs src tests --standard=psr12 -sp --colors --exclude=\"PSR2.ControlStructures.ControlStructureSpacing\"",
        "test": [
             "@lint",
             "@phpunit",
