@@ -56,7 +56,7 @@ class UuidType extends Type
             return null;
         }
 
-        if ($value instanceof Uuid) {
+        if ($value instanceof UuidInterface) {
             return $value;
         }
 
