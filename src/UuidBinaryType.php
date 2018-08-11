@@ -52,7 +52,7 @@ class UuidBinaryType extends Type
     /**
      * {@inheritdoc}
      *
-     * @param string|null                               $value
+     * @param string|UuidInterface|null                 $value
      * @param \Doctrine\DBAL\Platforms\AbstractPlatform $platform
      */
     public function convertToPHPValue($value, AbstractPlatform $platform)
@@ -61,7 +61,7 @@ class UuidBinaryType extends Type
             return null;
         }
 
-        if ($value instanceof Uuid) {
+        if ($value instanceof UuidInterface) {
             return $value;
         }
 
@@ -77,7 +77,7 @@ class UuidBinaryType extends Type
     /**
      * {@inheritdoc}
      *
-     * @param UuidInterface|null                        $value
+     * @param UuidInterface|string|null                 $value
      * @param \Doctrine\DBAL\Platforms\AbstractPlatform $platform
      */
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
@@ -86,17 +86,19 @@ class UuidBinaryType extends Type
             return null;
         }
 
-        if ($value instanceof Uuid) {
+        if ($value instanceof UuidInterface) {
             return $value->getBytes();
         }
 
         try {
-            $uuid = Uuid::fromString($value);
+            if (is_string($value) || method_exists($value, '__toString')) {
+                return Uuid::fromString((string) $value)->getBytes();
+            }
         } catch (InvalidArgumentException $e) {
-            throw ConversionException::conversionFailed($value, static::NAME);
+            // Ignore the exception and pass through.
         }
 
-        return $uuid->getBytes();
+        throw ConversionException::conversionFailed($value, static::NAME);
     }
 
     /**

@@ -30,6 +30,7 @@ class UuidOrderedTimeGeneratorTest extends TestCase
 
     /**
      * @covers \Ramsey\Uuid\Doctrine\UuidOrderedTimeGenerator::generate
+     * @covers \Ramsey\Uuid\Doctrine\UuidOrderedTimeGenerator::__construct
      */
     public function testUuidGeneratorGenerates()
     {
