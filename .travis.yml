@@ -21,6 +21,7 @@ before_install:
 
 install:
   - travis_retry composer install --no-interaction --prefer-dist
+  - if [ -f vendor/bin/coveralls ]; then; ln -s vendor/bin/coveralls vendor/bin/php-coveralls; fi
 
 before_script:
   - mkdir -p build/logs

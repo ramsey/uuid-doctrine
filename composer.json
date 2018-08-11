@@ -31,13 +31,16 @@
         "ramsey/uuid": "^3.0"
     },
     "require-dev": {
-        "jakub-onderka/php-parallel-lint": "^1.0.0",
-        "php-coveralls/php-coveralls": "^2.1.0",
+        "jakub-onderka/php-parallel-lint": "^1.0",
+        "php-coveralls/php-coveralls": "^1.1 || ^2.1",
         "phpunit/phpunit": "^4.8 || ^5.7 || ^6.5",
-        "squizlabs/php_codesniffer": "^3.3.1"
+        "squizlabs/php_codesniffer": "^3.3"
     },
     "autoload": {
         "psr-4": {"Ramsey\\Uuid\\Doctrine\\": "src/"}
+    },
+    "autoload-dev": {
+        "psr-4": {"Ramsey\\Uuid\\Doctrine\\": "tests/"}
     },
     "scripts": {
        "lint": "parallel-lint src tests",
