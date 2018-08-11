@@ -4,7 +4,6 @@ namespace Ramsey\Uuid\Doctrine;
 
 use InvalidArgumentException;
 use Ramsey\Uuid\Codec\OrderedTimeCodec;
-use Ramsey\Uuid\Uuid;
 use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
@@ -53,7 +52,7 @@ class UuidBinaryOrderedTimeType extends Type
     /**
      * {@inheritdoc}
      *
-     * @param string|null                               $value
+     * @param string|UuidInterface|null                 $value
      * @param \Doctrine\DBAL\Platforms\AbstractPlatform $platform
      */
     public function convertToPHPValue($value, AbstractPlatform $platform)
@@ -62,7 +61,7 @@ class UuidBinaryOrderedTimeType extends Type
             return null;
         }
 
-        if ($value instanceof Uuid) {
+        if ($value instanceof UuidInterface) {
             return $value;
         }
 
@@ -76,7 +75,7 @@ class UuidBinaryOrderedTimeType extends Type
     /**
      * {@inheritdoc}
      *
-     * @param UuidInterface|null                           $value
+     * @param UuidInterface|string|null                 $value
      * @param \Doctrine\DBAL\Platforms\AbstractPlatform $platform
      */
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
@@ -85,17 +84,21 @@ class UuidBinaryOrderedTimeType extends Type
             return null;
         }
 
-        if ($value instanceof Uuid) {
+        if ($value instanceof UuidInterface) {
             return $this->encode($value);
         }
 
         try {
-            $uuid = $this->getUuidFactory()->fromString($value);
+            if (is_string($value) || method_exists($value, '__toString')) {
+                $uuid = $this->getUuidFactory()->fromString((string) $value);
+
+                return $this->encode($uuid);
+            }
         } catch (InvalidArgumentException $e) {
-            throw ConversionException::conversionFailed($value, self::NAME);
+            // Ignore the exception and pass through.
         }
 
-        return $this->encode($uuid);
+        throw ConversionException::conversionFailed($value, self::NAME);
     }
 
     /**

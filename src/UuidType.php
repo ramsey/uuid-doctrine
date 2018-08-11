@@ -47,7 +47,7 @@ class UuidType extends Type
     /**
      * {@inheritdoc}
      *
-     * @param string|null                               $value
+     * @param string|UuidInterface|null                 $value
      * @param \Doctrine\DBAL\Platforms\AbstractPlatform $platform
      */
     public function convertToPHPValue($value, AbstractPlatform $platform)
@@ -72,7 +72,7 @@ class UuidType extends Type
     /**
      * {@inheritdoc}
      *
-     * @param UuidInterface|null                        $value
+     * @param UuidInterface|string|null                 $value
      * @param \Doctrine\DBAL\Platforms\AbstractPlatform $platform
      */
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
