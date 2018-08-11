@@ -90,6 +90,18 @@ class UuidTypeTest extends TestCase
     /**
      * @covers Ramsey\Uuid\Doctrine\UuidType::convertToPHPValue
      */
+    public function testUuidInterfaceConvertsToPHPValue()
+    {
+        $uuid = \Mockery::mock('Ramsey\\Uuid\\UuidInterface');
+
+        $actual = $this->type->convertToPHPValue($uuid, $this->platform);
+
+        $this->assertSame($uuid, $actual);
+    }
+
+    /**
+     * @covers Ramsey\Uuid\Doctrine\UuidType::convertToPHPValue
+     */
     public function testUuidConvertsToPHPValue()
     {
         $uuid = $this->type->convertToPHPValue('ff6f8cb0-c57d-11e1-9b21-0800200c9a66', $this->platform);
