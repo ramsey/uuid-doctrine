@@ -80,13 +80,9 @@ class UuidType extends Type
         if (empty($value)) {
             return null;
         }
-        
-        if ($value instanceof UuidInterface) {
-            return $value->toString();
-        }
 
         if (
-            $value instanceof Uuid
+            $value instanceof UuidInterface
             || (
                 (is_string($value) || method_exists($value, '__toString'))
                 && Uuid::isValid((string) $value)
