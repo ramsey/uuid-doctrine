@@ -82,8 +82,11 @@ class UuidType extends Type
         }
 
         if (
-            $value instanceof Uuid ||
-            (is_string($value) || method_exists($value, '__toString')) && Uuid::isValid((string) $value)
+            $value instanceof Uuid
+            || (
+                (is_string($value) || method_exists($value, '__toString'))
+                && Uuid::isValid((string) $value)
+            )
         ) {
             return (string) $value;
         }
