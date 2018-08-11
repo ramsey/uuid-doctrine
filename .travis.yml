@@ -28,7 +28,7 @@ before_script:
 script:
   - ./vendor/bin/parallel-lint src tests
   - ./vendor/bin/phpunit --verbose --coverage-clover build/logs/clover.xml
-  - ./vendor/bin/phpcs src tests --standard=psr2 -sp
+  - ./vendor/bin/phpcs src tests --standard=psr12 -sp
 
 after_success:
-  - travis_retry php vendor/bin/coveralls
+  - travis_retry php vendor/bin/php-coveralls
