@@ -194,6 +194,43 @@ If you use the XML Mapping instead of PHP annotations.
 </id>
 ```
 
+You can use this format in mysql cli with this two functions : 
+``` SQL
+CREATE 
+  FUNCTION `uuid_to_ouuid`(uuid BINARY(36))
+  RETURNS binary(16) DETERMINISTIC
+  RETURN UNHEX(CONCAT(
+  SUBSTR(uuid, 15, 4),
+  SUBSTR(uuid, 10, 4),
+  SUBSTR(uuid, 1, 8),
+  SUBSTR(uuid, 20, 4),
+  SUBSTR(uuid, 25, 12)
+));
+
+CREATE 
+  FUNCTION ouuid_to_uuid(uuid BINARY(16))
+  RETURNS VARCHAR(36)
+  RETURN LOWER(CONCAT(
+  SUBSTR(HEX(uuid), 9, 8), '-',
+  SUBSTR(HEX(uuid), 5, 4), '-',
+  SUBSTR(HEX(uuid), 1, 4), '-',
+  SUBSTR(HEX(uuid), 17,4), '-',
+  SUBSTR(HEX(uuid), 21, 12 )
+));
+```
+
+Test :
+```
+mysql> select '07a2f327-103a-11e9-8025-00ff5d11a779' as uuid , ouuid_to_uuid(uuid_to_ouuid('07a2f327-103a-11e9-8025-00ff5d11a779')) as flip_flop;
++--------------------------------------+--------------------------------------+
+| uuid                                 | flip_flop                            |
++--------------------------------------+--------------------------------------+
+| 07a2f327-103a-11e9-8025-00ff5d11a779 | 07a2f327-103a-11e9-8025-00ff5d11a779 |
++--------------------------------------+--------------------------------------+
+1 row in set (0.00 sec)
+```
+
+
 ### More Information
 
 For more information on getting started with Doctrine, check out the "[Getting
