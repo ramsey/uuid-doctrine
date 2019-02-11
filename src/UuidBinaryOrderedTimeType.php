@@ -164,7 +164,7 @@ class UuidBinaryOrderedTimeType extends Type
     private function assertUuidV1(UuidInterface $value)
     {
         if (1 !== $value->getVersion()) {
-            throw ConversionException::conversionFailed(
+            throw ConversionException::conversionFailedFormat(
                 $value->toString(),
                 self::NAME,
                 self::ASSERT_FORMAT
