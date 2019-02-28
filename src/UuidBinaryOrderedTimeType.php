@@ -2,6 +2,7 @@
 
 namespace Ramsey\Uuid\Doctrine;
 
+use Doctrine\DBAL\ParameterType;
 use InvalidArgumentException;
 use Ramsey\Uuid\Codec\OrderedTimeCodec;
 use Doctrine\DBAL\Types\ConversionException;
@@ -180,5 +181,15 @@ class UuidBinaryOrderedTimeType extends Type
         $this->assertUuidV1($decoded);
 
         return $decoded;
+    }
+
+    /**
+     * @inheritdoc
+     *
+     * @return int
+     */
+    public function getBindingType()
+    {
+        return ParameterType::STRING;
     }
 }
