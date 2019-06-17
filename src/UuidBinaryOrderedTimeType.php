@@ -26,7 +26,7 @@ class UuidBinaryOrderedTimeType extends Type
     /**
     * @var string
     */
-    const ASSERT_FORMAT = 'UuidV1'
+    const ASSERT_FORMAT = 'UuidV1';
 
     /**
      * @var UuidFactory|null
