@@ -22,6 +22,11 @@ class UuidBinaryOrderedTimeType extends Type
      * @var string
      */
     const NAME = 'uuid_binary_ordered_time';
+    
+    /**
+    * @var string
+    */
+    const ASSERT_FORMAT = 'UuidV1';
 
     /**
      * @var UuidFactory|null
@@ -159,9 +164,10 @@ class UuidBinaryOrderedTimeType extends Type
     private function assertUuidV1(UuidInterface $value)
     {
         if (1 !== $value->getVersion()) {
-            throw ConversionException::conversionFailed(
+            throw ConversionException::conversionFailedFormat(
                 $value->toString(),
-                self::NAME
+                self::NAME,
+                self::ASSERT_FORMAT
             );
         }
     }
