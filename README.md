@@ -140,7 +140,7 @@ More suitable if you want to use UUIDs as primary key. Note that this can cause 
 * another code (that isn't aware of this method) attempts to decode the resulting bytes
 
 More information in this [Percona article][percona-optimized-uuids]
-and [UUID Talk by Ben Ramsey][benramsey-com-uuid-talk] (starts at slide [61](https://speakerdeck.com/ramsey/identify-all-the-things-with-uuids-true-north-php-2016?slide=64)).
+and [UUID Talk by Ben Ramsey][benramsey-com-uuid-talk] (starts at slide [61](https://speakerdeck.com/ramsey/identify-all-the-things-with-uuids-true-north-php-2016?slide=61)).
 
 ``` php
 \Doctrine\DBAL\Types\Type::addType('uuid_binary_ordered_time', 'Ramsey\Uuid\Doctrine\UuidBinaryOrderedTimeType');
