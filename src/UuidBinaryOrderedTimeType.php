@@ -22,7 +22,7 @@ class UuidBinaryOrderedTimeType extends Type
      * @var string
      */
     const NAME = 'uuid_binary_ordered_time';
-    
+
     /**
     * @var string
     */
@@ -133,7 +133,7 @@ class UuidBinaryOrderedTimeType extends Type
      *
      * @return null|UuidFactory
      */
-    private function getUuidFactory()
+    protected function getUuidFactory()
     {
         if (null === $this->factory) {
             $this->factory = new UuidFactory();
@@ -142,7 +142,7 @@ class UuidBinaryOrderedTimeType extends Type
         return $this->factory;
     }
 
-    private function getCodec()
+    protected function getCodec()
     {
         if (null === $this->codec) {
             $this->codec = new OrderedTimeCodec(
