@@ -32,15 +32,19 @@ the following in your bootstrap:
 ``` php
 \Doctrine\DBAL\Types\Type::addType('uuid', 'Ramsey\Uuid\Doctrine\UuidType');
 ```
+
 In Symfony:
+
  ``` yaml
-# app/config/config.yml
+# app/config/packages/doctrine.yaml
 doctrine:
     dbal:
         types:
-            uuid:  Ramsey\Uuid\Doctrine\UuidType
+            uuid: Ramsey\Uuid\Doctrine\UuidType
 ```
+
 In Zend Framework:
+
 ```php
 <?php 
 // module.config.php
@@ -62,6 +66,7 @@ Doctrine will handle the rest.
 
 ``` php
 use Doctrine\ORM\Mapping as ORM;
+use Ramsey\Uuid\Doctrine\UuidGenerator;
 
 /**
  * @ORM\Entity
@@ -75,7 +80,7 @@ class Product
      * @ORM\Id
      * @ORM\Column(type="uuid", unique=true)
      * @ORM\GeneratedValue(strategy="CUSTOM")
-     * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
+     * @ORM\CustomIdGenerator(class=UuidGenerator::class)
      */
     protected $id;
 
@@ -87,6 +92,7 @@ class Product
 ```
 
 If you use the XML Mapping instead of PHP annotations.
+
 ``` XML
 <id name="id" column="id" type="uuid">
     <generator strategy="CUSTOM"/>
@@ -95,6 +101,7 @@ If you use the XML Mapping instead of PHP annotations.
 ```
 
 You can also use the YAML Mapping.
+
 ``` yaml
 id:
     id:
@@ -119,8 +126,9 @@ $entityManager->getConnection()->getDatabasePlatform()->registerDoctrineTypeMapp
 ```
 
 In Symfony:
+
  ``` yaml
-# app/config/config.yml
+# app/config/packages/doctrine.yaml
 doctrine:
     dbal:
         types:
@@ -134,6 +142,7 @@ Then, when annotating model class properties, use `uuid_binary` instead of `uuid
     @Column(type="uuid_binary")
 
 ### InnoDB-optimised binary UUIDs
+
 More suitable if you want to use UUIDs as primary key. Note that this can cause unintended effects if
 
 * decoding bytes that were not generated using this method
@@ -148,8 +157,9 @@ $entityManager->getConnection()->getDatabasePlatform()->registerDoctrineTypeMapp
 ```
 
 In Symfony:
+
  ``` yaml
-# app/config/config.yml
+# app/config/packages/doctrine.yaml
 doctrine:
     dbal:
         types:
@@ -194,7 +204,7 @@ If you use the XML Mapping instead of PHP annotations.
 </id>
 ```
 
-You can use this format in mysql cli with this two functions : 
+You can use this format in mysql cli with this two functions: 
 ``` SQL
 CREATE 
   FUNCTION `uuid_to_ouuid`(uuid BINARY(36))
@@ -219,7 +229,8 @@ CREATE
 ));
 ```
 
-Test :
+Test:
+
 ```
 mysql> select '07a2f327-103a-11e9-8025-00ff5d11a779' as uuid , ouuid_to_uuid(uuid_to_ouuid('07a2f327-103a-11e9-8025-00ff5d11a779')) as flip_flop;
 +--------------------------------------+--------------------------------------+
