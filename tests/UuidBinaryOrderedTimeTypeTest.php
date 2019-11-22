@@ -122,6 +122,11 @@ class UuidBinaryOrderedTimeTypeTest extends TestCase
         $this->assertTrue($this->type->requiresSQLCommentHint($this->platform));
     }
 
+    public function testItReturnsAppropriateBindingType()
+    {
+        $this->assertEquals(16, $this->type->getBindingType());
+    }
+
     private function getPlatformMock()
     {
         return $this->getMockBuilder('Doctrine\DBAL\Platforms\AbstractPlatform')
