@@ -1,4 +1,5 @@
 <?php
+
 namespace Ramsey\Uuid\Doctrine;
 
 use Doctrine\ORM\Mapping\Entity;

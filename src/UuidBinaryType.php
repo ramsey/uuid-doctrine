@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the ramsey/uuid-doctrine library
  *
@@ -42,10 +43,10 @@ class UuidBinaryType extends Type
     public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform)
     {
         return $platform->getBinaryTypeDeclarationSQL(
-            array(
+            [
                 'length' => '16',
                 'fixed' => true,
-            )
+            ]
         );
     }
 
@@ -57,7 +58,7 @@ class UuidBinaryType extends Type
      */
     public function convertToPHPValue($value, AbstractPlatform $platform)
     {
-        if (empty($value)) {
+        if ($value === null || $value === '') {
             return null;
         }
 
@@ -82,7 +83,7 @@ class UuidBinaryType extends Type
      */
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
-        if (empty($value)) {
+        if ($value === null || $value === '') {
             return null;
         }
 

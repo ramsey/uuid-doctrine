@@ -1,4 +1,5 @@
 <?php
+
 namespace Ramsey\Uuid\Doctrine;
 
 use Doctrine\DBAL\Types\Type;
@@ -120,7 +121,7 @@ class UuidBinaryTypeTest extends TestCase
      */
     public function testGetGuidTypeDeclarationSQL()
     {
-        $this->assertEquals('DUMMYBINARY(16)', $this->type->getSqlDeclaration(array('length' => 36), $this->platform));
+        $this->assertEquals('DUMMYBINARY(16)', $this->type->getSqlDeclaration(['length' => 36], $this->platform));
     }
 
     /**
@@ -137,7 +138,7 @@ class UuidBinaryTypeTest extends TestCase
     private function getPlatformMock()
     {
         return $this->getMockBuilder('Doctrine\DBAL\Platforms\AbstractPlatform')
-            ->setMethods(array('getBinaryTypeDeclarationSQLSnippet'))
+            ->setMethods(['getBinaryTypeDeclarationSQLSnippet'])
             ->getMockForAbstractClass();
     }
 }

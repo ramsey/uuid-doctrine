@@ -114,7 +114,7 @@ class UuidBinaryOrderedTimeTypeTest extends TestCase
 
     public function testGetGuidTypeDeclarationSQL()
     {
-        $this->assertEquals('DUMMYBINARY(16)', $this->type->getSqlDeclaration(array('length' => 36), $this->platform));
+        $this->assertEquals('DUMMYBINARY(16)', $this->type->getSqlDeclaration(['length' => 36], $this->platform));
     }
 
     public function testRequiresSQLCommentHint()
@@ -125,7 +125,7 @@ class UuidBinaryOrderedTimeTypeTest extends TestCase
     private function getPlatformMock()
     {
         return $this->getMockBuilder('Doctrine\DBAL\Platforms\AbstractPlatform')
-            ->setMethods(array('getBinaryTypeDeclarationSQLSnippet'))
+            ->setMethods(['getBinaryTypeDeclarationSQLSnippet'])
             ->getMockForAbstractClass();
     }
 
