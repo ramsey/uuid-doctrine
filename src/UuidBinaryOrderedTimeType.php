@@ -22,7 +22,7 @@ class UuidBinaryOrderedTimeType extends Type
      * @var string
      */
     const NAME = 'uuid_binary_ordered_time';
-    
+
     /**
     * @var string
     */
@@ -47,10 +47,10 @@ class UuidBinaryOrderedTimeType extends Type
     public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform)
     {
         return $platform->getBinaryTypeDeclarationSQL(
-            array(
+            [
                 'length' => '16',
                 'fixed' => true,
-            )
+            ]
         );
     }
 
@@ -62,7 +62,7 @@ class UuidBinaryOrderedTimeType extends Type
      */
     public function convertToPHPValue($value, AbstractPlatform $platform)
     {
-        if (empty($value)) {
+        if ($value === null || $value === '') {
             return null;
         }
 
@@ -85,7 +85,7 @@ class UuidBinaryOrderedTimeType extends Type
      */
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
-        if (empty($value)) {
+        if ($value === null || $value === '') {
             return null;
         }
 

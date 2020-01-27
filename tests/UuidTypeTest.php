@@ -1,4 +1,5 @@
 <?php
+
 namespace Ramsey\Uuid\Doctrine;
 
 use Doctrine\DBAL\Types\Type;
@@ -148,7 +149,7 @@ class UuidTypeTest extends TestCase
      */
     public function testGetGuidTypeDeclarationSQL()
     {
-        $this->assertEquals('DUMMYVARCHAR()', $this->type->getSqlDeclaration(array('length' => 36), $this->platform));
+        $this->assertEquals('DUMMYVARCHAR()', $this->type->getSqlDeclaration(['length' => 36], $this->platform));
     }
 
     /**
@@ -165,7 +166,7 @@ class UuidTypeTest extends TestCase
     private function getPlatformMock()
     {
         return $this->getMockBuilder('Doctrine\DBAL\Platforms\AbstractPlatform')
-            ->setMethods(array('getGuidTypeDeclarationSQL'))
+            ->setMethods(['getGuidTypeDeclarationSQL'])
             ->getMockForAbstractClass();
     }
 }

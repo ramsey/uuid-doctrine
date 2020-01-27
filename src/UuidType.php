@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the ramsey/uuid-doctrine library
  *
@@ -52,7 +53,7 @@ class UuidType extends Type
      */
     public function convertToPHPValue($value, AbstractPlatform $platform)
     {
-        if (empty($value)) {
+        if ($value === null || $value === '') {
             return null;
         }
 
@@ -77,7 +78,7 @@ class UuidType extends Type
      */
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
-        if (empty($value)) {
+        if ($value === null || $value === '') {
             return null;
         }
 
