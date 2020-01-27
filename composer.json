@@ -12,9 +12,9 @@
     "homepage": "https://github.com/ramsey/uuid-doctrine",
     "license": "MIT",
     "require": {
-        "php": "^5.4 | ^7.0",
+        "php": "^5.4 | ^7 | ^8",
         "doctrine/orm": "^2.5",
-        "ramsey/uuid": "^3.5"
+        "ramsey/uuid": "^3.5 | ^4"
     },
     "require-dev": {
         "jakub-onderka/php-parallel-lint": "^1",

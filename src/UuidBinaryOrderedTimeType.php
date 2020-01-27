@@ -17,6 +17,7 @@ use Ramsey\Uuid\Codec\OrderedTimeCodec;
 use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
+use Ramsey\Uuid\Exception\UnsupportedOperationException;
 use Ramsey\Uuid\UuidFactory;
 use Ramsey\Uuid\UuidInterface;
 
@@ -214,7 +215,15 @@ class UuidBinaryOrderedTimeType extends Type
      */
     private function decode($bytes)
     {
-        $decoded = $this->getCodec()->decodeBytes($bytes);
+        try {
+            $decoded = $this->getCodec()->decodeBytes($bytes);
+        } catch (UnsupportedOperationException $e) {
+            throw ConversionException::conversionFailedFormat(
+                bin2hex($bytes),
+                self::NAME,
+                self::ASSERT_FORMAT
+            );
+        }
 
         $this->assertUuidV1($decoded);
 
