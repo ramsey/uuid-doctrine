@@ -1,10 +1,9 @@
 <?php
+
 namespace Ramsey\Uuid\Doctrine;
 
-use Doctrine\DBAL\Types\Type;
-use Doctrine\Tests\DBAL\Mocks\MockPlatform;
+use Doctrine\ORM\Mapping\Entity;
 use PHPUnit\Framework\TestCase;
-use Ramsey\Uuid\Uuid;
 
 class UuidGeneratorTest extends TestCase
 {
@@ -15,12 +14,12 @@ class UuidGeneratorTest extends TestCase
     protected function setUp()
     {
         $this->em = new TestEntityManager();
-        $this->entity = new \Doctrine\ORM\Mapping\Entity();
+        $this->entity = new Entity();
         $this->generator = new UuidGenerator();
     }
 
     /**
-     * @covers Ramsey\Uuid\Doctrine\UuidGenerator::generate
+     * @covers \Ramsey\Uuid\Doctrine\UuidGenerator::generate
      */
     public function testUuidGeneratorGenerates()
     {

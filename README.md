@@ -10,7 +10,9 @@
 The ramsey/uuid-doctrine package provides the ability to use
 [ramsey/uuid][ramsey-uuid] as a [Doctrine field type][doctrine-field-type].
 
-This project adheres to a [Contributor Code of Conduct][conduct]. By participating in this project and its community, you are expected to uphold this code.
+This project adheres to a [Contributor Code of Conduct][conduct]. By
+participating in this project and its community, you are expected to uphold this
+code.
 
 ## Installation
 
@@ -32,17 +34,21 @@ the following in your bootstrap:
 ``` php
 \Doctrine\DBAL\Types\Type::addType('uuid', 'Ramsey\Uuid\Doctrine\UuidType');
 ```
+
 In Symfony:
- ``` yaml
+
+``` yaml
 # app/config/config.yml
 doctrine:
     dbal:
         types:
             uuid:  Ramsey\Uuid\Doctrine\UuidType
 ```
+
 In Zend Framework:
+
 ```php
-<?php 
+<?php
 // module.config.php
 use Ramsey\Uuid\Doctrine\UuidType;
 
@@ -87,7 +93,8 @@ class Product
 ```
 
 If you use the XML Mapping instead of PHP annotations.
-``` XML
+
+``` xml
 <id name="id" column="id" type="uuid">
     <generator strategy="CUSTOM"/>
     <custom-id-generator class="Ramsey\Uuid\Doctrine\UuidGenerator"/>
@@ -95,6 +102,7 @@ If you use the XML Mapping instead of PHP annotations.
 ```
 
 You can also use the YAML Mapping.
+
 ``` yaml
 id:
     id:
@@ -119,7 +127,8 @@ $entityManager->getConnection()->getDatabasePlatform()->registerDoctrineTypeMapp
 ```
 
 In Symfony:
- ``` yaml
+
+``` yaml
 # app/config/config.yml
 doctrine:
     dbal:
@@ -127,20 +136,22 @@ doctrine:
             uuid_binary:  Ramsey\Uuid\Doctrine\UuidBinaryType
         mapping_types:
             uuid_binary: binary
-```     
+```
 
 Then, when annotating model class properties, use `uuid_binary` instead of `uuid`:
 
     @Column(type="uuid_binary")
 
 ### InnoDB-optimised binary UUIDs
-More suitable if you want to use UUIDs as primary key. Note that this can cause unintended effects if
+More suitable if you want to use UUIDs as primary key. Note that this can cause
+unintended effects if:
 
 * decoding bytes that were not generated using this method
-* another code (that isn't aware of this method) attempts to decode the resulting bytes
+* another code (that isn't aware of this method) attempts to decode the
+  resulting bytes
 
 More information in this [Percona article][percona-optimized-uuids]
-and [UUID Talk by Ben Ramsey][benramsey-com-uuid-talk] (starts at slide [61](https://speakerdeck.com/ramsey/identify-all-the-things-with-uuids-true-north-php-2016?slide=61)).
+and [UUID Talk by Ben Ramsey][benramsey-com-uuid-talk] (starts at [slide 58][]).
 
 ``` php
 \Doctrine\DBAL\Types\Type::addType('uuid_binary_ordered_time', 'Ramsey\Uuid\Doctrine\UuidBinaryOrderedTimeType');
@@ -148,6 +159,7 @@ $entityManager->getConnection()->getDatabasePlatform()->registerDoctrineTypeMapp
 ```
 
 In Symfony:
+
  ``` yaml
 # app/config/config.yml
 doctrine:
@@ -156,11 +168,11 @@ doctrine:
             uuid_binary_ordered_time: Ramsey\Uuid\Doctrine\UuidBinaryOrderedTimeType
         mapping_types:
             uuid_binary_ordered_time: binary
-```     
+```
 
 Then, in your models, you may annotate properties by setting the `@Column`
-type to `uuid_binary_ordered_time`, and defining a custom generator of `Ramsey\Uuid\UuidOrderedTimeGenerator`.
-Doctrine will handle the rest.
+type to `uuid_binary_ordered_time`, and defining a custom generator of
+`Ramsey\Uuid\UuidOrderedTimeGenerator`. Doctrine will handle the rest.
 
 ``` php
 /**
@@ -187,16 +199,18 @@ class Product
 ```
 
 If you use the XML Mapping instead of PHP annotations.
-``` XML
+
+``` xml
 <id name="id" column="id" type="uuid_binary_ordered_time">
     <generator strategy="CUSTOM"/>
     <custom-id-generator class="Ramsey\Uuid\Doctrine\UuidOrderedTimeGenerator"/>
 </id>
 ```
 
-You can use this format in mysql cli with this two functions : 
-``` SQL
-CREATE 
+You can use this format in mysql cli with this two functions:
+
+``` sql
+CREATE
   FUNCTION `uuid_to_ouuid`(uuid BINARY(36))
   RETURNS binary(16) DETERMINISTIC
   RETURN UNHEX(CONCAT(
@@ -207,7 +221,7 @@ CREATE
   SUBSTR(uuid, 25, 12)
 ));
 
-CREATE 
+CREATE
   FUNCTION ouuid_to_uuid(uuid BINARY(16))
   RETURNS VARCHAR(36)
   RETURN LOWER(CONCAT(
@@ -219,7 +233,8 @@ CREATE
 ));
 ```
 
-Test :
+Test:
+
 ```
 mysql> select '07a2f327-103a-11e9-8025-00ff5d11a779' as uuid , ouuid_to_uuid(uuid_to_ouuid('07a2f327-103a-11e9-8025-00ff5d11a779')) as flip_flop;
 +--------------------------------------+--------------------------------------+
@@ -250,12 +265,13 @@ information.
 [benramsey-com-uuid-talk]: https://benramsey.com/talks/2016/11/tnphp-uuid/
 
 [ramsey-uuid]: https://github.com/ramsey/uuid
-[conduct]: https://github.com/ramsey/uuid-doctrine/blob/master/CODE_OF_CONDUCT.md
-[doctrine-field-type]: http://doctrine-dbal.readthedocs.org/en/latest/reference/types.html
+[conduct]: https://github.com/ramsey/uuid-doctrine/blob/master/.github/CODE_OF_CONDUCT.md
+[doctrine-field-type]: https://www.doctrine-project.org/projects/doctrine-dbal/en/2.10/reference/types.html
 [packagist]: https://packagist.org/packages/ramsey/uuid-doctrine
 [composer]: http://getcomposer.org/
-[contributing]: https://github.com/ramsey/uuid-doctrine/blob/master/CONTRIBUTING.md
-[doctrine-getting-started]: http://doctrine-orm.readthedocs.org/en/latest/tutorials/getting-started.html
+[contributing]: https://github.com/ramsey/uuid-doctrine/blob/master/.github/CONTRIBUTING.md
+[doctrine-getting-started]: https://www.doctrine-project.org/projects/doctrine-orm/en/current/tutorials/getting-started.html
+[slide 58]: https://speakerdeck.com/ramsey/identify-all-the-things-with-uuids-true-north-php-2016?slide=58
 
 [badge-source]: http://img.shields.io/badge/source-ramsey/uuid--doctrine-blue.svg?style=flat-square
 [badge-release]: https://img.shields.io/packagist/v/ramsey/uuid-doctrine.svg?style=flat-square
