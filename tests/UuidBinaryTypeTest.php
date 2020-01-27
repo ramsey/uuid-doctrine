@@ -1,8 +1,11 @@
 <?php
+
 namespace Ramsey\Uuid\Doctrine;
 
+use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
-use Doctrine\Tests\DBAL\Mocks\MockPlatform;
+use Mockery;
+use Mockery\MockInterface;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
 
@@ -21,15 +24,16 @@ class UuidBinaryTypeTest extends TestCase
     protected function setUp()
     {
         $this->platform = $this->getPlatformMock();
-        $this->platform->expects($this->any())
-            ->method('getBinaryTypeDeclarationSQLSnippet')
-            ->will($this->returnValue('DUMMYBINARY(16)'));
+        $this->platform->shouldAllowMockingProtectedMethods();
+        $this->platform
+            ->shouldReceive('getBinaryTypeDeclarationSQLSnippet')
+            ->andReturn('DUMMYBINARY(16)');
 
         $this->type = Type::getType('uuid_binary');
     }
 
     /**
-     * @covers Ramsey\Uuid\Doctrine\UuidBinaryType::convertToDatabaseValue
+     * @covers \Ramsey\Uuid\Doctrine\UuidBinaryType::convertToDatabaseValue
      */
     public function testUuidConvertsToDatabaseValue()
     {
@@ -42,7 +46,7 @@ class UuidBinaryTypeTest extends TestCase
     }
 
     /**
-     * @covers Ramsey\Uuid\Doctrine\UuidBinaryType::convertToDatabaseValue
+     * @covers \Ramsey\Uuid\Doctrine\UuidBinaryType::convertToDatabaseValue
      */
     public function testStringUuidConvertsToDatabaseValue()
     {
@@ -55,8 +59,8 @@ class UuidBinaryTypeTest extends TestCase
     }
 
     /**
-     * @expectedException Doctrine\DBAL\Types\ConversionException
-     * @covers Ramsey\Uuid\Doctrine\UuidBinaryType::convertToDatabaseValue
+     * @expectedException \Doctrine\DBAL\Types\ConversionException
+     * @covers \Ramsey\Uuid\Doctrine\UuidBinaryType::convertToDatabaseValue
      */
     public function testInvalidUuidConversionForDatabaseValue()
     {
@@ -64,7 +68,7 @@ class UuidBinaryTypeTest extends TestCase
     }
 
     /**
-     * @covers Ramsey\Uuid\Doctrine\UuidBinaryType::convertToDatabaseValue
+     * @covers \Ramsey\Uuid\Doctrine\UuidBinaryType::convertToDatabaseValue
      */
     public function testNullConversionForDatabaseValue()
     {
@@ -72,7 +76,7 @@ class UuidBinaryTypeTest extends TestCase
     }
 
     /**
-     * @covers Ramsey\Uuid\Doctrine\UuidBinaryType::convertToPHPValue
+     * @covers \Ramsey\Uuid\Doctrine\UuidBinaryType::convertToPHPValue
      */
     public function testUuidConvertsToPHPValue()
     {
@@ -82,8 +86,8 @@ class UuidBinaryTypeTest extends TestCase
     }
 
     /**
-     * @expectedException Doctrine\DBAL\Types\ConversionException
-     * @covers Ramsey\Uuid\Doctrine\UuidBinaryType::convertToPHPValue
+     * @expectedException \Doctrine\DBAL\Types\ConversionException
+     * @covers \Ramsey\Uuid\Doctrine\UuidBinaryType::convertToPHPValue
      */
     public function testInvalidUuidConversionForPHPValue()
     {
@@ -91,7 +95,7 @@ class UuidBinaryTypeTest extends TestCase
     }
 
     /**
-     * @covers Ramsey\Uuid\Doctrine\UuidBinaryType::convertToPHPValue
+     * @covers \Ramsey\Uuid\Doctrine\UuidBinaryType::convertToPHPValue
      */
     public function testNullConversionForPHPValue()
     {
@@ -99,7 +103,7 @@ class UuidBinaryTypeTest extends TestCase
     }
 
     /**
-     * @covers Ramsey\Uuid\Doctrine\UuidBinaryType::convertToPHPValue
+     * @covers \Ramsey\Uuid\Doctrine\UuidBinaryType::convertToPHPValue
      */
     public function testReturnValueIfUuidForPHPValue()
     {
@@ -108,7 +112,7 @@ class UuidBinaryTypeTest extends TestCase
     }
 
     /**
-     * @covers Ramsey\Uuid\Doctrine\UuidBinaryType::getName
+     * @covers \Ramsey\Uuid\Doctrine\UuidBinaryType::getName
      */
     public function testGetName()
     {
@@ -116,15 +120,15 @@ class UuidBinaryTypeTest extends TestCase
     }
 
     /**
-     * @covers Ramsey\Uuid\Doctrine\UuidBinaryType::getSqlDeclaration
+     * @covers \Ramsey\Uuid\Doctrine\UuidBinaryType::getSqlDeclaration
      */
     public function testGetGuidTypeDeclarationSQL()
     {
-        $this->assertEquals('DUMMYBINARY(16)', $this->type->getSqlDeclaration(array('length' => 36), $this->platform));
+        $this->assertEquals('DUMMYBINARY(16)', $this->type->getSqlDeclaration(['length' => 36], $this->platform));
     }
 
     /**
-     * @covers Ramsey\Uuid\Doctrine\UuidBinaryType::requiresSQLCommentHint
+     * @covers \Ramsey\Uuid\Doctrine\UuidBinaryType::requiresSQLCommentHint
      */
     public function testRequiresSQLCommentHint()
     {
@@ -132,12 +136,10 @@ class UuidBinaryTypeTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return AbstractPlatform & MockInterface
      */
     private function getPlatformMock()
     {
-        return $this->getMockBuilder('Doctrine\DBAL\Platforms\AbstractPlatform')
-            ->setMethods(array('getBinaryTypeDeclarationSQLSnippet'))
-            ->getMockForAbstractClass();
+        return Mockery::mock('Doctrine\DBAL\Platforms\AbstractPlatform')->makePartial();
     }
 }

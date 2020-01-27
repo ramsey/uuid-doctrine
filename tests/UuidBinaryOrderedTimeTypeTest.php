@@ -2,7 +2,10 @@
 
 namespace Ramsey\Uuid\Doctrine;
 
+use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
+use Mockery;
+use Mockery\MockInterface;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
 
@@ -23,9 +26,10 @@ class UuidBinaryOrderedTimeTypeTest extends TestCase
     protected function setUp()
     {
         $this->platform = $this->getPlatformMock();
-        $this->platform->expects($this->any())
-            ->method('getBinaryTypeDeclarationSQLSnippet')
-            ->will($this->returnValue('DUMMYBINARY(16)'));
+        $this->platform->shouldAllowMockingProtectedMethods();
+        $this->platform
+            ->shouldReceive('getBinaryTypeDeclarationSQLSnippet')
+            ->andReturn('DUMMYBINARY(16)');
 
         $this->type = Type::getType('uuid_binary_ordered_time');
     }
@@ -114,19 +118,12 @@ class UuidBinaryOrderedTimeTypeTest extends TestCase
 
     public function testGetGuidTypeDeclarationSQL()
     {
-        $this->assertEquals('DUMMYBINARY(16)', $this->type->getSqlDeclaration(array('length' => 36), $this->platform));
+        $this->assertEquals('DUMMYBINARY(16)', $this->type->getSqlDeclaration(['length' => 36], $this->platform));
     }
 
     public function testRequiresSQLCommentHint()
     {
         $this->assertTrue($this->type->requiresSQLCommentHint($this->platform));
-    }
-
-    private function getPlatformMock()
-    {
-        return $this->getMockBuilder('Doctrine\DBAL\Platforms\AbstractPlatform')
-            ->setMethods(array('getBinaryTypeDeclarationSQLSnippet'))
-            ->getMockForAbstractClass();
     }
 
     public function provideUnsupportedDatabaseValues()
@@ -142,5 +139,13 @@ class UuidBinaryOrderedTimeTypeTest extends TestCase
         }
 
         return $values;
+    }
+
+    /**
+     * @return AbstractPlatform & MockInterface
+     */
+    private function getPlatformMock()
+    {
+        return Mockery::mock('Doctrine\DBAL\Platforms\AbstractPlatform')->makePartial();
     }
 }
