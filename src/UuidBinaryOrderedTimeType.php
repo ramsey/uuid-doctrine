@@ -148,7 +148,7 @@ class UuidBinaryOrderedTimeType extends Type
      *
      * @return UuidFactory|null
      */
-    private function getUuidFactory()
+    protected function getUuidFactory()
     {
         if (null === $this->factory) {
             $this->factory = new UuidFactory();
@@ -160,7 +160,7 @@ class UuidBinaryOrderedTimeType extends Type
     /**
      * @return OrderedTimeCodec
      */
-    private function getCodec()
+    protected function getCodec()
     {
         if (null === $this->codec) {
             $this->codec = new OrderedTimeCodec(
