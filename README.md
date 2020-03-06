@@ -209,7 +209,7 @@ If you use the XML Mapping instead of PHP annotations.
 </id>
 ```
 
-You can use this format in mysql cli with these two functions: 
+You can use this format in mysql cli with these two functions:
 
 ``` sql
 CREATE 
