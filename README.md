@@ -38,7 +38,7 @@ the following in your bootstrap:
 In Symfony:
 
 ``` yaml
-# app/config/packages/doctrine.yaml
+# config/packages/doctrine.yaml
 doctrine:
     dbal:
         types:
@@ -130,7 +130,7 @@ $entityManager->getConnection()->getDatabasePlatform()->registerDoctrineTypeMapp
 In Symfony:
 
 ``` yaml
-# app/config/packages/doctrine.yaml
+# config/packages/doctrine.yaml
 doctrine:
     dbal:
         types:
@@ -163,7 +163,7 @@ $entityManager->getConnection()->getDatabasePlatform()->registerDoctrineTypeMapp
 In Symfony:
 
  ``` yaml
-# app/config/packages/doctrine.yaml
+# config/packages/doctrine.yaml
 doctrine:
     dbal:
         types:
