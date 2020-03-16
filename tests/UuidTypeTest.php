@@ -50,7 +50,7 @@ class UuidTypeTest extends TestCase
      */
     public function testUuidInterfaceConvertsToDatabaseValue()
     {
-        $uuid = \Mockery::mock('Ramsey\\Uuid\\UuidInterface,Ramsey\\Uuid\\Doctrine\\StringableInterface');
+        $uuid = \Mockery::mock('Ramsey\\Uuid\\Uuid');
 
         $uuid
             ->shouldReceive('__toString')
@@ -96,7 +96,7 @@ class UuidTypeTest extends TestCase
      */
     public function testUuidInterfaceConvertsToPHPValue()
     {
-        $uuid = \Mockery::mock('Ramsey\\Uuid\\UuidInterface');
+        $uuid = \Mockery::mock('Ramsey\\Uuid\\Uuid');
 
         $actual = $this->type->convertToPHPValue($uuid, $this->platform);
 
