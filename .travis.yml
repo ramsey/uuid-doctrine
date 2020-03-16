@@ -40,9 +40,9 @@ jobs:
     - php: 7.4
       env: COMPOSER_OPTIONS=--prefer-lowest
     - php: nightly
-      env: COMPOSER_OPTIONS=--prefer-stable --ignore-platform-reqs
+      env: COMPOSER_OPTIONS="--prefer-stable --ignore-platform-reqs"
     - php: nightly
-      env: COMPOSER_OPTIONS=--prefer-lowest --ignore-platform-reqs
+      env: COMPOSER_OPTIONS="--prefer-lowest --ignore-platform-reqs"
   allow_failures:
     - php: nightly
 
