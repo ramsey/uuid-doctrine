@@ -5,42 +5,34 @@ jobs:
   include:
     - php: 5.4
       dist: trusty
-      env: COMPOSER_OPTIONS=--prefer-latest
     - php: 5.4
       dist: trusty
       env: COMPOSER_OPTIONS="--prefer-lowest --prefer-stable"
     - php: 5.5
       dist: trusty
-      env: COMPOSER_OPTIONS=--prefer-latest
     - php: 5.5
       dist: trusty
       env: COMPOSER_OPTIONS="--prefer-lowest --prefer-stable"
     - php: 5.6
-      env: COMPOSER_OPTIONS=--prefer-latest
     - php: 5.6
       env: COMPOSER_OPTIONS="--prefer-lowest --prefer-stable"
     - php: 7.0
-      env: COMPOSER_OPTIONS=--prefer-latest
     - php: 7.0
       env: COMPOSER_OPTIONS="--prefer-lowest --prefer-stable"
     - php: 7.1
-      env: COMPOSER_OPTIONS=--prefer-latest
     - php: 7.1
       env: COMPOSER_OPTIONS="--prefer-lowest --prefer-stable"
     - php: 7.2
-      env: COMPOSER_OPTIONS=--prefer-latest
     - php: 7.2
       env: COMPOSER_OPTIONS="--prefer-lowest --prefer-stable"
     - php: 7.3
-      env: COMPOSER_OPTIONS=--prefer-latest
     - php: 7.3
       env: COMPOSER_OPTIONS="--prefer-lowest --prefer-stable"
     - php: 7.4
-      env: COMPOSER_OPTIONS=--prefer-latest
     - php: 7.4
       env: COMPOSER_OPTIONS="--prefer-lowest --prefer-stable"
     - php: nightly
-      env: COMPOSER_OPTIONS="--prefer-latest --ignore-platform-reqs"
+      env: COMPOSER_OPTIONS="--ignore-platform-reqs"
   allow_failures:
     - php: nightly
 
