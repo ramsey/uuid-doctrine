@@ -211,8 +211,8 @@ You can use this format in mysql cli with this two functions:
 
 ``` sql
 CREATE
-  FUNCTION `uuid_to_ouuid`(uuid BINARY(36))
-  RETURNS binary(16) DETERMINISTIC
+  FUNCTION `uuid_to_ouuid`(uuid VARCHAR(36))
+  RETURNS BINARY(16) DETERMINISTIC
   RETURN UNHEX(CONCAT(
   SUBSTR(uuid, 15, 4),
   SUBSTR(uuid, 10, 4),
