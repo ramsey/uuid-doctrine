@@ -8,12 +8,12 @@ use PHPUnit\Framework\TestCase;
 class UuidOrderedTimeGeneratorTest extends TestCase
 {
     /**
-     * @var \Ramsey\Uuid\Doctrine\TestEntityManager
+     * @var TestEntityManager
      */
     private $em;
 
     /**
-     * @var \Doctrine\ORM\Mapping\Entity
+     * @var Entity
      */
     private $entity;
 

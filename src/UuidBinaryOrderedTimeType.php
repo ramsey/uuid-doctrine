@@ -1,5 +1,15 @@
 <?php
 
+/**
+ * This file is part of the ramsey/uuid-doctrine library
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * @copyright Copyright (c) Ben Ramsey <http://benramsey.com>
+ * @license http://opensource.org/licenses/MIT MIT
+ */
+
 namespace Ramsey\Uuid\Doctrine;
 
 use InvalidArgumentException;
@@ -7,6 +17,7 @@ use Ramsey\Uuid\Codec\OrderedTimeCodec;
 use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
+use Ramsey\Uuid\Exception\UnsupportedOperationException;
 use Ramsey\Uuid\UuidFactory;
 use Ramsey\Uuid\UuidInterface;
 
@@ -41,8 +52,8 @@ class UuidBinaryOrderedTimeType extends Type
     /**
      * {@inheritdoc}
      *
-     * @param array                                     $fieldDeclaration
-     * @param \Doctrine\DBAL\Platforms\AbstractPlatform $platform
+     * @param array $fieldDeclaration
+     * @param AbstractPlatform $platform
      */
     public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform)
     {
@@ -57,8 +68,10 @@ class UuidBinaryOrderedTimeType extends Type
     /**
      * {@inheritdoc}
      *
-     * @param string|UuidInterface|null                 $value
-     * @param \Doctrine\DBAL\Platforms\AbstractPlatform $platform
+     * @param string|UuidInterface|null $value
+     * @param AbstractPlatform $platform
+     *
+     * @throws ConversionException
      */
     public function convertToPHPValue($value, AbstractPlatform $platform)
     {
@@ -80,8 +93,10 @@ class UuidBinaryOrderedTimeType extends Type
     /**
      * {@inheritdoc}
      *
-     * @param UuidInterface|string|null                 $value
-     * @param \Doctrine\DBAL\Platforms\AbstractPlatform $platform
+     * @param UuidInterface|string|null $value
+     * @param AbstractPlatform $platform
+     *
+     * @throws ConversionException
      */
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
@@ -119,8 +134,9 @@ class UuidBinaryOrderedTimeType extends Type
     /**
      * {@inheritdoc}
      *
-     * @param \Doctrine\DBAL\Platforms\AbstractPlatform $platform
-     * @return boolean
+     * @param AbstractPlatform $platform
+     *
+     * @return bool
      */
     public function requiresSQLCommentHint(AbstractPlatform $platform)
     {
@@ -131,9 +147,9 @@ class UuidBinaryOrderedTimeType extends Type
      * Creates/returns a UuidFactory instance that uses a specific codec
      * that creates a binary that can be time-ordered
      *
-     * @return null|UuidFactory
+     * @return UuidFactory|null
      */
-    private function getUuidFactory()
+    protected function getUuidFactory()
     {
         if (null === $this->factory) {
             $this->factory = new UuidFactory();
@@ -142,7 +158,10 @@ class UuidBinaryOrderedTimeType extends Type
         return $this->factory;
     }
 
-    private function getCodec()
+    /**
+     * @return OrderedTimeCodec
+     */
+    protected function getCodec()
     {
         if (null === $this->codec) {
             $this->codec = new OrderedTimeCodec(
@@ -159,6 +178,7 @@ class UuidBinaryOrderedTimeType extends Type
      * this type is likely a mistake
      *
      * @param UuidInterface $value
+     *
      * @throws ConversionException
      */
     private function assertUuidV1(UuidInterface $value)
@@ -172,6 +192,13 @@ class UuidBinaryOrderedTimeType extends Type
         }
     }
 
+    /**
+     * @param UuidInterface $uuid
+     *
+     * @return string
+     *
+     * @throws ConversionException
+     */
     private function encode(UuidInterface $uuid)
     {
         $this->assertUuidV1($uuid);
@@ -179,9 +206,24 @@ class UuidBinaryOrderedTimeType extends Type
         return $this->getCodec()->encodeBinary($uuid);
     }
 
+    /**
+     * @param string $bytes
+     *
+     * @return UuidInterface
+     *
+     * @throws ConversionException
+     */
     private function decode($bytes)
     {
-        $decoded = $this->getCodec()->decodeBytes($bytes);
+        try {
+            $decoded = $this->getCodec()->decodeBytes($bytes);
+        } catch (UnsupportedOperationException $e) {
+            throw ConversionException::conversionFailedFormat(
+                bin2hex($bytes),
+                self::NAME,
+                self::ASSERT_FORMAT
+            );
+        }
 
         $this->assertUuidV1($decoded);
 

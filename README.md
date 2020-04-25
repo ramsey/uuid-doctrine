@@ -212,9 +212,9 @@ If you use the XML Mapping instead of PHP annotations.
 You can use this format in mysql cli with these two functions:
 
 ``` sql
-CREATE 
-  FUNCTION `uuid_to_ouuid`(uuid BINARY(36))
-  RETURNS binary(16) DETERMINISTIC
+CREATE
+  FUNCTION `uuid_to_ouuid`(uuid VARCHAR(36))
+  RETURNS BINARY(16) DETERMINISTIC
   RETURN UNHEX(CONCAT(
   SUBSTR(uuid, 15, 4),
   SUBSTR(uuid, 10, 4),

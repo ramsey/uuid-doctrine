@@ -2,8 +2,10 @@
 
 namespace Ramsey\Uuid\Doctrine;
 
+use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
-use Doctrine\Tests\DBAL\Mocks\MockPlatform;
+use Mockery;
+use Mockery\MockInterface;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
 
@@ -22,15 +24,16 @@ class UuidTypeTest extends TestCase
     protected function setUp()
     {
         $this->platform = $this->getPlatformMock();
-        $this->platform->expects($this->any())
-            ->method('getGuidTypeDeclarationSQL')
-            ->will($this->returnValue('DUMMYVARCHAR()'));
+        $this->platform->shouldAllowMockingProtectedMethods();
+        $this->platform
+            ->shouldReceive('getGuidTypeDeclarationSQL')
+            ->andReturn('DUMMYVARCHAR()');
 
         $this->type = Type::getType('uuid');
     }
 
     /**
-     * @covers Ramsey\Uuid\Doctrine\UuidType::convertToDatabaseValue
+     * @covers \Ramsey\Uuid\Doctrine\UuidType::convertToDatabaseValue
      */
     public function testUuidConvertsToDatabaseValue()
     {
@@ -43,11 +46,11 @@ class UuidTypeTest extends TestCase
     }
 
     /**
-     * @covers Ramsey\Uuid\Doctrine\UuidType::convertToDatabaseValue
+     * @covers \Ramsey\Uuid\Doctrine\UuidType::convertToDatabaseValue
      */
     public function testUuidInterfaceConvertsToDatabaseValue()
     {
-        $uuid = \Mockery::mock('Ramsey\\Uuid\\UuidInterface,Ramsey\\Uuid\\Doctrine\\StringableInterface');
+        $uuid = \Mockery::mock('Ramsey\\Uuid\\Uuid');
 
         $uuid
             ->shouldReceive('__toString')
@@ -60,7 +63,7 @@ class UuidTypeTest extends TestCase
     }
 
     /**
-     * @covers Ramsey\Uuid\Doctrine\UuidType::convertToDatabaseValue
+     * @covers \Ramsey\Uuid\Doctrine\UuidType::convertToDatabaseValue
      */
     public function testUuidStringConvertsToDatabaseValue()
     {
@@ -72,8 +75,8 @@ class UuidTypeTest extends TestCase
     }
 
     /**
-     * @expectedException Doctrine\DBAL\Types\ConversionException
-     * @covers Ramsey\Uuid\Doctrine\UuidType::convertToDatabaseValue
+     * @expectedException \Doctrine\DBAL\Types\ConversionException
+     * @covers \Ramsey\Uuid\Doctrine\UuidType::convertToDatabaseValue
      */
     public function testInvalidUuidConversionForDatabaseValue()
     {
@@ -81,7 +84,7 @@ class UuidTypeTest extends TestCase
     }
 
     /**
-     * @covers Ramsey\Uuid\Doctrine\UuidType::convertToDatabaseValue
+     * @covers \Ramsey\Uuid\Doctrine\UuidType::convertToDatabaseValue
      */
     public function testNullConversionForDatabaseValue()
     {
@@ -89,11 +92,11 @@ class UuidTypeTest extends TestCase
     }
 
     /**
-     * @covers Ramsey\Uuid\Doctrine\UuidType::convertToPHPValue
+     * @covers \Ramsey\Uuid\Doctrine\UuidType::convertToPHPValue
      */
     public function testUuidInterfaceConvertsToPHPValue()
     {
-        $uuid = \Mockery::mock('Ramsey\\Uuid\\UuidInterface');
+        $uuid = \Mockery::mock('Ramsey\\Uuid\\Uuid');
 
         $actual = $this->type->convertToPHPValue($uuid, $this->platform);
 
@@ -101,7 +104,7 @@ class UuidTypeTest extends TestCase
     }
 
     /**
-     * @covers Ramsey\Uuid\Doctrine\UuidType::convertToPHPValue
+     * @covers \Ramsey\Uuid\Doctrine\UuidType::convertToPHPValue
      */
     public function testUuidConvertsToPHPValue()
     {
@@ -111,8 +114,8 @@ class UuidTypeTest extends TestCase
     }
 
     /**
-     * @expectedException Doctrine\DBAL\Types\ConversionException
-     * @covers Ramsey\Uuid\Doctrine\UuidType::convertToPHPValue
+     * @expectedException \Doctrine\DBAL\Types\ConversionException
+     * @covers \Ramsey\Uuid\Doctrine\UuidType::convertToPHPValue
      */
     public function testInvalidUuidConversionForPHPValue()
     {
@@ -120,7 +123,7 @@ class UuidTypeTest extends TestCase
     }
 
     /**
-     * @covers Ramsey\Uuid\Doctrine\UuidType::convertToPHPValue
+     * @covers \Ramsey\Uuid\Doctrine\UuidType::convertToPHPValue
      */
     public function testNullConversionForPHPValue()
     {
@@ -128,7 +131,7 @@ class UuidTypeTest extends TestCase
     }
 
     /**
-     * @covers Ramsey\Uuid\Doctrine\UuidType::convertToPHPValue
+     * @covers \Ramsey\Uuid\Doctrine\UuidType::convertToPHPValue
      */
     public function testReturnValueIfUuidForPHPValue()
     {
@@ -137,7 +140,7 @@ class UuidTypeTest extends TestCase
     }
 
     /**
-     * @covers Ramsey\Uuid\Doctrine\UuidType::getName
+     * @covers \Ramsey\Uuid\Doctrine\UuidType::getName
      */
     public function testGetName()
     {
@@ -145,7 +148,7 @@ class UuidTypeTest extends TestCase
     }
 
     /**
-     * @covers Ramsey\Uuid\Doctrine\UuidType::getSqlDeclaration
+     * @covers \Ramsey\Uuid\Doctrine\UuidType::getSqlDeclaration
      */
     public function testGetGuidTypeDeclarationSQL()
     {
@@ -153,7 +156,7 @@ class UuidTypeTest extends TestCase
     }
 
     /**
-     * @covers Ramsey\Uuid\Doctrine\UuidType::requiresSQLCommentHint
+     * @covers \Ramsey\Uuid\Doctrine\UuidType::requiresSQLCommentHint
      */
     public function testRequiresSQLCommentHint()
     {
@@ -161,12 +164,10 @@ class UuidTypeTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return AbstractPlatform & MockInterface
      */
     private function getPlatformMock()
     {
-        return $this->getMockBuilder('Doctrine\DBAL\Platforms\AbstractPlatform')
-            ->setMethods(['getGuidTypeDeclarationSQL'])
-            ->getMockForAbstractClass();
+        return Mockery::mock('Doctrine\DBAL\Platforms\AbstractPlatform')->makePartial();
     }
 }

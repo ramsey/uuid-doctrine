@@ -1,5 +1,21 @@
 # Ramsey\Uuid\Doctrine Changelog
 
+## 1.6.0
+
+_Released: 2020-01-27_
+
+* `UuidType::convertToPHPValue()` now checks for instances of `UuidInterface`
+  instead of `Uuid`.
+* When `UuidBinaryOrderedTimeType` fails to encode or decode a UUID because it
+  is not a version 1 UUID, the `ConversionException` thrown now includes more
+  information about the format expected ("UuidV1").
+* `UuidBinaryOrderedTimeType::getUuidFactory()` and
+  `UuidBinaryOrderedTimeType::getCodec()` are now `protected` instead of
+  `private`.
+* Set minimum ramsey/uuid version to 3.5. This is required for use of the
+  `OrderedTimeCodec` this library has supported since version 1.3.0.
+* Ensure the library supports the forthcoming ramsey/uuid version 4.0.0.
+
 ## 1.5.0
 
 _Released: 2018-08-11_
