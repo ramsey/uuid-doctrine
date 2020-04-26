@@ -16,7 +16,7 @@ use InvalidArgumentException;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 use Doctrine\DBAL\Types\ConversionException;
-use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\GuidType;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 
 /**
@@ -25,23 +25,12 @@ use Doctrine\DBAL\Platforms\AbstractPlatform;
  * UUID fields will be stored as a string in the database and converted back to
  * the Uuid value object when querying.
  */
-class UuidType extends Type
+class UuidType extends GuidType
 {
     /**
      * @var string
      */
     const NAME = 'uuid';
-
-    /**
-     * {@inheritdoc}
-     *
-     * @param array $fieldDeclaration
-     * @param AbstractPlatform $platform
-     */
-    public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform)
-    {
-        return $platform->getGuidTypeDeclarationSQL($fieldDeclaration);
-    }
 
     /**
      * {@inheritdoc}
@@ -110,17 +99,5 @@ class UuidType extends Type
     public function getName()
     {
         return static::NAME;
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @param AbstractPlatform $platform
-     *
-     * @return bool
-     */
-    public function requiresSQLCommentHint(AbstractPlatform $platform)
-    {
-        return true;
     }
 }
