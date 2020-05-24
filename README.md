@@ -60,6 +60,16 @@ return [
                     UuidType::NAME => UuidType::class,
 ```
 
+In Laravel:
+
+```php
+<?php
+// config/doctrine.php
+    'custom_types'               => [
+        \Ramsey\Uuid\Doctrine\UuidType::NAME => \Ramsey\Uuid\Doctrine\UuidType::class
+    ],
+```
+
 ### Usage
 
 Then, in your models, you may annotate properties by setting the `@Column`
