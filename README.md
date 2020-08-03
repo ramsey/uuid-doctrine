@@ -208,37 +208,63 @@ If you use the XML Mapping instead of PHP annotations.
     <custom-id-generator class="Ramsey\Uuid\Doctrine\UuidOrderedTimeGenerator"/>
 </id>
 ```
+### Working with binary Identifiers
+When working with binary identifiers you may wish to convert them into a readable format.
+As of MySql 8.0 you can use the BIN_TO_UUID and UUID_TO_BIN functions documented [here](https://dev.mysql.com/doc/refman/8.0/en/miscellaneous-functions.html).
+The second argument determines if the byte order should be swapped, therefore when using ```uuid_binary``` you should pass 0
+and when using ```uuid_binary_ordered_time``` you should pass 1.
 
-You can use this format in mysql cli with these two functions:
+For other versions you can use the following:
 
 ``` sql
-CREATE
-  FUNCTION `uuid_to_ouuid`(uuid VARCHAR(36))
-  RETURNS BINARY(16) DETERMINISTIC
-  RETURN UNHEX(CONCAT(
-  SUBSTR(uuid, 15, 4),
-  SUBSTR(uuid, 10, 4),
-  SUBSTR(uuid, 1, 8),
-  SUBSTR(uuid, 20, 4),
-  SUBSTR(uuid, 25, 12)
-));
+DELIMITER $$
 
-CREATE
-  FUNCTION ouuid_to_uuid(uuid BINARY(16))
-  RETURNS VARCHAR(36)
-  RETURN LOWER(CONCAT(
-  SUBSTR(HEX(uuid), 9, 8), '-',
-  SUBSTR(HEX(uuid), 5, 4), '-',
-  SUBSTR(HEX(uuid), 1, 4), '-',
-  SUBSTR(HEX(uuid), 17,4), '-',
-  SUBSTR(HEX(uuid), 21, 12 )
-));
+CREATE 
+    FUNCTION BIN_TO_UUID(bin_uuid BINARY(16), swap_flag BOOLEAN)
+    RETURNS CHAR(36)
+    DETERMINISTIC
+    BEGIN
+       DECLARE hex_uuid CHAR(32);
+       SET hex_uuid = HEX(bin_uuid);
+       RETURN LOWER(CONCAT(
+            IF(swap_flag, SUBSTR(hex_uuid, 9, 8),SUBSTR(hex_uuid, 1, 8)), '-',
+            IF(swap_flag, SUBSTR(hex_uuid, 5, 4),SUBSTR(hex_uuid, 9, 4)), '-',
+            IF(swap_flag, SUBSTR(hex_uuid, 1, 4),SUBSTR(hex_uuid, 13, 4)), '-',
+            SUBSTR(hex_uuid, 17, 4), '-',
+            SUBSTR(hex_uuid, 21)
+        ));
+    END$$
+
+
+CREATE 
+    FUNCTION UUID_TO_BIN(str_uuid CHAR(36), swap_flag BOOLEAN)
+    RETURNS BINARY(16)
+    DETERMINISTIC
+    BEGIN
+      RETURN UNHEX(CONCAT(
+          IF(swap_flag, SUBSTR(str_uuid, 15, 4),SUBSTR(str_uuid, 1, 8)),
+          SUBSTR(str_uuid, 10, 4),
+          IF(swap_flag, SUBSTR(str_uuid, 1, 8),SUBSTR(str_uuid, 15, 4)),
+          SUBSTR(str_uuid, 20, 4),
+          SUBSTR(str_uuid, 25))
+      );
+    END$$
+
+DELIMITER ;
 ```
 
-Test:
+Tests:
 
 ```
-mysql> select '07a2f327-103a-11e9-8025-00ff5d11a779' as uuid , ouuid_to_uuid(uuid_to_ouuid('07a2f327-103a-11e9-8025-00ff5d11a779')) as flip_flop;
+mysql> select '07a2f327-103a-11e9-8025-00ff5d11a779' as uuid, BIN_TO_UUID(UUID_TO_BIN('07a2f327-103a-11e9-8025-00ff5d11a779', 0), 0) as flip_flop;
++--------------------------------------+--------------------------------------+
+| uuid                                 | flip_flop                            |
++--------------------------------------+--------------------------------------+
+| 07a2f327-103a-11e9-8025-00ff5d11a779 | 07a2f327-103a-11e9-8025-00ff5d11a779 |
++--------------------------------------+--------------------------------------+
+1 row in set (0.00 sec)
+
+mysql> select '07a2f327-103a-11e9-8025-00ff5d11a779' as uuid, BIN_TO_UUID(UUID_TO_BIN('07a2f327-103a-11e9-8025-00ff5d11a779', 1), 1) as flip_flop;
 +--------------------------------------+--------------------------------------+
 | uuid                                 | flip_flop                            |
 +--------------------------------------+--------------------------------------+
