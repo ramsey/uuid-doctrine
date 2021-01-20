@@ -135,8 +135,9 @@ doctrine:
     dbal:
         types:
             uuid_binary:  Ramsey\Uuid\Doctrine\UuidBinaryType
-        mapping_types:
-            uuid_binary: binary
+# Uncomment if using doctrine/orm <2.8
+        # mapping_types:
+            # uuid_binary: binary
 ```
 
 Then, when annotating model class properties, use `uuid_binary` instead of `uuid`:
@@ -168,8 +169,9 @@ doctrine:
     dbal:
         types:
             uuid_binary_ordered_time: Ramsey\Uuid\Doctrine\UuidBinaryOrderedTimeType
-        mapping_types:
-            uuid_binary_ordered_time: binary
+# Uncomment if using doctrine/orm <2.8
+        # mapping_types:
+            # uuid_binary_ordered_time: binary
 ```
 
 Then, in your models, you may annotate properties by setting the `@Column`
