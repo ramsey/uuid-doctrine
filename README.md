@@ -10,7 +10,9 @@
 The ramsey/uuid-doctrine package provides the ability to use
 [ramsey/uuid][ramsey-uuid] as a [Doctrine field type][doctrine-field-type].
 
-This project adheres to a [Contributor Code of Conduct][conduct]. By participating in this project and its community, you are expected to uphold this code.
+This project adheres to a [Contributor Code of Conduct][conduct]. By
+participating in this project and its community, you are expected to uphold this
+code.
 
 ## Installation
 
@@ -32,17 +34,21 @@ the following in your bootstrap:
 ``` php
 \Doctrine\DBAL\Types\Type::addType('uuid', 'Ramsey\Uuid\Doctrine\UuidType');
 ```
+
 In Symfony:
- ``` yaml
-# app/config/config.yml
+
+``` yaml
+# config/packages/doctrine.yaml
 doctrine:
     dbal:
         types:
-            uuid:  Ramsey\Uuid\Doctrine\UuidType
+            uuid: Ramsey\Uuid\Doctrine\UuidType
 ```
+
 In Zend Framework:
+
 ```php
-<?php 
+<?php
 // module.config.php
 use Ramsey\Uuid\Doctrine\UuidType;
 
@@ -54,6 +60,16 @@ return [
                     UuidType::NAME => UuidType::class,
 ```
 
+In Laravel:
+
+```php
+<?php
+// config/doctrine.php
+    'custom_types'               => [
+        \Ramsey\Uuid\Doctrine\UuidType::NAME => \Ramsey\Uuid\Doctrine\UuidType::class
+    ],
+```
+
 ### Usage
 
 Then, in your models, you may annotate properties by setting the `@Column`
@@ -62,6 +78,7 @@ Doctrine will handle the rest.
 
 ``` php
 use Doctrine\ORM\Mapping as ORM;
+use Ramsey\Uuid\Doctrine\UuidGenerator;
 
 /**
  * @ORM\Entity
@@ -75,7 +92,7 @@ class Product
      * @ORM\Id
      * @ORM\Column(type="uuid", unique=true)
      * @ORM\GeneratedValue(strategy="CUSTOM")
-     * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
+     * @ORM\CustomIdGenerator(class=UuidGenerator::class)
      */
     protected $id;
 
@@ -87,7 +104,8 @@ class Product
 ```
 
 If you use the XML Mapping instead of PHP annotations.
-``` XML
+
+``` xml
 <id name="id" column="id" type="uuid">
     <generator strategy="CUSTOM"/>
     <custom-id-generator class="Ramsey\Uuid\Doctrine\UuidGenerator"/>
@@ -95,6 +113,7 @@ If you use the XML Mapping instead of PHP annotations.
 ```
 
 You can also use the YAML Mapping.
+
 ``` yaml
 id:
     id:
@@ -119,28 +138,33 @@ $entityManager->getConnection()->getDatabasePlatform()->registerDoctrineTypeMapp
 ```
 
 In Symfony:
- ``` yaml
-# app/config/config.yml
+
+``` yaml
+# config/packages/doctrine.yaml
 doctrine:
     dbal:
         types:
             uuid_binary:  Ramsey\Uuid\Doctrine\UuidBinaryType
-        mapping_types:
-            uuid_binary: binary
-```     
+# Uncomment if using doctrine/orm <2.8
+        # mapping_types:
+            # uuid_binary: binary
+```
 
 Then, when annotating model class properties, use `uuid_binary` instead of `uuid`:
 
     @Column(type="uuid_binary")
 
 ### InnoDB-optimised binary UUIDs
-More suitable if you want to use UUIDs as primary key. Note that this can cause unintended effects if
+
+More suitable if you want to use UUIDs as primary key. Note that this can cause
+unintended effects if:
 
 * decoding bytes that were not generated using this method
-* another code (that isn't aware of this method) attempts to decode the resulting bytes
+* another code (that isn't aware of this method) attempts to decode the
+  resulting bytes
 
 More information in this [Percona article][percona-optimized-uuids]
-and [UUID Talk by Ben Ramsey][benramsey-com-uuid-talk] (starts at slide [61](https://speakerdeck.com/ramsey/identify-all-the-things-with-uuids-true-north-php-2016?slide=64)).
+and [UUID Talk by Ben Ramsey][benramsey-com-uuid-talk] (starts at [slide 58][]).
 
 ``` php
 \Doctrine\DBAL\Types\Type::addType('uuid_binary_ordered_time', 'Ramsey\Uuid\Doctrine\UuidBinaryOrderedTimeType');
@@ -148,19 +172,21 @@ $entityManager->getConnection()->getDatabasePlatform()->registerDoctrineTypeMapp
 ```
 
 In Symfony:
+
  ``` yaml
-# app/config/config.yml
+# config/packages/doctrine.yaml
 doctrine:
     dbal:
         types:
             uuid_binary_ordered_time: Ramsey\Uuid\Doctrine\UuidBinaryOrderedTimeType
-        mapping_types:
-            uuid_binary_ordered_time: binary
-```     
+# Uncomment if using doctrine/orm <2.8
+        # mapping_types:
+            # uuid_binary_ordered_time: binary
+```
 
 Then, in your models, you may annotate properties by setting the `@Column`
-type to `uuid_binary_ordered_time`, and defining a custom generator of `Ramsey\Uuid\UuidOrderedTimeGenerator`.
-Doctrine will handle the rest.
+type to `uuid_binary_ordered_time`, and defining a custom generator of
+`Ramsey\Uuid\UuidOrderedTimeGenerator`. Doctrine will handle the rest.
 
 ``` php
 /**
@@ -187,41 +213,70 @@ class Product
 ```
 
 If you use the XML Mapping instead of PHP annotations.
-``` XML
+
+``` xml
 <id name="id" column="id" type="uuid_binary_ordered_time">
     <generator strategy="CUSTOM"/>
     <custom-id-generator class="Ramsey\Uuid\Doctrine\UuidOrderedTimeGenerator"/>
 </id>
 ```
+### Working with binary Identifiers
+When working with binary identifiers you may wish to convert them into a readable format.
+As of MySql 8.0 you can use the BIN_TO_UUID and UUID_TO_BIN functions documented [here](https://dev.mysql.com/doc/refman/8.0/en/miscellaneous-functions.html).
+The second argument determines if the byte order should be swapped, therefore when using ```uuid_binary``` you should pass 0
+and when using ```uuid_binary_ordered_time``` you should pass 1.
 
-You can use this format in mysql cli with this two functions : 
-``` SQL
-CREATE 
-  FUNCTION `uuid_to_ouuid`(uuid BINARY(36))
-  RETURNS binary(16) DETERMINISTIC
-  RETURN UNHEX(CONCAT(
-  SUBSTR(uuid, 15, 4),
-  SUBSTR(uuid, 10, 4),
-  SUBSTR(uuid, 1, 8),
-  SUBSTR(uuid, 20, 4),
-  SUBSTR(uuid, 25, 12)
-));
+For other versions you can use the following:
+
+``` sql
+DELIMITER $$
 
 CREATE 
-  FUNCTION ouuid_to_uuid(uuid BINARY(16))
-  RETURNS VARCHAR(36)
-  RETURN LOWER(CONCAT(
-  SUBSTR(HEX(uuid), 9, 8), '-',
-  SUBSTR(HEX(uuid), 5, 4), '-',
-  SUBSTR(HEX(uuid), 1, 4), '-',
-  SUBSTR(HEX(uuid), 17,4), '-',
-  SUBSTR(HEX(uuid), 21, 12 )
-));
+    FUNCTION BIN_TO_UUID(bin_uuid BINARY(16), swap_flag BOOLEAN)
+    RETURNS CHAR(36)
+    DETERMINISTIC
+    BEGIN
+       DECLARE hex_uuid CHAR(32);
+       SET hex_uuid = HEX(bin_uuid);
+       RETURN LOWER(CONCAT(
+            IF(swap_flag, SUBSTR(hex_uuid, 9, 8),SUBSTR(hex_uuid, 1, 8)), '-',
+            IF(swap_flag, SUBSTR(hex_uuid, 5, 4),SUBSTR(hex_uuid, 9, 4)), '-',
+            IF(swap_flag, SUBSTR(hex_uuid, 1, 4),SUBSTR(hex_uuid, 13, 4)), '-',
+            SUBSTR(hex_uuid, 17, 4), '-',
+            SUBSTR(hex_uuid, 21)
+        ));
+    END$$
+
+
+CREATE 
+    FUNCTION UUID_TO_BIN(str_uuid CHAR(36), swap_flag BOOLEAN)
+    RETURNS BINARY(16)
+    DETERMINISTIC
+    BEGIN
+      RETURN UNHEX(CONCAT(
+          IF(swap_flag, SUBSTR(str_uuid, 15, 4),SUBSTR(str_uuid, 1, 8)),
+          SUBSTR(str_uuid, 10, 4),
+          IF(swap_flag, SUBSTR(str_uuid, 1, 8),SUBSTR(str_uuid, 15, 4)),
+          SUBSTR(str_uuid, 20, 4),
+          SUBSTR(str_uuid, 25))
+      );
+    END$$
+
+DELIMITER ;
 ```
 
-Test :
+Tests:
+
 ```
-mysql> select '07a2f327-103a-11e9-8025-00ff5d11a779' as uuid , ouuid_to_uuid(uuid_to_ouuid('07a2f327-103a-11e9-8025-00ff5d11a779')) as flip_flop;
+mysql> select '07a2f327-103a-11e9-8025-00ff5d11a779' as uuid, BIN_TO_UUID(UUID_TO_BIN('07a2f327-103a-11e9-8025-00ff5d11a779', 0), 0) as flip_flop;
++--------------------------------------+--------------------------------------+
+| uuid                                 | flip_flop                            |
++--------------------------------------+--------------------------------------+
+| 07a2f327-103a-11e9-8025-00ff5d11a779 | 07a2f327-103a-11e9-8025-00ff5d11a779 |
++--------------------------------------+--------------------------------------+
+1 row in set (0.00 sec)
+
+mysql> select '07a2f327-103a-11e9-8025-00ff5d11a779' as uuid, BIN_TO_UUID(UUID_TO_BIN('07a2f327-103a-11e9-8025-00ff5d11a779', 1), 1) as flip_flop;
 +--------------------------------------+--------------------------------------+
 | uuid                                 | flip_flop                            |
 +--------------------------------------+--------------------------------------+
@@ -229,7 +284,6 @@ mysql> select '07a2f327-103a-11e9-8025-00ff5d11a779' as uuid , ouuid_to_uuid(uui
 +--------------------------------------+--------------------------------------+
 1 row in set (0.00 sec)
 ```
-
 
 ### More Information
 
@@ -250,12 +304,13 @@ information.
 [benramsey-com-uuid-talk]: https://benramsey.com/talks/2016/11/tnphp-uuid/
 
 [ramsey-uuid]: https://github.com/ramsey/uuid
-[conduct]: https://github.com/ramsey/uuid-doctrine/blob/master/CODE_OF_CONDUCT.md
-[doctrine-field-type]: http://doctrine-dbal.readthedocs.org/en/latest/reference/types.html
+[conduct]: https://github.com/ramsey/uuid-doctrine/blob/master/.github/CODE_OF_CONDUCT.md
+[doctrine-field-type]: https://www.doctrine-project.org/projects/doctrine-dbal/en/2.10/reference/types.html
 [packagist]: https://packagist.org/packages/ramsey/uuid-doctrine
 [composer]: http://getcomposer.org/
-[contributing]: https://github.com/ramsey/uuid-doctrine/blob/master/CONTRIBUTING.md
-[doctrine-getting-started]: http://doctrine-orm.readthedocs.org/en/latest/tutorials/getting-started.html
+[contributing]: https://github.com/ramsey/uuid-doctrine/blob/master/.github/CONTRIBUTING.md
+[doctrine-getting-started]: https://www.doctrine-project.org/projects/doctrine-orm/en/current/tutorials/getting-started.html
+[slide 58]: https://speakerdeck.com/ramsey/identify-all-the-things-with-uuids-true-north-php-2016?slide=58
 
 [badge-source]: http://img.shields.io/badge/source-ramsey/uuid--doctrine-blue.svg?style=flat-square
 [badge-release]: https://img.shields.io/packagist/v/ramsey/uuid-doctrine.svg?style=flat-square
