@@ -13,10 +13,11 @@
     "license": "MIT",
     "require": {
         "php": "^5.4 | ^7 | ^8",
-        "doctrine/orm": "^2.5",
+        "doctrine/dbal": "^2.5",
         "ramsey/uuid": "^3.5 | ^4"
     },
     "require-dev": {
+        "doctrine/orm": "^2.5",
         "jakub-onderka/php-parallel-lint": "^1",
         "mockery/mockery": "^0.9.11 | ^1",
         "phpunit/phpunit": "^4.8.36 | ^5.7 | ^6.5 | ^7",
