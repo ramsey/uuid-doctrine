@@ -11,25 +11,29 @@ use Ramsey\Uuid\Uuid;
 
 class UuidBinaryTypeTest extends TestCase
 {
-    private $platform;
-    private $type;
-
-    public static function setUpBeforeClass()
+    public function __construct()
     {
-        if (class_exists('Doctrine\\DBAL\\Types\\Type')) {
+        parent::__construct();
+
+        if (class_exists('Doctrine\DBAL\Types\Type') && !Type::hasType('uuid_binary')) {
             Type::addType('uuid_binary', 'Ramsey\Uuid\Doctrine\UuidBinaryType');
         }
     }
 
-    protected function setUp()
+    protected function getPlatform()
     {
-        $this->platform = $this->getPlatformMock();
-        $this->platform->shouldAllowMockingProtectedMethods();
-        $this->platform
+        $platform = $this->getPlatformMock();
+        $platform->shouldAllowMockingProtectedMethods();
+        $platform
             ->shouldReceive('getBinaryTypeDeclarationSQLSnippet')
             ->andReturn('DUMMYBINARY(16)');
 
-        $this->type = Type::getType('uuid_binary');
+        return $platform;
+    }
+
+    protected function getType()
+    {
+        return Type::getType('uuid_binary');
     }
 
     /**
@@ -40,7 +44,7 @@ class UuidBinaryTypeTest extends TestCase
         $uuid = Uuid::fromString('ff6f8cb0-c57d-11e1-9b21-0800200c9a66');
 
         $expected = hex2bin('ff6f8cb0c57d11e19b210800200c9a66');
-        $actual = $this->type->convertToDatabaseValue($uuid, $this->platform);
+        $actual = $this->getType()->convertToDatabaseValue($uuid, $this->getPlatform());
 
         $this->assertEquals($expected, $actual);
     }
@@ -53,18 +57,23 @@ class UuidBinaryTypeTest extends TestCase
         $uuid = 'ff6f8cb0-c57d-11e1-9b21-0800200c9a66';
 
         $expected = hex2bin('ff6f8cb0c57d11e19b210800200c9a66');
-        $actual = $this->type->convertToDatabaseValue($uuid, $this->platform);
+        $actual = $this->getType()->convertToDatabaseValue($uuid, $this->getPlatform());
 
         $this->assertEquals($expected, $actual);
     }
 
     /**
-     * @expectedException \Doctrine\DBAL\Types\ConversionException
      * @covers \Ramsey\Uuid\Doctrine\UuidBinaryType::convertToDatabaseValue
      */
     public function testInvalidUuidConversionForDatabaseValue()
     {
-        $this->type->convertToDatabaseValue('abcdefg', $this->platform);
+        if (!method_exists($this, 'expectException')) {
+            $this->markTestSkipped('This version of PHPUnit does not have expectException()');
+        }
+
+        $this->expectException('Doctrine\\DBAL\\Types\\ConversionException');
+
+        $this->getType()->convertToDatabaseValue('abcdefg', $this->getPlatform());
     }
 
     /**
@@ -72,7 +81,7 @@ class UuidBinaryTypeTest extends TestCase
      */
     public function testNullConversionForDatabaseValue()
     {
-        $this->assertNull($this->type->convertToDatabaseValue(null, $this->platform));
+        $this->assertNull($this->getType()->convertToDatabaseValue(null, $this->getPlatform()));
     }
 
     /**
@@ -80,18 +89,23 @@ class UuidBinaryTypeTest extends TestCase
      */
     public function testUuidConvertsToPHPValue()
     {
-        $uuid = $this->type->convertToPHPValue(hex2bin('ff6f8cb0c57d11e19b210800200c9a66'), $this->platform);
-        $this->assertInstanceOf('Ramsey\Uuid\Uuid', $uuid);
+        $uuid = $this->getType()->convertToPHPValue(hex2bin('ff6f8cb0c57d11e19b210800200c9a66'), $this->getPlatform());
+        $this->assertInstanceOf('Ramsey\Uuid\UuidInterface', $uuid);
         $this->assertEquals('ff6f8cb0-c57d-11e1-9b21-0800200c9a66', $uuid->toString());
     }
 
     /**
-     * @expectedException \Doctrine\DBAL\Types\ConversionException
      * @covers \Ramsey\Uuid\Doctrine\UuidBinaryType::convertToPHPValue
      */
     public function testInvalidUuidConversionForPHPValue()
     {
-        $this->type->convertToPHPValue('abcdefg', $this->platform);
+        if (!method_exists($this, 'expectException')) {
+            $this->markTestSkipped('This version of PHPUnit does not have expectException()');
+        }
+
+        $this->expectException('Doctrine\\DBAL\\Types\\ConversionException');
+
+        $this->getType()->convertToPHPValue('abcdefg', $this->getPlatform());
     }
 
     /**
@@ -99,7 +113,7 @@ class UuidBinaryTypeTest extends TestCase
      */
     public function testNullConversionForPHPValue()
     {
-        $this->assertNull($this->type->convertToPHPValue(null, $this->platform));
+        $this->assertNull($this->getType()->convertToPHPValue(null, $this->getPlatform()));
     }
 
     /**
@@ -108,7 +122,7 @@ class UuidBinaryTypeTest extends TestCase
     public function testReturnValueIfUuidForPHPValue()
     {
         $uuid = Uuid::uuid4();
-        $this->assertSame($uuid, $this->type->convertToPHPValue($uuid, $this->platform));
+        $this->assertSame($uuid, $this->getType()->convertToPHPValue($uuid, $this->getPlatform()));
     }
 
     /**
@@ -116,7 +130,7 @@ class UuidBinaryTypeTest extends TestCase
      */
     public function testGetName()
     {
-        $this->assertEquals('uuid_binary', $this->type->getName());
+        $this->assertEquals('uuid_binary', $this->getType()->getName());
     }
 
     /**
@@ -124,7 +138,10 @@ class UuidBinaryTypeTest extends TestCase
      */
     public function testGetGuidTypeDeclarationSQL()
     {
-        $this->assertEquals('DUMMYBINARY(16)', $this->type->getSqlDeclaration(['length' => 36], $this->platform));
+        $this->assertEquals(
+            'DUMMYBINARY(16)',
+            $this->getType()->getSqlDeclaration(['length' => 36], $this->getPlatform())
+        );
     }
 
     /**
@@ -132,7 +149,7 @@ class UuidBinaryTypeTest extends TestCase
      */
     public function testRequiresSQLCommentHint()
     {
-        $this->assertTrue($this->type->requiresSQLCommentHint($this->platform));
+        $this->assertTrue($this->getType()->requiresSQLCommentHint($this->getPlatform()));
     }
 
     /**

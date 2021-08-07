@@ -1,5 +1,4 @@
-.phpunit.result.cache
-/build/
+/captainhook.config.json
 /composer.lock
 /phpcs.xml
 /phpunit.xml

@@ -11,25 +11,29 @@ use Ramsey\Uuid\Uuid;
 
 class UuidTypeTest extends TestCase
 {
-    private $platform;
-    private $type;
-
-    public static function setUpBeforeClass()
+    public function __construct()
     {
-        if (class_exists('Doctrine\\DBAL\\Types\\Type')) {
+        parent::__construct();
+
+        if (class_exists('Doctrine\DBAL\Types\Type') && !Type::hasType('uuid')) {
             Type::addType('uuid', 'Ramsey\Uuid\Doctrine\UuidType');
         }
     }
 
-    protected function setUp()
+    protected function getPlatform()
     {
-        $this->platform = $this->getPlatformMock();
-        $this->platform->shouldAllowMockingProtectedMethods();
-        $this->platform
+        $platform = $this->getPlatformMock();
+        $platform->shouldAllowMockingProtectedMethods();
+        $platform
             ->shouldReceive('getGuidTypeDeclarationSQL')
             ->andReturn('DUMMYVARCHAR()');
 
-        $this->type = Type::getType('uuid');
+        return $platform;
+    }
+
+    protected function getType()
+    {
+        return Type::getType('uuid');
     }
 
     /**
@@ -40,7 +44,7 @@ class UuidTypeTest extends TestCase
         $uuid = Uuid::fromString('ff6f8cb0-c57d-11e1-9b21-0800200c9a66');
 
         $expected = $uuid->toString();
-        $actual = $this->type->convertToDatabaseValue($uuid, $this->platform);
+        $actual = $this->getType()->convertToDatabaseValue($uuid, $this->getPlatform());
 
         $this->assertEquals($expected, $actual);
     }
@@ -57,7 +61,7 @@ class UuidTypeTest extends TestCase
             ->once()
             ->andReturn('foo');
 
-        $actual = $this->type->convertToDatabaseValue($uuid, $this->platform);
+        $actual = $this->getType()->convertToDatabaseValue($uuid, $this->getPlatform());
 
         $this->assertEquals('foo', $actual);
     }
@@ -69,18 +73,23 @@ class UuidTypeTest extends TestCase
     {
         $uuid = 'ff6f8cb0-c57d-11e1-9b21-0800200c9a66';
 
-        $actual = $this->type->convertToDatabaseValue($uuid, $this->platform);
+        $actual = $this->getType()->convertToDatabaseValue($uuid, $this->getPlatform());
 
         $this->assertEquals($uuid, $actual);
     }
 
     /**
-     * @expectedException \Doctrine\DBAL\Types\ConversionException
      * @covers \Ramsey\Uuid\Doctrine\UuidType::convertToDatabaseValue
      */
     public function testInvalidUuidConversionForDatabaseValue()
     {
-        $this->type->convertToDatabaseValue('abcdefg', $this->platform);
+        if (!method_exists($this, 'expectException')) {
+            $this->markTestSkipped('This version of PHPUnit does not have expectException()');
+        }
+
+        $this->expectException('Doctrine\\DBAL\\Types\\ConversionException');
+
+        $this->getType()->convertToDatabaseValue('abcdefg', $this->getPlatform());
     }
 
     /**
@@ -88,7 +97,7 @@ class UuidTypeTest extends TestCase
      */
     public function testNullConversionForDatabaseValue()
     {
-        $this->assertNull($this->type->convertToDatabaseValue(null, $this->platform));
+        $this->assertNull($this->getType()->convertToDatabaseValue(null, $this->getPlatform()));
     }
 
     /**
@@ -98,7 +107,7 @@ class UuidTypeTest extends TestCase
     {
         $uuid = \Mockery::mock('Ramsey\\Uuid\\Uuid');
 
-        $actual = $this->type->convertToPHPValue($uuid, $this->platform);
+        $actual = $this->getType()->convertToPHPValue($uuid, $this->getPlatform());
 
         $this->assertSame($uuid, $actual);
     }
@@ -108,18 +117,23 @@ class UuidTypeTest extends TestCase
      */
     public function testUuidConvertsToPHPValue()
     {
-        $uuid = $this->type->convertToPHPValue('ff6f8cb0-c57d-11e1-9b21-0800200c9a66', $this->platform);
-        $this->assertInstanceOf('Ramsey\Uuid\Uuid', $uuid);
+        $uuid = $this->getType()->convertToPHPValue('ff6f8cb0-c57d-11e1-9b21-0800200c9a66', $this->getPlatform());
+        $this->assertInstanceOf('Ramsey\Uuid\UuidInterface', $uuid);
         $this->assertEquals('ff6f8cb0-c57d-11e1-9b21-0800200c9a66', $uuid->toString());
     }
 
     /**
-     * @expectedException \Doctrine\DBAL\Types\ConversionException
      * @covers \Ramsey\Uuid\Doctrine\UuidType::convertToPHPValue
      */
     public function testInvalidUuidConversionForPHPValue()
     {
-        $this->type->convertToPHPValue('abcdefg', $this->platform);
+        if (!method_exists($this, 'expectException')) {
+            $this->markTestSkipped('This version of PHPUnit does not have expectException()');
+        }
+
+        $this->expectException('Doctrine\\DBAL\\Types\\ConversionException');
+
+        $this->getType()->convertToPHPValue('abcdefg', $this->getPlatform());
     }
 
     /**
@@ -127,7 +141,7 @@ class UuidTypeTest extends TestCase
      */
     public function testNullConversionForPHPValue()
     {
-        $this->assertNull($this->type->convertToPHPValue(null, $this->platform));
+        $this->assertNull($this->getType()->convertToPHPValue(null, $this->getPlatform()));
     }
 
     /**
@@ -136,7 +150,7 @@ class UuidTypeTest extends TestCase
     public function testReturnValueIfUuidForPHPValue()
     {
         $uuid = Uuid::uuid4();
-        $this->assertSame($uuid, $this->type->convertToPHPValue($uuid, $this->platform));
+        $this->assertSame($uuid, $this->getType()->convertToPHPValue($uuid, $this->getPlatform()));
     }
 
     /**
@@ -144,7 +158,7 @@ class UuidTypeTest extends TestCase
      */
     public function testGetName()
     {
-        $this->assertEquals('uuid', $this->type->getName());
+        $this->assertEquals('uuid', $this->getType()->getName());
     }
 
     /**
@@ -152,7 +166,10 @@ class UuidTypeTest extends TestCase
      */
     public function testGetGuidTypeDeclarationSQL()
     {
-        $this->assertEquals('DUMMYVARCHAR()', $this->type->getSqlDeclaration(['length' => 36], $this->platform));
+        $this->assertEquals(
+            'DUMMYVARCHAR()',
+            $this->getType()->getSqlDeclaration(['length' => 36], $this->getPlatform())
+        );
     }
 
     /**
@@ -160,7 +177,7 @@ class UuidTypeTest extends TestCase
      */
     public function testRequiresSQLCommentHint()
     {
-        $this->assertTrue($this->type->requiresSQLCommentHint($this->platform));
+        $this->assertTrue($this->getType()->requiresSQLCommentHint($this->getPlatform()));
     }
 
     /**

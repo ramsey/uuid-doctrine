@@ -7,24 +7,17 @@ use PHPUnit\Framework\TestCase;
 
 class UuidGeneratorTest extends TestCase
 {
-    private $em;
-    private $entity;
-    private $generator;
-
-    protected function setUp()
-    {
-        $this->em = new TestEntityManager();
-        $this->entity = new Entity();
-        $this->generator = new UuidGenerator();
-    }
-
     /**
      * @covers \Ramsey\Uuid\Doctrine\UuidGenerator::generate
      */
     public function testUuidGeneratorGenerates()
     {
-        $uuid = $this->generator->generate($this->em, $this->entity);
+        $em = new TestEntityManager();
+        $entity = new Entity();
+        $generator = new UuidGenerator();
 
-        $this->assertInstanceOf('Ramsey\Uuid\Uuid', $uuid);
+        $uuid = $generator->generate($em, $entity);
+
+        $this->assertInstanceOf('Ramsey\Uuid\UuidInterface', $uuid);
     }
 }
