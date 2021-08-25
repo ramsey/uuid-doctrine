@@ -100,4 +100,16 @@ class UuidType extends GuidType
     {
         return static::NAME;
     }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param AbstractPlatform $platform
+     *
+     * @return bool
+     */
+    public function requiresSQLCommentHint(AbstractPlatform $platform)
+    {
+        return true;
+    }
 }
