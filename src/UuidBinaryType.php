@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the ramsey/uuid-doctrine library
  *
@@ -7,8 +8,6 @@
  *
  * @copyright Copyright (c) Ben Ramsey <http://benramsey.com>
  * @license http://opensource.org/licenses/MIT MIT
- * @link https://packagist.org/packages/ramsey/uuid-doctrine Packagist
- * @link https://github.com/ramsey/uuid-doctrine GitHub
  */
 
 namespace Ramsey\Uuid\Doctrine;
@@ -36,28 +35,32 @@ class UuidBinaryType extends Type
     /**
      * {@inheritdoc}
      *
-     * @param array                                     $fieldDeclaration
-     * @param \Doctrine\DBAL\Platforms\AbstractPlatform $platform
+     * @param array $fieldDeclaration
+     * @param AbstractPlatform $platform
      */
     public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform)
     {
         return $platform->getBinaryTypeDeclarationSQL(
-            array(
+            [
                 'length' => '16',
                 'fixed' => true,
-            )
+            ]
         );
     }
 
     /**
      * {@inheritdoc}
      *
-     * @param string|UuidInterface|null                 $value
-     * @param \Doctrine\DBAL\Platforms\AbstractPlatform $platform
+     * @param string|UuidInterface|null $value
+     * @param AbstractPlatform $platform
+     *
+     * @return UuidInterface|null
+     *
+     * @throws ConversionException
      */
     public function convertToPHPValue($value, AbstractPlatform $platform)
     {
-        if (empty($value)) {
+        if ($value === null || $value === '') {
             return null;
         }
 
@@ -77,12 +80,16 @@ class UuidBinaryType extends Type
     /**
      * {@inheritdoc}
      *
-     * @param UuidInterface|string|null                 $value
-     * @param \Doctrine\DBAL\Platforms\AbstractPlatform $platform
+     * @param UuidInterface|string|null $value
+     * @param AbstractPlatform $platform
+     *
+     * @return string|null
+     *
+     * @throws ConversionException
      */
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
-        if (empty($value)) {
+        if ($value === null || $value === '') {
             return null;
         }
 
@@ -114,8 +121,9 @@ class UuidBinaryType extends Type
     /**
      * {@inheritdoc}
      *
-     * @param \Doctrine\DBAL\Platforms\AbstractPlatform $platform
-     * @return boolean
+     * @param AbstractPlatform $platform
+     *
+     * @return bool
      */
     public function requiresSQLCommentHint(AbstractPlatform $platform)
     {

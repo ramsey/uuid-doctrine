@@ -1,8 +1,7 @@
-.idea/
-*.phar
-.DS_Store
-build
-composer.lock
-docs
-phpunit.xml
-vendor
+/captainhook.config.json
+/composer.lock
+/phpcs.xml
+/phpunit.xml
+/.phpunit.result.cache
+/vendor/
+.phpunit.result.cache

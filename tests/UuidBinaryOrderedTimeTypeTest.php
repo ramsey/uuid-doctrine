@@ -2,37 +2,43 @@
 
 namespace Ramsey\Uuid\Doctrine;
 
+use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
+use Mockery;
+use Mockery\MockInterface;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
 
 class UuidBinaryOrderedTimeTypeTest extends TestCase
 {
-    private $platform;
-
-    /** @var UuidBinaryOrderedTimeType */
-    private $type;
-
-    public static function setUpBeforeClass()
+    public function __construct()
     {
-        if (class_exists('Doctrine\DBAL\Types\Type')) {
+        parent::__construct();
+
+        if (class_exists('Doctrine\DBAL\Types\Type') && !Type::hasType('uuid_binary_ordered_time')) {
             Type::addType('uuid_binary_ordered_time', 'Ramsey\Uuid\Doctrine\UuidBinaryOrderedTimeType');
         }
     }
 
-    protected function setUp()
+    protected function getPlatform()
     {
-        $this->platform = $this->getPlatformMock();
-        $this->platform->expects($this->any())
-            ->method('getBinaryTypeDeclarationSQLSnippet')
-            ->will($this->returnValue('DUMMYBINARY(16)'));
+        $platform = $this->getPlatformMock();
+        $platform->shouldAllowMockingProtectedMethods();
+        $platform
+            ->shouldReceive('getBinaryTypeDeclarationSQLSnippet')
+            ->andReturn('DUMMYBINARY(16)');
 
-        $this->type = Type::getType('uuid_binary_ordered_time');
+        return $platform;
+    }
+
+    protected function getType()
+    {
+        return Type::getType('uuid_binary_ordered_time');
     }
 
     public function testGetName()
     {
-        $this->assertEquals('uuid_binary_ordered_time', $this->type->getName());
+        $this->assertEquals('uuid_binary_ordered_time', $this->getType()->getName());
     }
 
     public function testUuidConvertsToDatabaseValue()
@@ -40,7 +46,7 @@ class UuidBinaryOrderedTimeTypeTest extends TestCase
         $uuid = Uuid::fromString('ff6f8cb0-c57d-11e1-9b21-0800200c9a66');
 
         $expected = hex2bin('11e1c57dff6f8cb09b210800200c9a66');
-        $actual = $this->type->convertToDatabaseValue($uuid, $this->platform);
+        $actual = $this->getType()->convertToDatabaseValue($uuid, $this->getPlatform());
 
         $this->assertEquals($expected, $actual);
     }
@@ -50,76 +56,89 @@ class UuidBinaryOrderedTimeTypeTest extends TestCase
         $uuid = 'ff6f8cb0-c57d-11e1-9b21-0800200c9a66';
 
         $expected = hex2bin('11e1c57dff6f8cb09b210800200c9a66');
-        $actual = $this->type->convertToDatabaseValue($uuid, $this->platform);
+        $actual = $this->getType()->convertToDatabaseValue($uuid, $this->getPlatform());
 
         $this->assertEquals($expected, $actual);
     }
 
-    /**
-     * @expectedException Doctrine\DBAL\Types\ConversionException
-     */
     public function testInvalidUuidConversionForDatabaseValue()
     {
-        $this->type->convertToDatabaseValue('abcdefg', $this->platform);
+        if (!method_exists($this, 'expectException')) {
+            $this->markTestSkipped('This version of PHPUnit does not have expectException()');
+        }
+
+        $this->expectException('Doctrine\\DBAL\\Types\\ConversionException');
+
+        $this->getType()->convertToDatabaseValue('abcdefg', $this->getPlatform());
     }
 
     public function testNullConversionForDatabaseValue()
     {
-        $this->assertNull($this->type->convertToDatabaseValue(null, $this->platform));
+        $this->assertNull($this->getType()->convertToDatabaseValue(null, $this->getPlatform()));
     }
 
     public function testUuidConvertsToPHPValue()
     {
-        $uuid = $this->type->convertToPHPValue(hex2bin('11e1c57dff6f8cb09b210800200c9a66'), $this->platform);
+        $uuid = $this->getType()->convertToPHPValue(hex2bin('11e1c57dff6f8cb09b210800200c9a66'), $this->getPlatform());
         $this->assertInstanceOf('Ramsey\Uuid\Uuid', $uuid);
         $this->assertEquals('ff6f8cb0-c57d-11e1-9b21-0800200c9a66', $uuid->toString());
     }
 
-    /**
-     * @expectedException Doctrine\DBAL\Types\ConversionException
-     */
     public function testInvalidUuidConversionForPHPValue()
     {
-        $this->type->convertToPHPValue('abcdefg', $this->platform);
+        if (!method_exists($this, 'expectException')) {
+            $this->markTestSkipped('This version of PHPUnit does not have expectException()');
+        }
+
+        $this->expectException('Doctrine\\DBAL\\Types\\ConversionException');
+
+        $this->getType()->convertToPHPValue('abcdefg', $this->getPlatform());
     }
 
-    /**
-     * @expectedException Doctrine\DBAL\Types\ConversionException
-     */
     public function testUnsupportedUuidConversionToDatabaseValue()
     {
-        $this->type->convertToDatabaseValue(Uuid::uuid4(), $this->platform);
+        if (!method_exists($this, 'expectException')) {
+            $this->markTestSkipped('This version of PHPUnit does not have expectException()');
+        }
+
+        $this->expectException('Doctrine\\DBAL\\Types\\ConversionException');
+
+        $this->getType()->convertToDatabaseValue(Uuid::uuid4(), $this->getPlatform());
     }
 
-    /**
-     * @expectedException Doctrine\DBAL\Types\ConversionException
-     * @dataProvider provideUnsupportedDatabaseValues
-     * @param string $databaseValue
-     */
-    public function testUnsupportedUuidConversionToPHPValue($databaseValue)
+    public function testUnsupportedUuidConversionToPHPValue()
     {
-        $this->type->convertToPHPValue(hex2bin($databaseValue), $this->platform);
+        if (!method_exists($this, 'expectException')) {
+            $this->markTestSkipped('This version of PHPUnit does not have expectException()');
+        }
+
+        $this->expectException('Doctrine\\DBAL\\Types\\ConversionException');
+
+        $this->getType()->convertToPHPValue(hex2bin('01e1c57dff6f8cb09b210800200c9a66'), $this->getPlatform());
     }
 
     public function testNullConversionForPHPValue()
     {
-        $this->assertNull($this->type->convertToPHPValue(null, $this->platform));
+        $this->assertNull($this->getType()->convertToPHPValue(null, $this->getPlatform()));
     }
 
     public function testReturnValueIfUuidForPHPValue()
     {
         $uuid = Uuid::uuid4();
-        $this->assertSame($uuid, $this->type->convertToPHPValue($uuid, $this->platform));
+        $this->assertSame($uuid, $this->getType()->convertToPHPValue($uuid, $this->getPlatform()));
     }
 
     public function testGetGuidTypeDeclarationSQL()
     {
-        $this->assertEquals('DUMMYBINARY(16)', $this->type->getSqlDeclaration(array('length' => 36), $this->platform));
+        $this->assertEquals(
+            'DUMMYBINARY(16)',
+            $this->getType()->getSqlDeclaration(['length' => 36], $this->getPlatform())
+        );
     }
 
     public function testRequiresSQLCommentHint()
     {
-        $this->assertTrue($this->type->requiresSQLCommentHint($this->platform));
+        $this->assertTrue($this->getType()->requiresSQLCommentHint($this->getPlatform()));
     }
 
     public function testItReturnsAppropriateBindingType()
@@ -127,25 +146,11 @@ class UuidBinaryOrderedTimeTypeTest extends TestCase
         $this->assertEquals(16, $this->type->getBindingType());
     }
 
+    /**
+     * @return AbstractPlatform & MockInterface
+     */
     private function getPlatformMock()
     {
-        return $this->getMockBuilder('Doctrine\DBAL\Platforms\AbstractPlatform')
-            ->setMethods(array('getBinaryTypeDeclarationSQLSnippet'))
-            ->getMockForAbstractClass();
-    }
-
-    public function provideUnsupportedDatabaseValues()
-    {
-        $values = [];
-
-        $tail = '1e1c57dff6f8cb09b210800200c9a66';
-        for ($i = 0; $i <= 9; $i++) {
-            if (1 === $i) {
-                continue;
-            }
-            $values["Packed UUID that begins with $i"] = [$i . $tail];
-        }
-
-        return $values;
+        return Mockery::mock('Doctrine\DBAL\Platforms\AbstractPlatform')->makePartial();
     }
 }

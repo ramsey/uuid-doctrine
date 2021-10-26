@@ -1,59 +1,59 @@
 {
     "name": "ramsey/uuid-doctrine",
-    "description": "Allow the use of a ramsey/uuid UUID as Doctrine field type.",
     "type": "library",
+    "description": "Use ramsey/uuid as a Doctrine field type.",
     "keywords": [
         "uuid",
         "identifier",
         "guid",
-        "doctrine"
+        "doctrine",
+        "database"
     ],
-    "homepage": "https://github.com/ramsey/uuid-doctrine",
     "license": "MIT",
     "authors": [
         {
             "name": "Ben Ramsey",
             "email": "ben@benramsey.com",
-            "homepage": "http://benramsey.com"
-        },
-        {
-            "name": "Marijn Huizendveld",
-            "email": "marijn.huizendveld@gmail.com"
+            "homepage": "https://benramsey.com"
         }
     ],
-    "support": {
-        "issues": "https://github.com/ramsey/uuid-doctrine/issues",
-        "source": "https://github.com/ramsey/uuid-doctrine"
-    },
     "require": {
-        "php": "^5.4 || ^7.0",
-        "doctrine/orm": "^2.5",
-        "ramsey/uuid": "^3.0"
+        "php": "^5.4 || ^7 || ^8",
+        "doctrine/dbal": "^2.5 || ^3.0",
+        "ramsey/uuid": "^3.5 || ^4"
     },
     "require-dev": {
-        "jakub-onderka/php-parallel-lint": "^1.0",
-        "mockery/mockery": "^0.9 || ^1.1",
-        "php-coveralls/php-coveralls": "^1.1 || ^2.1",
-        "phpunit/phpunit": "^4.8 || ^5.7 || ^6.5",
-        "squizlabs/php_codesniffer": "^3.3"
+        "doctrine/orm": "^2.5",
+        "php-parallel-lint/php-parallel-lint": "^1",
+        "mockery/mockery": "^0.9.11 || ^1",
+        "phpunit/phpunit": "^4.8.36 || ^5.7 || ^6.5 || ^7 || ^8 || ^9",
+        "squizlabs/php_codesniffer": "^3.5"
     },
     "config": {
         "sort-packages": true
     },
+    "scripts": {
+        "build:clean": "git clean -fX build/",
+        "lint": "parallel-lint src tests",
+        "lint:paths": "parallel-lint",
+        "phpcbf": "phpcbf -vpw --cache=build/cache/phpcs.cache",
+        "phpcs": "phpcs --cache=build/cache/phpcs.cache",
+        "phpunit": "phpunit --verbose --colors=always",
+        "phpunit-coverage": "phpunit --verbose --colors=always --coverage-html build/coverage",
+        "test": [
+            "@lint",
+            "@phpcs",
+            "@phpunit"
+        ]
+    },
     "autoload": {
-        "psr-4": {"Ramsey\\Uuid\\Doctrine\\": "src/"}
+        "psr-4": {
+            "Ramsey\\Uuid\\Doctrine\\": "src/"
+        }
     },
     "autoload-dev": {
-        "psr-4": {"Ramsey\\Uuid\\Doctrine\\": "tests/"}
-    },
-    "scripts": {
-       "lint": "parallel-lint src tests",
-       "phpunit": "phpunit --verbose --colors=always",
-       "phpcs": "phpcs src tests --standard=psr12 -sp --colors --exclude=\"PSR2.ControlStructures.ControlStructureSpacing\"",
-       "test": [
-            "@lint",
-            "@phpunit",
-            "@phpcs"
-       ]
+        "psr-4": {
+            "Ramsey\\Uuid\\Doctrine\\": "tests/"
+        }
     }
 }

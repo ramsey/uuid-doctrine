@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the ramsey/uuid-doctrine library
  *
@@ -7,14 +8,16 @@
  *
  * @copyright Copyright (c) Ben Ramsey <http://benramsey.com>
  * @license http://opensource.org/licenses/MIT MIT
- * @link https://packagist.org/packages/ramsey/uuid-doctrine Packagist
- * @link https://github.com/ramsey/uuid-doctrine GitHub
  */
 
 namespace Ramsey\Uuid\Doctrine;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Id\AbstractIdGenerator;
+use Doctrine\ORM\Mapping\Entity;
+use Exception;
+use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\UuidInterface;
 
 /**
  * UUID generator for the Doctrine ORM.
@@ -24,12 +27,15 @@ class UuidGenerator extends AbstractIdGenerator
     /**
      * Generate an identifier
      *
-     * @param \Doctrine\ORM\EntityManager  $em
-     * @param \Doctrine\ORM\Mapping\Entity $entity
-     * @return \Ramsey\Uuid\UuidInterface
+     * @param EntityManager $em
+     * @param Entity $entity
+     *
+     * @return UuidInterface
+     *
+     * @throws Exception
      */
     public function generate(EntityManager $em, $entity)
     {
-        return \Ramsey\Uuid\Uuid::uuid4();
+        return Uuid::uuid4();
     }
 }
