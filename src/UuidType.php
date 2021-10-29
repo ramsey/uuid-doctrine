@@ -112,4 +112,14 @@ class UuidType extends GuidType
     {
         return true;
     }
+    
+    /**
+     * @param AbstractPlatform $platform
+     *
+     * @return array
+     */
+    public function getMappedDatabaseTypes(AbstractPlatform $platform)
+    {
+        return [self::NAME];
+    }
 }
