@@ -143,7 +143,7 @@ class UuidBinaryOrderedTimeTypeTest extends TestCase
 
     public function testItReturnsAppropriateBindingType()
     {
-        $this->assertEquals(16, $this->type->getBindingType());
+        $this->assertEquals(16, $this->getType()->getBindingType());
     }
 
     /**
