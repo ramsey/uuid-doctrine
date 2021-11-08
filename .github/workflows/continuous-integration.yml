@@ -74,11 +74,14 @@ jobs:
           - "7.3"
           - "7.4"
           - "8.0"
+          - "8.1"
         dependencies:
           - "lowest"
           - "highest"
         exclude:
           - php-version: "8.0"
+            dependencies: "lowest"
+          - php-version: "8.1"
             dependencies: "lowest"
 
     steps:
