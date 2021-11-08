@@ -181,6 +181,14 @@ class UuidTypeTest extends TestCase
     }
 
     /**
+     * @covers \Ramsey\Uuid\Doctrine\UuidType::getMappedDatabaseTypes
+     */
+    public function testGetMappedDatabaseTypes()
+    {
+        $this->assertSame(['uuid'], $this->getType()->getMappedDatabaseTypes($this->getPlatformMock()));
+    }
+
+    /**
      * @return AbstractPlatform & MockInterface
      */
     private function getPlatformMock()
