@@ -112,7 +112,7 @@ class UuidType extends GuidType
     {
         return true;
     }
-    
+
     /**
      * @param AbstractPlatform $platform
      *
