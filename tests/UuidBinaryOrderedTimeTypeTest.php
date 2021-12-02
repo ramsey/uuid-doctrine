@@ -38,7 +38,7 @@ class UuidBinaryOrderedTimeTypeTest extends TestCase
 
     public function testGetName()
     {
-        $this->assertEquals('uuid_binary_ordered_time', $this->getType()->getName());
+        $this->assertSame('uuid_binary_ordered_time', $this->getType()->getName());
     }
 
     public function testUuidConvertsToDatabaseValue()
@@ -48,7 +48,7 @@ class UuidBinaryOrderedTimeTypeTest extends TestCase
         $expected = hex2bin('11e1c57dff6f8cb09b210800200c9a66');
         $actual = $this->getType()->convertToDatabaseValue($uuid, $this->getPlatform());
 
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     public function testStringUuidConvertsToDatabaseValue()
@@ -58,7 +58,7 @@ class UuidBinaryOrderedTimeTypeTest extends TestCase
         $expected = hex2bin('11e1c57dff6f8cb09b210800200c9a66');
         $actual = $this->getType()->convertToDatabaseValue($uuid, $this->getPlatform());
 
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     public function testInvalidUuidConversionForDatabaseValue()
@@ -81,7 +81,7 @@ class UuidBinaryOrderedTimeTypeTest extends TestCase
     {
         $uuid = $this->getType()->convertToPHPValue(hex2bin('11e1c57dff6f8cb09b210800200c9a66'), $this->getPlatform());
         $this->assertInstanceOf('Ramsey\Uuid\Uuid', $uuid);
-        $this->assertEquals('ff6f8cb0-c57d-11e1-9b21-0800200c9a66', $uuid->toString());
+        $this->assertSame('ff6f8cb0-c57d-11e1-9b21-0800200c9a66', $uuid->toString());
     }
 
     public function testInvalidUuidConversionForPHPValue()
@@ -130,7 +130,7 @@ class UuidBinaryOrderedTimeTypeTest extends TestCase
 
     public function testGetGuidTypeDeclarationSQL()
     {
-        $this->assertEquals(
+        $this->assertSame(
             'DUMMYBINARY(16)',
             $this->getType()->getSqlDeclaration(['length' => 36], $this->getPlatform())
         );
