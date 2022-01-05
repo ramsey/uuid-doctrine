@@ -72,6 +72,20 @@ class UuidBinaryOrderedTimeTypeTest extends TestCase
         $this->getType()->convertToDatabaseValue('abcdefg', $this->getPlatform());
     }
 
+    /**
+     * @covers \Ramsey\Uuid\Doctrine\UuidType::convertToDatabaseValue
+     */
+    public function testInvalidValueTypeConversionForDatabaseValue()
+    {
+        if (!method_exists($this, 'expectException')) {
+            $this->markTestSkipped('This version of PHPUnit does not have expectException()');
+        }
+
+        $this->expectException('Doctrine\\DBAL\\Types\\ConversionException');
+
+        $this->getType()->convertToDatabaseValue(false, $this->getPlatform());
+    }
+
     public function testNullConversionForDatabaseValue()
     {
         $this->assertNull($this->getType()->convertToDatabaseValue(null, $this->getPlatform()));

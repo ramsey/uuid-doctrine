@@ -81,7 +81,7 @@ class UuidType extends GuidType
             $value instanceof UuidInterface
             || (
                 (is_string($value)
-                || method_exists($value, '__toString'))
+                || (is_object($value) && method_exists($value, '__toString')))
                 && Uuid::isValid((string) $value)
             )
         ) {
