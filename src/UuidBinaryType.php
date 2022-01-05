@@ -37,6 +37,7 @@ class UuidBinaryType extends Type
      *
      * @param array $fieldDeclaration
      * @param AbstractPlatform $platform
+     * @return string
      */
     public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform)
     {
