@@ -12,7 +12,7 @@
 
 namespace Ramsey\Uuid\Doctrine;
 
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Id\AbstractIdGenerator;
 use Doctrine\ORM\Mapping\Entity;
 use Exception;
@@ -42,14 +42,32 @@ class UuidOrderedTimeGenerator extends AbstractIdGenerator
     /**
      * Generates an identifier for an entity.
      *
-     * @param EntityManager $em
+     * @param EntityManagerInterface $em
+     * @param Entity $entity
+     *
+     * @return UuidInterface
+     *
+     * @throws Exception
+     *
+     * @deprecated as per parent. Accepts any EntityManagerInterface for maximum compatibility on PHP 7.4+.
+     * @see UuidOrderedTimeGenerator::generateId()
+     */
+    public function generate(EntityManagerInterface $em, $entity): UuidInterface
+    {
+        return $this->factory->uuid1();
+    }
+
+    /**
+     * Generates an identifier for an entity.
+     *
+     * @param EntityManagerInterface $em
      * @param Entity $entity
      *
      * @return UuidInterface
      *
      * @throws Exception
      */
-    public function generate(EntityManager $em, $entity)
+    public function generateId(EntityManagerInterface $em, $entity): UuidInterface
     {
         return $this->factory->uuid1();
     }
