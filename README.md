@@ -108,6 +108,30 @@ class Product
 }
 ```
 
+or as follow with [PHP8 attributes](https://www.php.net/manual/fr/language.attributes.overview.php) and [Type declarations](https://www.php.net/manual/en/language.types.declarations.php):
+
+``` php
+use Doctrine\ORM\Mapping as ORM;
+use Ramsey\Uuid\Doctrine\UuidGenerator;
+use Ramsey\Uuid\UuidInterface;
+
+#[ORM\Entity]
+#[ORM\Table(name: "products")
+class Product
+{
+    #[ORM\Id]
+    #[ORM\Column(type: "uuid", unique: true)]
+    #[ORM\GeneratedValue(strategy: "CUSTOM")]
+    #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
+    protected UuidInterface|string $id;
+
+    public function getId(): string
+    {
+        return $this->id;
+    }
+}
+```
+
 If you use the XML Mapping instead of PHP annotations.
 
 ``` xml
