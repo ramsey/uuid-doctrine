@@ -37,6 +37,7 @@ class UuidBinaryType extends Type
      *
      * @param array $fieldDeclaration
      * @param AbstractPlatform $platform
+     * @return string
      */
     public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform)
     {
@@ -98,7 +99,7 @@ class UuidBinaryType extends Type
         }
 
         try {
-            if (is_string($value) || method_exists($value, '__toString')) {
+            if (is_string($value) || (is_object($value) && method_exists($value, '__toString'))) {
                 return Uuid::fromString((string) $value)->getBytes();
             }
         } catch (InvalidArgumentException $e) {

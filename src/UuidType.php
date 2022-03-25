@@ -81,7 +81,7 @@ class UuidType extends GuidType
             $value instanceof UuidInterface
             || (
                 (is_string($value)
-                || method_exists($value, '__toString'))
+                || (is_object($value) && method_exists($value, '__toString')))
                 && Uuid::isValid((string) $value)
             )
         ) {
@@ -111,5 +111,15 @@ class UuidType extends GuidType
     public function requiresSQLCommentHint(AbstractPlatform $platform)
     {
         return true;
+    }
+
+    /**
+     * @param AbstractPlatform $platform
+     *
+     * @return array
+     */
+    public function getMappedDatabaseTypes(AbstractPlatform $platform)
+    {
+        return [self::NAME];
     }
 }

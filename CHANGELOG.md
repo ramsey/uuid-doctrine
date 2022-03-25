@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## 1.8.1 - 2022-01-15
+
+### Fixed
+
+* Prevent type error while converting invalid value type in `convertToDatabaseValue()` ([#170](https://github.com/ramsey/uuid-doctrine/pull/170)).
+* Add return type annotation to `getSQLDeclaration()` to silence deprecation notices ([#173](https://github.com/ramsey/uuid-doctrine/pull/173)).
+
+## 1.8.0 - 2021-11-08
+
+### Added
+
+* Support doctrine/dbal v3
+* Add `UuidType::requiresSQLCommentHint()` and `UuidType::getMappedDatabaseTypes()`
+  to avoid unnecessary `ALTER TABLE` statements after each schema update.
+
 ## 1.7.0 - 2021-08-07
 
 ### Added

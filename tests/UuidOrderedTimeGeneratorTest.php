@@ -20,6 +20,6 @@ class UuidOrderedTimeGeneratorTest extends TestCase
         $uuid = $generator->generate($em, $entity);
 
         $this->assertInstanceOf('Ramsey\Uuid\UuidInterface', $uuid);
-        $this->assertEquals(1, $uuid->getVersion());
+        $this->assertSame(1, $uuid->getVersion());
     }
 }

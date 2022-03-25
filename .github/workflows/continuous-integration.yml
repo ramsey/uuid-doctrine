@@ -2,7 +2,21 @@
 
 name: "build"
 
-on: ["pull_request", "push"]
+on:
+  push:
+    branches:
+      - "main"
+    tags:
+      - "*"
+  pull_request:
+    branches:
+      - "main"
+
+# Cancels all previous workflow runs for the same branch that have not yet completed.
+concurrency:
+  # The concurrency group contains the workflow name and the branch name.
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 env:
   COMPOSER_ROOT_VERSION: "1.99.99"
@@ -23,7 +37,7 @@ jobs:
           coverage: "none"
 
       - name: "Install dependencies (Composer)"
-        uses: "ramsey/composer-install@v1"
+        uses: "ramsey/composer-install@v2"
 
       - name: "Check syntax (php-parallel-lint)"
         run: "composer lint -- --colors"
@@ -47,7 +61,7 @@ jobs:
           ini-values: "memory_limit=-1"
 
       - name: "Install dependencies (Composer)"
-        uses: "ramsey/composer-install@v1"
+        uses: "ramsey/composer-install@v2"
         with:
           dependency-versions: "${{ matrix.dependencies }}"
 
@@ -55,10 +69,11 @@ jobs:
         run: "./vendor/bin/phpunit --verbose --colors=always --coverage-text --coverage-clover build/logs/clover.xml"
 
       - name: "Publish coverage report to Codecov"
-        uses: "codecov/codecov-action@v1"
+        uses: "codecov/codecov-action@v2.1.0"
 
   unit-tests:
     name: "Unit Tests"
+    needs: ["coding-standards", "code-coverage"]
     runs-on: "ubuntu-latest"
 
     strategy:
@@ -74,11 +89,14 @@ jobs:
           - "7.3"
           - "7.4"
           - "8.0"
+          - "8.1"
         dependencies:
           - "lowest"
           - "highest"
         exclude:
           - php-version: "8.0"
+            dependencies: "lowest"
+          - php-version: "8.1"
             dependencies: "lowest"
 
     steps:
@@ -94,7 +112,7 @@ jobs:
           ini-values: "memory_limit=-1"
 
       - name: "Install dependencies (Composer)"
-        uses: "ramsey/composer-install@v1"
+        uses: "ramsey/composer-install@v2"
         with:
           dependency-versions: "${{ matrix.dependencies }}"
 

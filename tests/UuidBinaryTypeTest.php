@@ -46,7 +46,7 @@ class UuidBinaryTypeTest extends TestCase
         $expected = hex2bin('ff6f8cb0c57d11e19b210800200c9a66');
         $actual = $this->getType()->convertToDatabaseValue($uuid, $this->getPlatform());
 
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     /**
@@ -59,7 +59,7 @@ class UuidBinaryTypeTest extends TestCase
         $expected = hex2bin('ff6f8cb0c57d11e19b210800200c9a66');
         $actual = $this->getType()->convertToDatabaseValue($uuid, $this->getPlatform());
 
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     /**
@@ -77,6 +77,20 @@ class UuidBinaryTypeTest extends TestCase
     }
 
     /**
+     * @covers \Ramsey\Uuid\Doctrine\UuidType::convertToDatabaseValue
+     */
+    public function testInvalidValueTypeConversionForDatabaseValue()
+    {
+        if (!method_exists($this, 'expectException')) {
+            $this->markTestSkipped('This version of PHPUnit does not have expectException()');
+        }
+
+        $this->expectException('Doctrine\\DBAL\\Types\\ConversionException');
+
+        $this->getType()->convertToDatabaseValue(false, $this->getPlatform());
+    }
+
+    /**
      * @covers \Ramsey\Uuid\Doctrine\UuidBinaryType::convertToDatabaseValue
      */
     public function testNullConversionForDatabaseValue()
@@ -91,7 +105,7 @@ class UuidBinaryTypeTest extends TestCase
     {
         $uuid = $this->getType()->convertToPHPValue(hex2bin('ff6f8cb0c57d11e19b210800200c9a66'), $this->getPlatform());
         $this->assertInstanceOf('Ramsey\Uuid\UuidInterface', $uuid);
-        $this->assertEquals('ff6f8cb0-c57d-11e1-9b21-0800200c9a66', $uuid->toString());
+        $this->assertSame('ff6f8cb0-c57d-11e1-9b21-0800200c9a66', $uuid->toString());
     }
 
     /**
@@ -130,7 +144,7 @@ class UuidBinaryTypeTest extends TestCase
      */
     public function testGetName()
     {
-        $this->assertEquals('uuid_binary', $this->getType()->getName());
+        $this->assertSame('uuid_binary', $this->getType()->getName());
     }
 
     /**
@@ -138,7 +152,7 @@ class UuidBinaryTypeTest extends TestCase
      */
     public function testGetGuidTypeDeclarationSQL()
     {
-        $this->assertEquals(
+        $this->assertSame(
             'DUMMYBINARY(16)',
             $this->getType()->getSqlDeclaration(['length' => 36], $this->getPlatform())
         );
