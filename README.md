@@ -307,7 +307,7 @@ Contributions are welcome! To contribute, please familiarize yourself with
 Keeping user information safe and secure is a top priority, and we welcome the
 contribution of external security researchers. If you believe you've found a
 security issue in software that is maintained in this repository, please read
-[SECURITY.md](SECURITY.md) for instructions on submitting a vulnerability report.
+[SECURITY.md][] for instructions on submitting a vulnerability report.
 
 ## ramsey/uuid-doctrine for enterprise
 
@@ -331,3 +331,4 @@ information.
 [doctrine-field-type]: https://www.doctrine-project.org/projects/doctrine-dbal/en/latest/reference/types.html
 [doctrine-getting-started]: https://www.doctrine-project.org/projects/doctrine-orm/en/current/tutorials/getting-started.html
 [slide 58]: https://speakerdeck.com/ramsey/identify-all-the-things-with-uuids-true-north-php-2016?slide=58
+[security.md]: https://github.com/ramsey/uuid-doctrine/blob/main/SECURITY.md
