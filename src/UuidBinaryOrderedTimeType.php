@@ -72,6 +72,7 @@ class UuidBinaryOrderedTimeType extends Type
      *
      * @param string|UuidInterface|null $value
      * @param AbstractPlatform $platform
+     * @return mixed
      *
      * @throws ConversionException
      */
@@ -97,6 +98,7 @@ class UuidBinaryOrderedTimeType extends Type
      *
      * @param UuidInterface|string|null $value
      * @param AbstractPlatform $platform
+     * @return mixed
      *
      * @throws ConversionException
      */
