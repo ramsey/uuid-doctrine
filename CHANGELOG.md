@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 
-* Fix return type deprecation warnings ([#178](https://github.com/ramsey/uuid-doctrine/pull/178).
+* Fix return type deprecation warnings ([#178](https://github.com/ramsey/uuid-doctrine/pull/178)).
 
 ## 1.8.1 - 2022-01-15
 
