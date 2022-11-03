@@ -75,6 +75,23 @@ In Laravel:
     ],
 ```
 
+In [roave/psr-container-doctrine](https://github.com/Roave/psr-container-doctrine):
+
+```php
+<?php
+use Ramsey\Uuid\Doctrine\UuidType;
+
+return [
+    'doctrine' => [
+        'types' => [
+            UuidType::NAME => UuidType::class,
+        ],
+        /* ... */
+    ],
+    /* ... */
+];
+```
+
 ### Mappings
 
 Then, in your models, you may annotate properties by setting the `@Column`
