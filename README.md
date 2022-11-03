@@ -108,7 +108,7 @@ class Product
 }
 ```
 
-or as follow with [PHP8 attributes](https://www.php.net/manual/fr/language.attributes.overview.php) and [Type declarations](https://www.php.net/manual/en/language.types.declarations.php):
+or, as follows, with [PHP 8 attributes](https://www.php.net/attributes) and [type declarations](https://www.php.net/types.declarations):
 
 ``` php
 use Doctrine\ORM\Mapping as ORM;
