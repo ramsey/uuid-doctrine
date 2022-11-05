@@ -17,9 +17,9 @@ namespace Ramsey\Uuid\Doctrine;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\Type;
-use InvalidArgumentException;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
+use Throwable;
 
 use function is_object;
 use function is_string;
@@ -65,7 +65,7 @@ class UuidBinaryType extends Type
 
         try {
             $uuid = Uuid::fromBytes($value);
-        } catch (InvalidArgumentException $e) {
+        } catch (Throwable $e) {
             throw ConversionException::conversionFailed($value, self::NAME);
         }
 
@@ -91,7 +91,7 @@ class UuidBinaryType extends Type
             if (is_string($value) || (is_object($value) && method_exists($value, '__toString'))) {
                 return Uuid::fromString((string) $value)->getBytes();
             }
-        } catch (InvalidArgumentException $e) {
+        } catch (Throwable $e) {
             // Ignore the exception and pass through.
         }
 

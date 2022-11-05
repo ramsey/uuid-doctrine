@@ -14,6 +14,7 @@ use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 
 use function hex2bin;
+use function method_exists;
 
 class UuidBinaryTypeTest extends TestCase
 {
@@ -103,9 +104,19 @@ class UuidBinaryTypeTest extends TestCase
         $this->assertNull($this->getType()->convertToPHPValue(null, $this->getPlatform()));
     }
 
-    public function testReturnValueIfUuidForPHPValue(): void
+    public function testReturnValueIfUuid4ForPHPValue(): void
     {
         $uuid = Uuid::uuid4();
+        $this->assertSame($uuid, $this->getType()->convertToPHPValue($uuid, $this->getPlatform()));
+    }
+
+    public function testReturnValueIfUuid7ForPHPValue(): void
+    {
+        if (!method_exists(Uuid::class, 'uuid7')) {
+            $this->markTestSkipped('Uuid::uuid7() is not available in the installed version of ramsey/uuid');
+        }
+
+        $uuid = Uuid::uuid7();
         $this->assertSame($uuid, $this->getType()->convertToPHPValue($uuid, $this->getPlatform()));
     }
 

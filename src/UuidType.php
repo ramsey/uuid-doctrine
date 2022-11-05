@@ -17,9 +17,9 @@ namespace Ramsey\Uuid\Doctrine;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\GuidType;
-use InvalidArgumentException;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
+use Throwable;
 
 use function is_object;
 use function is_string;
@@ -52,7 +52,7 @@ class UuidType extends GuidType
 
         try {
             $uuid = Uuid::fromString($value);
-        } catch (InvalidArgumentException $e) {
+        } catch (Throwable $e) {
             throw ConversionException::conversionFailed($value, self::NAME);
         }
 

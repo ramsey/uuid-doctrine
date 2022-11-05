@@ -18,10 +18,10 @@ use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\Type;
 use Ramsey\Uuid\Codec\OrderedTimeCodec;
-use Ramsey\Uuid\Exception\InvalidArgumentException;
 use Ramsey\Uuid\Exception\UnsupportedOperationException;
 use Ramsey\Uuid\UuidFactory;
 use Ramsey\Uuid\UuidInterface;
+use Throwable;
 
 use function bin2hex;
 use function is_object;
@@ -74,7 +74,7 @@ class UuidBinaryOrderedTimeType extends Type
 
         try {
             return $this->decode($value);
-        } catch (InvalidArgumentException $e) {
+        } catch (Throwable $e) {
             throw ConversionException::conversionFailed($value, self::NAME);
         }
     }
@@ -100,7 +100,7 @@ class UuidBinaryOrderedTimeType extends Type
 
                 return $this->encode($uuid);
             }
-        } catch (InvalidArgumentException $e) {
+        } catch (Throwable $e) {
             // Ignore the exception and pass through.
         }
 
@@ -162,7 +162,6 @@ class UuidBinaryOrderedTimeType extends Type
 
     /**
      * @throws ConversionException
-     * @throws InvalidArgumentException
      */
     private function encode(UuidInterface $uuid): string
     {
@@ -173,7 +172,6 @@ class UuidBinaryOrderedTimeType extends Type
 
     /**
      * @throws ConversionException
-     * @throws InvalidArgumentException
      */
     private function decode(string $bytes): UuidInterface
     {
