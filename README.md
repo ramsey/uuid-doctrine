@@ -200,7 +200,7 @@ Then, when annotating model class properties, use `uuid_binary` instead of `uuid
 
     @Column(type="uuid_binary")
 
-### InnoDB-optimised binary UUIDs
+### InnoDB-optimised binary UUIDs - deprecated
 
 More suitable if you want to use UUIDs as primary key. Note that this can cause
 unintended effects if:
@@ -264,6 +264,70 @@ If you use the XML Mapping instead of PHP annotations.
 <id name="id" column="id" type="uuid_binary_ordered_time">
     <generator strategy="CUSTOM"/>
     <custom-id-generator class="Ramsey\Uuid\Doctrine\UuidOrderedTimeGenerator"/>
+</id>
+```
+
+### InnoDB-optimised binary UUIDs - new way
+
+With the introduction of new
+[UUID types](https://www.ietf.org/archive/id/draft-peabody-dispatch-new-uuid-format-04.html)
+(including sortable, unix epoch based UUID version 7) it is now recommended
+to use regular `uuid_binary` with `Ramsey\Uuid\Doctrine\UuidV7Generator` for primary keys.
+
+In your bootstrap, place the following:
+
+``` php
+\Doctrine\DBAL\Types\Type::addType('uuid_binary', 'Ramsey\Uuid\Doctrine\UuidBinaryType');
+$entityManager->getConnection()->getDatabasePlatform()->registerDoctrineTypeMapping('uuid_binary', 'binary');
+```
+
+In Symfony:
+
+``` yaml
+# config/packages/doctrine.yaml
+doctrine:
+    dbal:
+        types:
+            uuid_binary:  Ramsey\Uuid\Doctrine\UuidBinaryType
+# Uncomment if using doctrine/orm <2.8
+        # mapping_types:
+            # uuid_binary: binary
+```
+
+Then, in your models, you may annotate properties by setting the `@Column`
+type to `uuid_binary`, and defining a custom generator of
+`Ramsey\Uuid\UuidV7Generator`. Doctrine will handle the rest.
+
+``` php
+/**
+ * @Entity
+ * @Table(name="products")
+ */
+class Product
+{
+    /**
+     * @var \Ramsey\Uuid\UuidInterface
+     *
+     * @Id
+     * @Column(type="uuid_binary", unique=true)
+     * @GeneratedValue(strategy="CUSTOM")
+     * @CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidV7Generator")
+     */
+    protected $id;
+
+    public function getId()
+    {
+        return $this->id;
+    }
+}
+```
+
+If you use the XML Mapping instead of PHP annotations.
+
+``` xml
+<id name="id" column="id" type="uuid_binary">
+    <generator strategy="CUSTOM"/>
+    <custom-id-generator class="Ramsey\Uuid\Doctrine\UuidV7Generator"/>
 </id>
 ```
 

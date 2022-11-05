@@ -133,9 +133,18 @@ class UuidBinaryTypeTest extends TestCase
     /**
      * @covers \Ramsey\Uuid\Doctrine\UuidBinaryType::convertToPHPValue
      */
-    public function testReturnValueIfUuidForPHPValue()
+    public function testReturnValueIfUuid4ForPHPValue()
     {
         $uuid = Uuid::uuid4();
+        $this->assertSame($uuid, $this->getType()->convertToPHPValue($uuid, $this->getPlatform()));
+    }
+
+    /**
+     * @covers \Ramsey\Uuid\Doctrine\UuidBinaryType::convertToPHPValue
+     */
+    public function testReturnValueIfUuid7ForPHPValue()
+    {
+        $uuid = Uuid::uuid7();
         $this->assertSame($uuid, $this->getType()->convertToPHPValue($uuid, $this->getPlatform()));
     }
 
