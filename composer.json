@@ -23,6 +23,7 @@
         "ramsey/uuid": "^3.5 || ^4.0"
     },
     "require-dev": {
+        "captainhook/plugin-composer": "^5.3",
         "doctrine/orm": "^2.5",
         "ergebnis/composer-normalize": "^2.29",
         "mockery/mockery": "^1.5",
@@ -37,6 +38,7 @@
         "psalm/plugin-mockery": "^1.1",
         "psalm/plugin-phpunit": "^0.18.4",
         "ramsey/coding-standard": "^2.0.3",
+        "ramsey/conventional-commits": "^1.3",
         "vimeo/psalm": "^5.4"
     },
     "minimum-stability": "alpha",
@@ -56,9 +58,18 @@
             "composer/package-versions-deprecated": true,
             "dealerdirect/phpcodesniffer-composer-installer": true,
             "ergebnis/composer-normalize": true,
-            "phpstan/extension-installer": true
+            "phpstan/extension-installer": true,
+            "captainhook/plugin-composer": true
         },
         "sort-packages": true
+    },
+    "extra": {
+        "captainhook": {
+            "force-install": true
+        },
+        "ramsey/conventional-commits": {
+            "configFile": "conventional-commits.json"
+        }
     },
     "scripts": {
         "dev:analyze": [
