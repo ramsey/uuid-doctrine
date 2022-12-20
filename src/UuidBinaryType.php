@@ -51,24 +51,22 @@ class UuidBinaryType extends Type
     /**
      * {@inheritdoc}
      *
-     * @param string|UuidInterface|null $value
-     *
      * @throws ConversionException
      */
     public function convertToPHPValue($value, AbstractPlatform $platform): ?UuidInterface
     {
-        if ($value === null || $value === '') {
-            return null;
-        }
-
         if ($value instanceof UuidInterface) {
             return $value;
+        }
+
+        if (!is_string($value) || $value === '') {
+            return null;
         }
 
         try {
             $uuid = Uuid::fromBytes($value);
         } catch (InvalidArgumentException $e) {
-            throw ConversionException::conversionFailed($value, static::NAME);
+            throw ConversionException::conversionFailed($value, self::NAME);
         }
 
         return $uuid;
@@ -77,18 +75,16 @@ class UuidBinaryType extends Type
     /**
      * {@inheritdoc}
      *
-     * @param UuidInterface|string|null $value
-     *
      * @throws ConversionException
      */
     public function convertToDatabaseValue($value, AbstractPlatform $platform): ?string
     {
-        if ($value === null || $value === '') {
-            return null;
-        }
-
         if ($value instanceof UuidInterface) {
             return $value->getBytes();
+        }
+
+        if ($value === null || $value === '') {
+            return null;
         }
 
         try {
@@ -99,12 +95,12 @@ class UuidBinaryType extends Type
             // Ignore the exception and pass through.
         }
 
-        throw ConversionException::conversionFailed($value, static::NAME);
+        throw ConversionException::conversionFailed($value, self::NAME);
     }
 
     public function getName(): string
     {
-        return static::NAME;
+        return self::NAME;
     }
 
     public function requiresSQLCommentHint(AbstractPlatform $platform): bool

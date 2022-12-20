@@ -38,24 +38,22 @@ class UuidType extends GuidType
     /**
      * {@inheritdoc}
      *
-     * @param string|UuidInterface|null $value
-     *
      * @throws ConversionException
      */
     public function convertToPHPValue($value, AbstractPlatform $platform): ?UuidInterface
     {
-        if ($value === null || $value === '') {
-            return null;
-        }
-
         if ($value instanceof UuidInterface) {
             return $value;
+        }
+
+        if (!is_string($value) || $value === '') {
+            return null;
         }
 
         try {
             $uuid = Uuid::fromString($value);
         } catch (InvalidArgumentException $e) {
-            throw ConversionException::conversionFailed($value, static::NAME);
+            throw ConversionException::conversionFailed($value, self::NAME);
         }
 
         return $uuid;
@@ -63,8 +61,6 @@ class UuidType extends GuidType
 
     /**
      * {@inheritdoc}
-     *
-     * @param UuidInterface|string|null $value
      *
      * @throws ConversionException
      */
@@ -85,12 +81,12 @@ class UuidType extends GuidType
             return (string) $value;
         }
 
-        throw ConversionException::conversionFailed($value, static::NAME);
+        throw ConversionException::conversionFailed($value, self::NAME);
     }
 
     public function getName(): string
     {
-        return static::NAME;
+        return self::NAME;
     }
 
     public function requiresSQLCommentHint(AbstractPlatform $platform): bool

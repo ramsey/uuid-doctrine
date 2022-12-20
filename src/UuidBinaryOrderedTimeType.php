@@ -17,8 +17,8 @@ namespace Ramsey\Uuid\Doctrine;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\Type;
-use InvalidArgumentException;
 use Ramsey\Uuid\Codec\OrderedTimeCodec;
+use Ramsey\Uuid\Exception\InvalidArgumentException;
 use Ramsey\Uuid\Exception\UnsupportedOperationException;
 use Ramsey\Uuid\UuidFactory;
 use Ramsey\Uuid\UuidInterface;
@@ -60,18 +60,16 @@ class UuidBinaryOrderedTimeType extends Type
     /**
      * {@inheritdoc}
      *
-     * @param string|UuidInterface|null $value
-     *
      * @throws ConversionException
      */
     public function convertToPHPValue($value, AbstractPlatform $platform): ?UuidInterface
     {
-        if ($value === null || $value === '') {
-            return null;
-        }
-
         if ($value instanceof UuidInterface) {
             return $value;
+        }
+
+        if (!is_string($value) || $value === '') {
+            return null;
         }
 
         try {
@@ -84,18 +82,16 @@ class UuidBinaryOrderedTimeType extends Type
     /**
      * {@inheritdoc}
      *
-     * @param UuidInterface|string|null $value
-     *
      * @throws ConversionException
      */
     public function convertToDatabaseValue($value, AbstractPlatform $platform): ?string
     {
-        if ($value === null || $value === '') {
-            return null;
-        }
-
         if ($value instanceof UuidInterface) {
             return $this->encode($value);
+        }
+
+        if ($value === null || $value === '') {
+            return null;
         }
 
         try {
@@ -154,6 +150,7 @@ class UuidBinaryOrderedTimeType extends Type
      */
     private function assertUuidV1(UuidInterface $value): void
     {
+        /** @psalm-suppress DeprecatedMethod */
         if ($value->getVersion() !== 1) {
             throw ConversionException::conversionFailedFormat(
                 $value->toString(),
@@ -165,6 +162,7 @@ class UuidBinaryOrderedTimeType extends Type
 
     /**
      * @throws ConversionException
+     * @throws InvalidArgumentException
      */
     private function encode(UuidInterface $uuid): string
     {
@@ -175,6 +173,7 @@ class UuidBinaryOrderedTimeType extends Type
 
     /**
      * @throws ConversionException
+     * @throws InvalidArgumentException
      */
     private function decode(string $bytes): UuidInterface
     {

@@ -22,13 +22,18 @@ use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidFactory;
 use Ramsey\Uuid\UuidInterface;
 
+use function assert;
+
 class UuidOrderedTimeGenerator extends AbstractIdGenerator
 {
     protected UuidFactory $factory;
 
     public function __construct()
     {
-        $this->factory = clone Uuid::getFactory();
+        $factory = clone Uuid::getFactory();
+        assert($factory instanceof UuidFactory);
+
+        $this->factory = $factory;
 
         $codec = new OrderedTimeCodec(
             $this->factory->getUuidBuilder(),
