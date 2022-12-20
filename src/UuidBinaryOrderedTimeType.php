@@ -10,16 +10,23 @@
  * @license http://opensource.org/licenses/MIT MIT
  */
 
+declare(strict_types=1);
+
 namespace Ramsey\Uuid\Doctrine;
 
-use InvalidArgumentException;
-use Ramsey\Uuid\Codec\OrderedTimeCodec;
+use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\Type;
-use Doctrine\DBAL\Platforms\AbstractPlatform;
+use InvalidArgumentException;
+use Ramsey\Uuid\Codec\OrderedTimeCodec;
 use Ramsey\Uuid\Exception\UnsupportedOperationException;
 use Ramsey\Uuid\UuidFactory;
 use Ramsey\Uuid\UuidInterface;
+
+use function bin2hex;
+use function is_object;
+use function is_string;
+use function method_exists;
 
 /**
  * Field type mapping for the Doctrine Database Abstraction Layer (DBAL).
@@ -29,40 +36,24 @@ use Ramsey\Uuid\UuidInterface;
  */
 class UuidBinaryOrderedTimeType extends Type
 {
-    /**
-     * @var string
-     */
-    const NAME = 'uuid_binary_ordered_time';
+    public const NAME = 'uuid_binary_ordered_time';
 
-    /**
-    * @var string
-    */
-    const ASSERT_FORMAT = 'UuidV1';
+    public const ASSERT_FORMAT = 'UuidV1';
 
-    /**
-     * @var UuidFactory|null
-     */
-    private $factory;
+    private ?UuidFactory $factory = null;
 
-    /**
-     * @var OrderedTimeCodec
-     */
-    private $codec;
+    private ?OrderedTimeCodec $codec = null;
 
     /**
      * {@inheritdoc}
-     *
-     * @param array $fieldDeclaration
-     * @param AbstractPlatform $platform
-     * @return string
      */
-    public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform)
+    public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
     {
         return $platform->getBinaryTypeDeclarationSQL(
             [
                 'length' => '16',
                 'fixed' => true,
-            ]
+            ],
         );
     }
 
@@ -70,12 +61,10 @@ class UuidBinaryOrderedTimeType extends Type
      * {@inheritdoc}
      *
      * @param string|UuidInterface|null $value
-     * @param AbstractPlatform $platform
-     * @return mixed
      *
      * @throws ConversionException
      */
-    public function convertToPHPValue($value, AbstractPlatform $platform)
+    public function convertToPHPValue($value, AbstractPlatform $platform): ?UuidInterface
     {
         if ($value === null || $value === '') {
             return null;
@@ -96,12 +85,10 @@ class UuidBinaryOrderedTimeType extends Type
      * {@inheritdoc}
      *
      * @param UuidInterface|string|null $value
-     * @param AbstractPlatform $platform
-     * @return mixed
      *
      * @throws ConversionException
      */
-    public function convertToDatabaseValue($value, AbstractPlatform $platform)
+    public function convertToDatabaseValue($value, AbstractPlatform $platform): ?string
     {
         if ($value === null || $value === '') {
             return null;
@@ -124,24 +111,12 @@ class UuidBinaryOrderedTimeType extends Type
         throw ConversionException::conversionFailed($value, self::NAME);
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @return string
-     */
-    public function getName()
+    public function getName(): string
     {
         return self::NAME;
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @param AbstractPlatform $platform
-     *
-     * @return bool
-     */
-    public function requiresSQLCommentHint(AbstractPlatform $platform)
+    public function requiresSQLCommentHint(AbstractPlatform $platform): bool
     {
         return true;
     }
@@ -149,26 +124,21 @@ class UuidBinaryOrderedTimeType extends Type
     /**
      * Creates/returns a UuidFactory instance that uses a specific codec
      * that creates a binary that can be time-ordered
-     *
-     * @return UuidFactory|null
      */
-    protected function getUuidFactory()
+    protected function getUuidFactory(): UuidFactory
     {
-        if (null === $this->factory) {
+        if ($this->factory === null) {
             $this->factory = new UuidFactory();
         }
 
         return $this->factory;
     }
 
-    /**
-     * @return OrderedTimeCodec
-     */
-    protected function getCodec()
+    protected function getCodec(): OrderedTimeCodec
     {
-        if (null === $this->codec) {
+        if ($this->codec === null) {
             $this->codec = new OrderedTimeCodec(
-                $this->getUuidFactory()->getUuidBuilder()
+                $this->getUuidFactory()->getUuidBuilder(),
             );
         }
 
@@ -180,29 +150,23 @@ class UuidBinaryOrderedTimeType extends Type
      * kind of UUID that can be time-ordered. Passing any other UUID into
      * this type is likely a mistake
      *
-     * @param UuidInterface $value
-     *
      * @throws ConversionException
      */
-    private function assertUuidV1(UuidInterface $value)
+    private function assertUuidV1(UuidInterface $value): void
     {
-        if (1 !== $value->getVersion()) {
+        if ($value->getVersion() !== 1) {
             throw ConversionException::conversionFailedFormat(
                 $value->toString(),
                 self::NAME,
-                self::ASSERT_FORMAT
+                self::ASSERT_FORMAT,
             );
         }
     }
 
     /**
-     * @param UuidInterface $uuid
-     *
-     * @return string
-     *
      * @throws ConversionException
      */
-    private function encode(UuidInterface $uuid)
+    private function encode(UuidInterface $uuid): string
     {
         $this->assertUuidV1($uuid);
 
@@ -210,13 +174,9 @@ class UuidBinaryOrderedTimeType extends Type
     }
 
     /**
-     * @param string $bytes
-     *
-     * @return UuidInterface
-     *
      * @throws ConversionException
      */
-    private function decode($bytes)
+    private function decode(string $bytes): UuidInterface
     {
         try {
             $decoded = $this->getCodec()->decodeBytes($bytes);
@@ -224,7 +184,7 @@ class UuidBinaryOrderedTimeType extends Type
             throw ConversionException::conversionFailedFormat(
                 bin2hex($bytes),
                 self::NAME,
-                self::ASSERT_FORMAT
+                self::ASSERT_FORMAT,
             );
         }
 

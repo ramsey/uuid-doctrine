@@ -8,8 +8,6 @@
     <file>./src</file>
     <file>./tests</file>
 
-    <rule ref="PSR12">
-        <exclude name="PSR12.Properties.ConstantVisibility.NotFound"/>
-    </rule>
+    <rule ref="Ramsey"/>
 
 </ruleset>

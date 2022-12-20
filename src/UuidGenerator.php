@@ -10,11 +10,12 @@
  * @license http://opensource.org/licenses/MIT MIT
  */
 
+declare(strict_types=1);
+
 namespace Ramsey\Uuid\Doctrine;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Id\AbstractIdGenerator;
-use Doctrine\ORM\Mapping\Entity;
 use Exception;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
@@ -27,16 +28,15 @@ class UuidGenerator extends AbstractIdGenerator
     /**
      * Generate an identifier
      *
-     * @param EntityManagerInterface $em
-     * @param Entity $entity
+     * @deprecated as per parent. Accepts any EntityManagerInterface for maximum compatibility on PHP 7.4+.
      *
-     * @return UuidInterface
+     * @see UuidGenerator::generateId()
+     *
+     * @param object | null $entity
      *
      * @throws Exception
-     *
-     * @deprecated as per parent. Accepts any EntityManagerInterface for maximum compatibility on PHP 7.4+.
-     * @see UuidGenerator::generateId()
      */
+    // phpcs:ignore SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
     public function generate(EntityManagerInterface $em, $entity): UuidInterface
     {
         return Uuid::uuid4();
@@ -45,13 +45,11 @@ class UuidGenerator extends AbstractIdGenerator
     /**
      * Generate an identifier
      *
-     * @param EntityManagerInterface $em
-     * @param Entity $entity
-     *
-     * @return UuidInterface
+     * @param object | null $entity
      *
      * @throws Exception
      */
+    // phpcs:ignore SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
     public function generateId(EntityManagerInterface $em, $entity): UuidInterface
     {
         return Uuid::uuid4();

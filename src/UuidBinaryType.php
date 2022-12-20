@@ -10,14 +10,20 @@
  * @license http://opensource.org/licenses/MIT MIT
  */
 
+declare(strict_types=1);
+
 namespace Ramsey\Uuid\Doctrine;
 
+use Doctrine\DBAL\Platforms\AbstractPlatform;
+use Doctrine\DBAL\Types\ConversionException;
+use Doctrine\DBAL\Types\Type;
 use InvalidArgumentException;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
-use Doctrine\DBAL\Types\ConversionException;
-use Doctrine\DBAL\Types\Type;
-use Doctrine\DBAL\Platforms\AbstractPlatform;
+
+use function is_object;
+use function is_string;
+use function method_exists;
 
 /**
  * Field type mapping for the Doctrine Database Abstraction Layer (DBAL).
@@ -27,25 +33,18 @@ use Doctrine\DBAL\Platforms\AbstractPlatform;
  */
 class UuidBinaryType extends Type
 {
-    /**
-     * @var string
-     */
-    const NAME = 'uuid_binary';
+    public const NAME = 'uuid_binary';
 
     /**
      * {@inheritdoc}
-     *
-     * @param array $fieldDeclaration
-     * @param AbstractPlatform $platform
-     * @return string
      */
-    public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform)
+    public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
     {
         return $platform->getBinaryTypeDeclarationSQL(
             [
                 'length' => '16',
                 'fixed' => true,
-            ]
+            ],
         );
     }
 
@@ -53,13 +52,10 @@ class UuidBinaryType extends Type
      * {@inheritdoc}
      *
      * @param string|UuidInterface|null $value
-     * @param AbstractPlatform $platform
-     *
-     * @return UuidInterface|null
      *
      * @throws ConversionException
      */
-    public function convertToPHPValue($value, AbstractPlatform $platform)
+    public function convertToPHPValue($value, AbstractPlatform $platform): ?UuidInterface
     {
         if ($value === null || $value === '') {
             return null;
@@ -82,13 +78,10 @@ class UuidBinaryType extends Type
      * {@inheritdoc}
      *
      * @param UuidInterface|string|null $value
-     * @param AbstractPlatform $platform
-     *
-     * @return string|null
      *
      * @throws ConversionException
      */
-    public function convertToDatabaseValue($value, AbstractPlatform $platform)
+    public function convertToDatabaseValue($value, AbstractPlatform $platform): ?string
     {
         if ($value === null || $value === '') {
             return null;
@@ -109,24 +102,12 @@ class UuidBinaryType extends Type
         throw ConversionException::conversionFailed($value, static::NAME);
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @return string
-     */
-    public function getName()
+    public function getName(): string
     {
         return static::NAME;
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @param AbstractPlatform $platform
-     *
-     * @return bool
-     */
-    public function requiresSQLCommentHint(AbstractPlatform $platform)
+    public function requiresSQLCommentHint(AbstractPlatform $platform): bool
     {
         return true;
     }

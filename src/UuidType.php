@@ -10,14 +10,20 @@
  * @license http://opensource.org/licenses/MIT MIT
  */
 
+declare(strict_types=1);
+
 namespace Ramsey\Uuid\Doctrine;
 
+use Doctrine\DBAL\Platforms\AbstractPlatform;
+use Doctrine\DBAL\Types\ConversionException;
+use Doctrine\DBAL\Types\GuidType;
 use InvalidArgumentException;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
-use Doctrine\DBAL\Types\ConversionException;
-use Doctrine\DBAL\Types\GuidType;
-use Doctrine\DBAL\Platforms\AbstractPlatform;
+
+use function is_object;
+use function is_string;
+use function method_exists;
 
 /**
  * Field type mapping for the Doctrine Database Abstraction Layer (DBAL).
@@ -27,22 +33,16 @@ use Doctrine\DBAL\Platforms\AbstractPlatform;
  */
 class UuidType extends GuidType
 {
-    /**
-     * @var string
-     */
-    const NAME = 'uuid';
+    public const NAME = 'uuid';
 
     /**
      * {@inheritdoc}
      *
      * @param string|UuidInterface|null $value
-     * @param AbstractPlatform $platform
-     *
-     * @return UuidInterface|null
      *
      * @throws ConversionException
      */
-    public function convertToPHPValue($value, AbstractPlatform $platform)
+    public function convertToPHPValue($value, AbstractPlatform $platform): ?UuidInterface
     {
         if ($value === null || $value === '') {
             return null;
@@ -65,13 +65,10 @@ class UuidType extends GuidType
      * {@inheritdoc}
      *
      * @param UuidInterface|string|null $value
-     * @param AbstractPlatform $platform
-     *
-     * @return string|null
      *
      * @throws ConversionException
      */
-    public function convertToDatabaseValue($value, AbstractPlatform $platform)
+    public function convertToDatabaseValue($value, AbstractPlatform $platform): ?string
     {
         if ($value === null || $value === '') {
             return null;
@@ -91,34 +88,20 @@ class UuidType extends GuidType
         throw ConversionException::conversionFailed($value, static::NAME);
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @return string
-     */
-    public function getName()
+    public function getName(): string
     {
         return static::NAME;
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @param AbstractPlatform $platform
-     *
-     * @return bool
-     */
-    public function requiresSQLCommentHint(AbstractPlatform $platform)
+    public function requiresSQLCommentHint(AbstractPlatform $platform): bool
     {
         return true;
     }
 
     /**
-     * @param AbstractPlatform $platform
-     *
-     * @return array
+     * @return string[]
      */
-    public function getMappedDatabaseTypes(AbstractPlatform $platform)
+    public function getMappedDatabaseTypes(AbstractPlatform $platform): array
     {
         return [self::NAME];
     }

@@ -10,11 +10,12 @@
  * @license http://opensource.org/licenses/MIT MIT
  */
 
+declare(strict_types=1);
+
 namespace Ramsey\Uuid\Doctrine;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Id\AbstractIdGenerator;
-use Doctrine\ORM\Mapping\Entity;
 use Exception;
 use Ramsey\Uuid\Codec\OrderedTimeCodec;
 use Ramsey\Uuid\Uuid;
@@ -23,17 +24,14 @@ use Ramsey\Uuid\UuidInterface;
 
 class UuidOrderedTimeGenerator extends AbstractIdGenerator
 {
-    /**
-     * @var UuidFactory
-     */
-    protected $factory;
+    protected UuidFactory $factory;
 
     public function __construct()
     {
         $this->factory = clone Uuid::getFactory();
 
         $codec = new OrderedTimeCodec(
-            $this->factory->getUuidBuilder()
+            $this->factory->getUuidBuilder(),
         );
 
         $this->factory->setCodec($codec);
@@ -42,16 +40,15 @@ class UuidOrderedTimeGenerator extends AbstractIdGenerator
     /**
      * Generates an identifier for an entity.
      *
-     * @param EntityManagerInterface $em
-     * @param Entity $entity
+     * @deprecated as per parent. Accepts any EntityManagerInterface for maximum compatibility on PHP 7.4+.
      *
-     * @return UuidInterface
+     * @see UuidOrderedTimeGenerator::generateId()
+     *
+     * @param object | null $entity
      *
      * @throws Exception
-     *
-     * @deprecated as per parent. Accepts any EntityManagerInterface for maximum compatibility on PHP 7.4+.
-     * @see UuidOrderedTimeGenerator::generateId()
      */
+    // phpcs:ignore SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
     public function generate(EntityManagerInterface $em, $entity): UuidInterface
     {
         return $this->factory->uuid1();
@@ -60,13 +57,11 @@ class UuidOrderedTimeGenerator extends AbstractIdGenerator
     /**
      * Generates an identifier for an entity.
      *
-     * @param EntityManagerInterface $em
-     * @param Entity $entity
-     *
-     * @return UuidInterface
+     * @param object | null $entity
      *
      * @throws Exception
      */
+    // phpcs:ignore SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
     public function generateId(EntityManagerInterface $em, $entity): UuidInterface
     {
         return $this->factory->uuid1();

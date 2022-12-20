@@ -1,20 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Ramsey\Uuid\Doctrine;
 
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\Entity;
+use Mockery;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\UuidInterface;
 
 class UuidOrderedTimeGeneratorTest extends TestCase
 {
-    /**
-     * @covers \Ramsey\Uuid\Doctrine\UuidOrderedTimeGenerator::generate
-     * @covers \Ramsey\Uuid\Doctrine\UuidOrderedTimeGenerator::__construct
-     */
     public function testUuidGeneratorGeneratesInLegacyMode(): void
     {
-        $em = new TestEntityManager();
+        $em = Mockery::mock(EntityManager::class);
         $entity = new Entity();
         $generator = new UuidOrderedTimeGenerator();
 
@@ -24,13 +24,9 @@ class UuidOrderedTimeGeneratorTest extends TestCase
         $this->assertSame(1, $uuid->getVersion());
     }
 
-    /**
-     * @covers \Ramsey\Uuid\Doctrine\UuidOrderedTimeGenerator::generateId
-     * @covers \Ramsey\Uuid\Doctrine\UuidOrderedTimeGenerator::__construct
-     */
     public function testUuidGeneratorGenerates(): void
     {
-        $em = new TestEntityManager();
+        $em = Mockery::mock(EntityManager::class);
         $entity = new Entity();
         $generator = new UuidOrderedTimeGenerator();
 
