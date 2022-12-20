@@ -33,21 +33,22 @@ jobs:
         uses: "shivammathur/setup-php@2.22.0"
         with:
           php-version: "latest"
-          extensions: bcmath, ctype, gmp
+          extensions: "bcmath, ctype, gmp"
           coverage: "none"
 
       - name: "Install dependencies (Composer)"
         uses: "ramsey/composer-install@2.2.0"
 
       - name: "Check syntax (php-parallel-lint)"
-        run: "composer lint -- --colors"
+        run: "composer dev:lint:syntax"
 
       - name: "Check coding standards (PHP_CodeSniffer)"
-        run: "./vendor/bin/phpcs --colors"
+        run: "composer dev:lint:style"
 
-  code-coverage:
-    name: "Code coverage"
+  static-analysis:
+    name: "Static analysis"
     runs-on: "ubuntu-latest"
+
     steps:
       - name: "Checkout repository"
         uses: "actions/checkout@v3.1.0"
@@ -56,44 +57,22 @@ jobs:
         uses: "shivammathur/setup-php@2.22.0"
         with:
           php-version: "latest"
-          extensions: bcmath, ctype, gmp
-          coverage: "pcov"
-          ini-values: "memory_limit=-1"
+          extensions: "bcmath, ctype, gmp"
+          coverage: "none"
 
       - name: "Install dependencies (Composer)"
         uses: "ramsey/composer-install@2.2.0"
-        with:
-          dependency-versions: "${{ matrix.dependencies }}"
 
-      - name: "Run unit tests (PHPUnit)"
-        run: "./vendor/bin/phpunit --verbose --colors=always --coverage-text --coverage-clover build/logs/clover.xml"
+      - name: "Statically analyze code (PHPStan)"
+        run: "composer dev:analyze:phpstan"
 
-      - name: "Publish coverage report to Codecov"
-        uses: "codecov/codecov-action@v3.1.1"
+      - name: "Statically analyze code (Psalm)"
+        run: "composer dev:analyze:psalm -- --shepherd"
 
-  unit-tests:
-    name: "Unit Tests"
-    needs: ["coding-standards", "code-coverage"]
+  security-analysis:
+    name: "Security analysis"
+    needs: ["coding-standards", "static-analysis"]
     runs-on: "ubuntu-latest"
-
-    strategy:
-      fail-fast: false
-      matrix:
-        php-version:
-          - "7.4"
-          - "8.0"
-          - "8.1"
-          - "8.2"
-        dependencies:
-          - "lowest"
-          - "highest"
-        exclude:
-          - php-version: "8.0"
-            dependencies: "lowest"
-          - php-version: "8.1"
-            dependencies: "lowest"
-          - php-version: "8.2"
-            dependencies: "lowest"
 
     steps:
       - name: "Checkout repository"
@@ -102,15 +81,77 @@ jobs:
       - name: "Install PHP"
         uses: "shivammathur/setup-php@2.22.0"
         with:
-          php-version: "${{ matrix.php-version }}"
-          extensions: bcmath, ctype, gmp
+          php-version: "latest"
+          extensions: "bcmath, ctype, gmp"
           coverage: "none"
+
+      - name: "Install dependencies (Composer)"
+        uses: "ramsey/composer-install@2.2.0"
+
+      - name: "Analyze security of code (Psalm)"
+        run: "./vendor/bin/psalm --taint-analysis --report=build/logs/psalm.sarif"
+
+      - name: "Upload security analysis results to GitHub"
+        uses: "github/codeql-action/upload-sarif@v2"
+        with:
+          sarif_file: "build/logs/psalm.sarif"
+
+  code-coverage:
+    name: "Code coverage"
+    needs: ["coding-standards", "static-analysis"]
+    runs-on: "ubuntu-latest"
+
+    steps:
+      - name: "Checkout repository"
+        uses: "actions/checkout@v3.1.0"
+
+      - name: "Install PHP"
+        uses: "shivammathur/setup-php@2.22.0"
+        with:
+          php-version: "latest"
+          extensions: "bcmath, ctype, gmp"
+          coverage: "pcov"
           ini-values: "memory_limit=-1"
 
       - name: "Install dependencies (Composer)"
         uses: "ramsey/composer-install@2.2.0"
-        with:
-          dependency-versions: "${{ matrix.dependencies }}"
 
       - name: "Run unit tests (PHPUnit)"
-        run: "./vendor/bin/phpunit --verbose --colors=always --no-coverage"
+        run: "composer dev:test:coverage:ci"
+
+      - name: "Publish coverage report to Codecov"
+        uses: "codecov/codecov-action@v3.1.1"
+
+  unit-tests:
+    name: "Unit tests"
+    needs: ["code-coverage"]
+    runs-on: "ubuntu-latest"
+
+    strategy:
+      fail-fast: false
+      matrix:
+        php:
+          - "7.4"
+          - "8.0"
+          - "8.1"
+          - "8.2"
+        composer-deps: ["lowest", "highest"]
+
+    steps:
+      - name: "Checkout repository"
+        uses: "actions/checkout@v3.1.0"
+
+      - name: "Install PHP"
+        uses: "shivammathur/setup-php@2.22.0"
+        with:
+          php-version: "${{ matrix.php }}"
+          extensions: "bcmath, ctype, gmp"
+          coverage: "none"
+
+      - name: "Install dependencies (Composer)"
+        uses: "ramsey/composer-install@2.2.0"
+        with:
+          dependency-versions: "${{ matrix.composer-deps }}"
+
+      - name: "Run unit tests (PHPUnit)"
+        run: "composer dev:test:unit"
