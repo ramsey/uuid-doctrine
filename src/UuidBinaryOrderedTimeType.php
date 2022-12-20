@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace Ramsey\Uuid\Doctrine;
 
+use Doctrine\DBAL\ParameterType;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\Type;
@@ -115,6 +116,11 @@ class UuidBinaryOrderedTimeType extends Type
     public function requiresSQLCommentHint(AbstractPlatform $platform): bool
     {
         return true;
+    }
+
+    public function getBindingType(): int
+    {
+        return ParameterType::BINARY;
     }
 
     /**

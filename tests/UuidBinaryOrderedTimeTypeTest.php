@@ -139,4 +139,9 @@ class UuidBinaryOrderedTimeTypeTest extends TestCase
     {
         $this->assertTrue($this->getType()->requiresSQLCommentHint($this->getPlatform()));
     }
+
+    public function testItReturnsAppropriateBindingType(): void
+    {
+        $this->assertEquals(16, $this->getType()->getBindingType());
+    }
 }
