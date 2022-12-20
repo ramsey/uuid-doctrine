@@ -154,4 +154,9 @@ jobs:
           dependency-versions: "${{ matrix.composer-deps }}"
 
       - name: "Run unit tests (PHPUnit)"
+        if: "${{ matrix.composer-deps == 'highest' }}"
         run: "composer dev:test:unit"
+
+      - name: "Run unit tests, with deprecation notices turned off (PHPUnit)"
+        if: "${{ matrix.composer-deps == 'lowest' }}"
+        run: "composer dev:test:unit -- -d 'error_reporting=E_ALL & ~E_DEPRECATED'"
