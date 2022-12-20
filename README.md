@@ -9,9 +9,9 @@
     <a href="https://packagist.org/packages/ramsey/uuid-doctrine"><img src="https://img.shields.io/packagist/v/ramsey/uuid-doctrine.svg?style=flat-square&label=release" alt="Download Package"></a>
     <a href="https://php.net"><img src="https://img.shields.io/packagist/php-v/ramsey/uuid-doctrine.svg?style=flat-square&colorB=%238892BF" alt="PHP Programming Language"></a>
     <a href="https://github.com/ramsey/uuid-doctrine/blob/main/LICENSE"><img src="https://img.shields.io/packagist/l/ramsey/uuid-doctrine.svg?style=flat-square&colorB=darkcyan" alt="Read License"></a>
-    <a href="https://github.com/ramsey/uuid-doctrine/actions/workflows/continuous-integration.yml"><img src="https://img.shields.io/github/workflow/status/ramsey/uuid-doctrine/build/main?style=flat-square&logo=github" alt="Build Status"></a>
+    <a href="https://github.com/ramsey/uuid-doctrine/actions/workflows/continuous-integration.yml"><img src="https://img.shields.io/github/actions/workflow/status/ramsey/uuid-doctrine/continuous-integration.yml?branch=main&logo=github&style=flat-square" alt="Build Status"></a>
     <a href="https://codecov.io/gh/ramsey/uuid-doctrine"><img src="https://img.shields.io/codecov/c/gh/ramsey/uuid-doctrine?label=codecov&logo=codecov&style=flat-square" alt="Codecov Code Coverage"></a>
-    <!--<a href="https://shepherd.dev/github/ramsey/uuid-doctrine"><img src="https://img.shields.io/endpoint?style=flat-square&url=https%3A%2F%2Fshepherd.dev%2Fgithub%2Framsey%2Fuuid-doctrine%2Fcoverage" alt="Psalm Type Coverage"></a>-->
+    <a href="https://shepherd.dev/github/ramsey/uuid-doctrine"><img src="https://img.shields.io/endpoint?style=flat-square&url=https%3A%2F%2Fshepherd.dev%2Fgithub%2Framsey%2Fuuid-doctrine%2Fcoverage" alt="Psalm Type Coverage"></a>
 </p>
 
 The ramsey/uuid-doctrine package provides the ability to use

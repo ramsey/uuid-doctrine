@@ -97,12 +97,10 @@ composer install
 
 Now, you are ready to develop!
 
-<!--
 ### Tooling
 
 This project uses [CaptainHook](https://github.com/CaptainHookPhp/captainhook)
 to validate all staged changes prior to commit.
--->
 
 ### Commands
 
@@ -129,7 +127,6 @@ composer dev:lint
 composer dev:lint:fix
 ```
 
-<!--
 ### Static Analysis
 
 This project uses a combination of [PHPStan](https://github.com/phpstan/phpstan)
@@ -145,7 +142,6 @@ following command:
 # Static analysis
 composer dev:analyze
 ```
--->
 
 ### Project Structure
 
@@ -165,10 +161,8 @@ command line, while in the project root directory:
 composer test
 ```
 
-<!--
 CaptainHook will automatically run all tests before pushing to the remote
 repository.
--->
 
 [github]: https://github.com/ramsey/uuid-doctrine
 [issues]: https://github.com/ramsey/uuid-doctrine/issues
