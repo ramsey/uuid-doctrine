@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## 2.0.0 - 2022-12-20
+
+### Added
+
+* Add UUID version 7 generator ([#191](https://github.com/ramsey/uuid-doctrine/pull/191)).
+* Support other subclasses of EntityManagerInterface ([#180](https://github.com/ramsey/uuid-doctrine/pull/180)).
+* Use binary binding type for `UuidBinary*` types ([#72](https://github.com/ramsey/uuid-doctrine/pull/72)).
+
+### Changed
+
+* All public method signatures now specify return types. This might affect downstream child classes.
+* Minimum version of PHP is now 7.4.
+* Minimum version of doctrine/dbal is now 2.8.
+* Minimum version of ramsey/uuid is now 3.9.7.
+
 ## 1.8.2 - 2022-11-03
 
 ### Fixed
