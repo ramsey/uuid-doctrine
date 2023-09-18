@@ -30,7 +30,7 @@ jobs:
         uses: "actions/checkout@v4.0.0"
 
       - name: "Install PHP"
-        uses: "shivammathur/setup-php@2.25.5"
+        uses: "shivammathur/setup-php@2.26.0"
         with:
           php-version: "latest"
           extensions: "bcmath, ctype, gmp"
@@ -54,7 +54,7 @@ jobs:
         uses: "actions/checkout@v4.0.0"
 
       - name: "Install PHP"
-        uses: "shivammathur/setup-php@2.25.5"
+        uses: "shivammathur/setup-php@2.26.0"
         with:
           php-version: "latest"
           extensions: "bcmath, ctype, gmp"
@@ -79,7 +79,7 @@ jobs:
         uses: "actions/checkout@v4.0.0"
 
       - name: "Install PHP"
-        uses: "shivammathur/setup-php@2.25.5"
+        uses: "shivammathur/setup-php@2.26.0"
         with:
           php-version: "latest"
           extensions: "bcmath, ctype, gmp"
@@ -106,7 +106,7 @@ jobs:
         uses: "actions/checkout@v4.0.0"
 
       - name: "Install PHP"
-        uses: "shivammathur/setup-php@2.25.5"
+        uses: "shivammathur/setup-php@2.26.0"
         with:
           php-version: "latest"
           extensions: "bcmath, ctype, gmp"
@@ -142,7 +142,7 @@ jobs:
         uses: "actions/checkout@v4.0.0"
 
       - name: "Install PHP"
-        uses: "shivammathur/setup-php@2.25.5"
+        uses: "shivammathur/setup-php@2.26.0"
         with:
           php-version: "${{ matrix.php }}"
           extensions: "bcmath, ctype, gmp"
