@@ -60,6 +60,10 @@ class UuidBinaryType extends Type
             return $value;
         }
 
+        if (is_resource($value)) {
+            $value = stream_get_contents($value);
+        }
+
         if (!is_string($value) || $value === '') {
             return null;
         }
