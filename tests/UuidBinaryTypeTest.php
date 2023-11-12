@@ -109,8 +109,12 @@ class UuidBinaryTypeTest extends TestCase
 
     public function testResourceConvertsToPHPValue(): void
     {
-        $stream = fopen('php://memory', 'r+');
-        fwrite($stream, hex2bin('ff6f8cb0c57d11e19b210800200c9a66'));
+        /** @var resource $stream */
+        $stream = fopen('php://memory', 'r+b');
+        /** @var string $binaryId */
+        $binaryId = hex2bin('ff6f8cb0c57d11e19b210800200c9a66');
+
+        fwrite($stream, $binaryId);
         rewind($stream);
 
         $uuid = $this->getType()->convertToPHPValue($stream, $this->getPlatform());
