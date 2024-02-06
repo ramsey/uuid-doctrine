@@ -53,7 +53,7 @@ class UuidType extends GuidType
         try {
             $uuid = Uuid::fromString($value);
         } catch (Throwable $e) {
-            throw ConversionException::conversionFailed($value, self::NAME);
+            throw new ConversionException(self::NAME . ' ' . $value);
         }
 
         return $uuid;
@@ -81,7 +81,7 @@ class UuidType extends GuidType
             return (string) $value;
         }
 
-        throw ConversionException::conversionFailed($value, self::NAME);
+        throw new ConversionException(self::NAME . ' ' . $value);
     }
 
     public function getName(): string

@@ -76,7 +76,7 @@ class UuidBinaryOrderedTimeType extends Type
         try {
             return $this->decode($value);
         } catch (Throwable $e) {
-            throw ConversionException::conversionFailed($value, self::NAME);
+            throw new ConversionException(self::NAME . ' ' . $value);
         }
     }
 
@@ -105,7 +105,7 @@ class UuidBinaryOrderedTimeType extends Type
             // Ignore the exception and pass through.
         }
 
-        throw ConversionException::conversionFailed($value, self::NAME);
+        throw new ConversionException(self::NAME . ' ' . $value);
     }
 
     public function getName(): string
@@ -118,7 +118,7 @@ class UuidBinaryOrderedTimeType extends Type
         return true;
     }
 
-    public function getBindingType(): int
+    public function getBindingType(): ParameterType
     {
         return ParameterType::BINARY;
     }
@@ -158,11 +158,7 @@ class UuidBinaryOrderedTimeType extends Type
     {
         /** @psalm-suppress DeprecatedMethod */
         if ($value->getVersion() !== 1) {
-            throw ConversionException::conversionFailedFormat(
-                $value->toString(),
-                self::NAME,
-                self::ASSERT_FORMAT,
-            );
+            throw new ConversionException($value->toString() . ' ' . self::NAME . ' ' . self::ASSERT_FORMAT);
         }
     }
 

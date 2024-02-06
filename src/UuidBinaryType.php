@@ -67,7 +67,7 @@ class UuidBinaryType extends Type
         try {
             $uuid = Uuid::fromBytes($value);
         } catch (Throwable $e) {
-            throw ConversionException::conversionFailed($value, self::NAME);
+            throw new ConversionException(self::NAME . ' ' . $value);
         }
 
         return $uuid;
@@ -96,7 +96,7 @@ class UuidBinaryType extends Type
             // Ignore the exception and pass through.
         }
 
-        throw ConversionException::conversionFailed($value, self::NAME);
+        throw new ConversionException(self::NAME . ' ' . $value);
     }
 
     public function getName(): string
@@ -109,7 +109,7 @@ class UuidBinaryType extends Type
         return true;
     }
 
-    public function getBindingType(): int
+    public function getBindingType(): ParameterType
     {
         return ParameterType::BINARY;
     }
