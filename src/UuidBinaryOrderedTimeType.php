@@ -63,7 +63,7 @@ class UuidBinaryOrderedTimeType extends Type
      *
      * @throws ConversionException
      */
-    public function convertToPHPValue($value, AbstractPlatform $platform): ?UuidInterface
+    public function convertToPHPValue(mixed $value, AbstractPlatform $platform): ?UuidInterface
     {
         if ($value instanceof UuidInterface) {
             return $value;
@@ -105,7 +105,7 @@ class UuidBinaryOrderedTimeType extends Type
             // Ignore the exception and pass through.
         }
 
-        throw new ConversionException(self::NAME . ' ' . $value);
+        throw new ConversionException(self::NAME);
     }
 
     public function getName(): string

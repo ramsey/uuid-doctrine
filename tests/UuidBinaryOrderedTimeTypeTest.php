@@ -47,7 +47,10 @@ class UuidBinaryOrderedTimeTypeTest extends TestCase
 
     public function testGetName(): void
     {
-        $this->assertSame('uuid_binary_ordered_time', $this->getType()->getName());
+        $this->assertSame(
+            'uuid_binary_ordered_time',
+            $this->getType()->lookupName(Type::getType('uuid_binary_ordered_time')),
+        );
     }
 
     public function testUuidConvertsToDatabaseValue(): void
@@ -134,11 +137,6 @@ class UuidBinaryOrderedTimeTypeTest extends TestCase
             'DUMMYBINARY(16)',
             $this->getType()->getSqlDeclaration(['length' => 36], $this->getPlatform()),
         );
-    }
-
-    public function testRequiresSQLCommentHint(): void
-    {
-        $this->assertTrue($this->getType()->requiresSQLCommentHint($this->getPlatform()));
     }
 
     public function testItReturnsAppropriateBindingType(): void

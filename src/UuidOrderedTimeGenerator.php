@@ -62,12 +62,10 @@ class UuidOrderedTimeGenerator extends AbstractIdGenerator
     /**
      * Generates an identifier for an entity.
      *
-     * @param object | null $entity
-     *
      * @throws Exception
      */
     // phpcs:ignore SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-    public function generateId(EntityManagerInterface $em, $entity): UuidInterface
+    public function generateId(EntityManagerInterface $em, ?object $entity): UuidInterface
     {
         return $this->factory->uuid1();
     }

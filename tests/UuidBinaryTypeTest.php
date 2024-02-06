@@ -123,7 +123,7 @@ class UuidBinaryTypeTest extends TestCase
 
     public function testGetName(): void
     {
-        $this->assertSame('uuid_binary', $this->getType()->getName());
+        $this->assertSame('uuid_binary', $this->getType()->lookupName(Type::getType('uuid_binary')));
     }
 
     public function testGetGuidTypeDeclarationSQL(): void
@@ -132,11 +132,6 @@ class UuidBinaryTypeTest extends TestCase
             'DUMMYBINARY(16)',
             $this->getType()->getSqlDeclaration(['length' => 36], $this->getPlatform()),
         );
-    }
-
-    public function testRequiresSQLCommentHint(): void
-    {
-        $this->assertTrue($this->getType()->requiresSQLCommentHint($this->getPlatform()));
     }
 
     public function testItReturnsAppropriateBindingType(): void

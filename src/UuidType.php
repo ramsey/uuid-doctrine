@@ -40,7 +40,7 @@ class UuidType extends GuidType
      *
      * @throws ConversionException
      */
-    public function convertToPHPValue($value, AbstractPlatform $platform): ?UuidInterface
+    public function convertToPHPValue(mixed $value, AbstractPlatform $platform): ?UuidInterface
     {
         if ($value instanceof UuidInterface) {
             return $value;
@@ -81,7 +81,7 @@ class UuidType extends GuidType
             return (string) $value;
         }
 
-        throw new ConversionException(self::NAME . ' ' . $value);
+        throw new ConversionException(self::NAME);
     }
 
     public function getName(): string
@@ -95,7 +95,7 @@ class UuidType extends GuidType
     }
 
     /**
-     * @return string[]
+     * @return array<int, string>
      */
     public function getMappedDatabaseTypes(AbstractPlatform $platform): array
     {

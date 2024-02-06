@@ -32,12 +32,10 @@ class UuidGenerator extends AbstractIdGenerator
      *
      * @see UuidGenerator::generateId()
      *
-     * @param object | null $entity
-     *
      * @throws Exception
      */
     // phpcs:ignore SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-    public function generate(EntityManagerInterface $em, $entity): UuidInterface
+    public function generate(EntityManagerInterface $em, ?object $entity): UuidInterface
     {
         return Uuid::uuid4();
     }
@@ -45,12 +43,10 @@ class UuidGenerator extends AbstractIdGenerator
     /**
      * Generate an identifier
      *
-     * @param object | null $entity
-     *
      * @throws Exception
      */
     // phpcs:ignore SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-    public function generateId(EntityManagerInterface $em, $entity): UuidInterface
+    public function generateId(EntityManagerInterface $em, ?object $entity): UuidInterface
     {
         return Uuid::uuid4();
     }

@@ -127,7 +127,7 @@ class UuidTypeTest extends TestCase
 
     public function testGetName(): void
     {
-        $this->assertSame('uuid', $this->getType()->getName());
+        $this->assertSame('uuid', $this->getType()->lookupName(Type::getType('uuid')));
     }
 
     public function testGetGuidTypeDeclarationSQL(): void
@@ -136,11 +136,6 @@ class UuidTypeTest extends TestCase
             'DUMMYVARCHAR()',
             $this->getType()->getSqlDeclaration(['length' => 36], $this->getPlatform()),
         );
-    }
-
-    public function testRequiresSQLCommentHint(): void
-    {
-        $this->assertTrue($this->getType()->requiresSQLCommentHint($this->getPlatform()));
     }
 
     public function testGetMappedDatabaseTypes(): void
