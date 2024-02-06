@@ -180,11 +180,7 @@ class UuidBinaryOrderedTimeType extends Type
         try {
             $decoded = $this->getCodec()->decodeBytes($bytes);
         } catch (UnsupportedOperationException $e) {
-            throw ConversionException::conversionFailedFormat(
-                bin2hex($bytes),
-                self::NAME,
-                self::ASSERT_FORMAT,
-            );
+            throw new ConversionException(bin2hex($bytes) . ' ' . self::NAME . ' ' . self::ASSERT_FORMAT);
         }
 
         $this->assertUuidV1($decoded);
