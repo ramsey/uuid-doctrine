@@ -16,11 +16,13 @@ namespace Ramsey\Uuid\Doctrine;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\ConversionException;
+use Doctrine\DBAL\Types\Exception\ValueNotConvertible;
 use Doctrine\DBAL\Types\GuidType;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 use Throwable;
 
+use function class_exists;
 use function is_object;
 use function is_string;
 use function method_exists;
@@ -53,7 +55,9 @@ class UuidType extends GuidType
         try {
             $uuid = Uuid::fromString($value);
         } catch (Throwable $e) {
-            throw ConversionException::conversionFailed($value, self::NAME);
+            throw class_exists(ValueNotConvertible::class)
+                ? ValueNotConvertible::new($value, self::NAME)
+                : ConversionException::conversionFailed($value, self::NAME);
         }
 
         return $uuid;
@@ -81,7 +85,9 @@ class UuidType extends GuidType
             return (string) $value;
         }
 
-        throw ConversionException::conversionFailed($value, self::NAME);
+        throw class_exists(ValueNotConvertible::class)
+            ? ValueNotConvertible::new($value, self::NAME)
+            : ConversionException::conversionFailed($value, self::NAME);
     }
 
     public function getName(): string

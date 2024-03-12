@@ -14,9 +14,10 @@ declare(strict_types=1);
 
 namespace Ramsey\Uuid\Doctrine;
 
-use Doctrine\DBAL\ParameterType;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\ConversionException;
+use Doctrine\DBAL\Types\Exception\InvalidFormat;
+use Doctrine\DBAL\Types\Exception\ValueNotConvertible;
 use Doctrine\DBAL\Types\Type;
 use Ramsey\Uuid\Codec\OrderedTimeCodec;
 use Ramsey\Uuid\Exception\UnsupportedOperationException;
@@ -25,6 +26,7 @@ use Ramsey\Uuid\UuidInterface;
 use Throwable;
 
 use function bin2hex;
+use function class_exists;
 use function is_object;
 use function is_string;
 use function method_exists;
@@ -37,6 +39,8 @@ use function method_exists;
  */
 class UuidBinaryOrderedTimeType extends Type
 {
+    use GetBindingTypeImplementation;
+
     public const NAME = 'uuid_binary_ordered_time';
 
     public const ASSERT_FORMAT = 'UuidV1';
@@ -52,7 +56,7 @@ class UuidBinaryOrderedTimeType extends Type
     {
         return $platform->getBinaryTypeDeclarationSQL(
             [
-                'length' => '16',
+                'length' => 16,
                 'fixed' => true,
             ],
         );
@@ -76,7 +80,9 @@ class UuidBinaryOrderedTimeType extends Type
         try {
             return $this->decode($value);
         } catch (Throwable $e) {
-            throw ConversionException::conversionFailed($value, self::NAME);
+            throw class_exists(ValueNotConvertible::class)
+                ? ValueNotConvertible::new($value, self::NAME)
+                : ConversionException::conversionFailed($value, self::NAME);
         }
     }
 
@@ -105,7 +111,9 @@ class UuidBinaryOrderedTimeType extends Type
             // Ignore the exception and pass through.
         }
 
-        throw ConversionException::conversionFailed($value, self::NAME);
+        throw class_exists(ValueNotConvertible::class) ?
+            ValueNotConvertible::new($value, self::NAME) :
+            ConversionException::conversionFailed($value, self::NAME);
     }
 
     public function getName(): string
@@ -116,11 +124,6 @@ class UuidBinaryOrderedTimeType extends Type
     public function requiresSQLCommentHint(AbstractPlatform $platform): bool
     {
         return true;
-    }
-
-    public function getBindingType(): int
-    {
-        return ParameterType::BINARY;
     }
 
     /**
@@ -158,11 +161,17 @@ class UuidBinaryOrderedTimeType extends Type
     {
         /** @psalm-suppress DeprecatedMethod */
         if ($value->getVersion() !== 1) {
-            throw ConversionException::conversionFailedFormat(
-                $value->toString(),
-                self::NAME,
-                self::ASSERT_FORMAT,
-            );
+            throw class_exists(InvalidFormat::class) ?
+                InvalidFormat::new(
+                    $value->toString(),
+                    self::NAME,
+                    self::ASSERT_FORMAT,
+                ) :
+                ConversionException::conversionFailedFormat(
+                    $value->toString(),
+                    self::NAME,
+                    self::ASSERT_FORMAT,
+                );
         }
     }
 
@@ -184,11 +193,17 @@ class UuidBinaryOrderedTimeType extends Type
         try {
             $decoded = $this->getCodec()->decodeBytes($bytes);
         } catch (UnsupportedOperationException $e) {
-            throw ConversionException::conversionFailedFormat(
-                bin2hex($bytes),
-                self::NAME,
-                self::ASSERT_FORMAT,
-            );
+            throw class_exists(InvalidFormat::class) ?
+                InvalidFormat::new(
+                    bin2hex($bytes),
+                    self::NAME,
+                    self::ASSERT_FORMAT,
+                ) :
+                ConversionException::conversionFailedFormat(
+                    bin2hex($bytes),
+                    self::NAME,
+                    self::ASSERT_FORMAT,
+                );
         }
 
         $this->assertUuidV1($decoded);

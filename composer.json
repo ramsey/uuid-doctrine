@@ -19,12 +19,12 @@
     ],
     "require": {
         "php": "^7.4 || ^8.0",
-        "doctrine/dbal": "^2.8 || ^3.0",
+        "doctrine/dbal": "^2.8 || ^3.0 || ^4.0",
         "ramsey/uuid": "^3.9.7 || ^4.0"
     },
     "require-dev": {
         "captainhook/plugin-composer": "^5.3",
-        "doctrine/orm": "^2.5",
+        "doctrine/orm": "^2.5 || ^3",
         "ergebnis/composer-normalize": "^2.28.3",
         "mockery/mockery": "^1.5",
         "php-parallel-lint/php-console-highlighter": "^1.0",

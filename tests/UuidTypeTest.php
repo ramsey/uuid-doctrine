@@ -38,7 +38,7 @@ class UuidTypeTest extends TestCase
         return $platform;
     }
 
-    private function getType(): Type
+    private function getType(): UuidType
     {
         return Type::getType('uuid');
     }
