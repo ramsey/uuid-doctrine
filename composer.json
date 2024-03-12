@@ -55,11 +55,11 @@
     },
     "config": {
         "allow-plugins": {
+            "captainhook/plugin-composer": true,
             "composer/package-versions-deprecated": true,
             "dealerdirect/phpcodesniffer-composer-installer": true,
             "ergebnis/composer-normalize": true,
-            "phpstan/extension-installer": true,
-            "captainhook/plugin-composer": true
+            "phpstan/extension-installer": true
         },
         "sort-packages": true
     },
