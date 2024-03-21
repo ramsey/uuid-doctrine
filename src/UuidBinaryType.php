@@ -23,8 +23,10 @@ use Ramsey\Uuid\UuidInterface;
 use Throwable;
 
 use function is_object;
+use function is_resource;
 use function is_string;
 use function method_exists;
+use function stream_get_contents;
 
 /**
  * Field type mapping for the Doctrine Database Abstraction Layer (DBAL).
@@ -58,6 +60,10 @@ class UuidBinaryType extends Type
     {
         if ($value instanceof UuidInterface) {
             return $value;
+        }
+
+        if (is_resource($value)) {
+            $value = stream_get_contents($value);
         }
 
         if (!is_string($value) || $value === '') {
