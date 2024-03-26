@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Ramsey\Uuid\Doctrine;
 
+use Doctrine\DBAL\ParameterType;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\Type;
@@ -46,7 +47,7 @@ class UuidBinaryOrderedTimeTypeTest extends TestCase
 
     public function testGetName(): void
     {
-        $this->assertSame('uuid_binary_ordered_time', $this->getType()->getName());
+        $this->assertSame('uuid_binary_ordered_time', $this->getType()::lookupName($this->getType()));
     }
 
     public function testUuidConvertsToDatabaseValue(): void
@@ -135,13 +136,8 @@ class UuidBinaryOrderedTimeTypeTest extends TestCase
         );
     }
 
-    public function testRequiresSQLCommentHint(): void
-    {
-        $this->assertTrue($this->getType()->requiresSQLCommentHint($this->getPlatform()));
-    }
-
     public function testItReturnsAppropriateBindingType(): void
     {
-        $this->assertEquals(16, $this->getType()->getBindingType());
+        $this->assertEquals(ParameterType::BINARY, $this->getType()->getBindingType());
     }
 }

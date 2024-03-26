@@ -10,4 +10,8 @@
 
     <rule ref="Ramsey"/>
 
+    <rule ref="PSR1.Classes.ClassDeclaration.MultipleClasses">
+        <exclude-pattern>src/GetBindingTypeImplementation.php</exclude-pattern>
+    </rule>
+
 </ruleset>
