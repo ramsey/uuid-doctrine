@@ -105,7 +105,7 @@ use Ramsey\Uuid\UuidInterface;
 
 
 #[ORM\Entity]
-#[ORM\Table(name="products")]
+#[ORM\Table(name: "products")]
 class Product
 {
     #[ORM\Id]
@@ -208,7 +208,7 @@ type to `uuid_binary_ordered_time`, and defining a custom generator of
 
 ``` php
 #[Entity]
-#[Table(name="products")]´
+#[Table(name: "products")]´
 class Product
 {
     #[Id]
