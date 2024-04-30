@@ -45,6 +45,8 @@ class UuidV7Generator extends AbstractIdGenerator
      * @param object | null $entity*
      *
      * @throws Exception
+     *
+     * @psalm-suppress MissingParamType method deprecated
      */
     // phpcs:ignore SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
     public function generate(EntityManagerInterface $em, $entity): UuidInterface
