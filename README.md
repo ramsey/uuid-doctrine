@@ -93,43 +93,15 @@ return [
 
 ### Mappings
 
-Then, in your models, you may annotate properties by setting the `@Column`
+Then, in your models, you may annotate properties by setting the `#[Column]`
 type to `uuid`, and defining a custom generator of `Ramsey\Uuid\UuidGenerator`.
 Doctrine will handle the rest.
 
 ``` php
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
-
-/**
- * @ORM\Entity
- * @ORM\Table(name="products")
- */
-class Product
-{
-    /**
-     * @var \Ramsey\Uuid\UuidInterface
-     *
-     * @ORM\Id
-     * @ORM\Column(type="uuid", unique=true)
-     * @ORM\GeneratedValue(strategy="CUSTOM")
-     * @ORM\CustomIdGenerator(class=UuidGenerator::class)
-     */
-    protected $id;
-
-    public function getId()
-    {
-        return $this->id;
-    }
-}
-```
-
-or, as follows, with [PHP 8 attributes](https://www.php.net/attributes) and [type declarations](https://www.php.net/types.declarations):
-
-``` php
-use Doctrine\ORM\Mapping as ORM;
-use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Ramsey\Uuid\UuidInterface;
+
 
 #[ORM\Entity]
 #[ORM\Table(name: "products")]
@@ -139,16 +111,16 @@ class Product
     #[ORM\Column(type: "uuid", unique: true)]
     #[ORM\GeneratedValue(strategy: "CUSTOM")]
     #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
-    protected UuidInterface|string $id;
+    protected UuidInterface $id;
 
-    public function getId(): string
+    public function getId(): UuidInterface
     {
         return $this->id;
     }
 }
 ```
 
-If you use the XML Mapping instead of PHP annotations.
+If you use the XML Mapping instead of PHP attributes.
 
 ``` xml
 <id name="id" column="id" type="uuid">
@@ -171,7 +143,7 @@ id:
 
 ### Binary database columns
 
-In the previous example, Doctrine will create a database column of type `CHAR(36)`,
+In the previous example, Doctrine will create a database column of type `CHAR(36)` if MariaDB / MySQL are in use,
 but you may also use this library to store UUIDs as binary strings. The
 `UuidBinaryType` helps accomplish this.
 
@@ -197,7 +169,7 @@ doctrine:
 
 Then, when annotating model class properties, use `uuid_binary` instead of `uuid`:
 
-    @Column(type="uuid_binary")
+    #[Column(type: "uuid_binary")]
 
 ### InnoDB-optimised binary UUIDs - deprecated
 
@@ -234,23 +206,17 @@ type to `uuid_binary_ordered_time`, and defining a custom generator of
 `Ramsey\Uuid\UuidOrderedTimeGenerator`. Doctrine will handle the rest.
 
 ``` php
-/**
- * @Entity
- * @Table(name="products")
- */
+#[Entity]
+#[Table(name: "products")]´
 class Product
 {
-    /**
-     * @var \Ramsey\Uuid\UuidInterface
-     *
-     * @Id
-     * @Column(type="uuid_binary_ordered_time", unique=true)
-     * @GeneratedValue(strategy="CUSTOM")
-     * @CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidOrderedTimeGenerator")
-     */
-    protected $id;
+    #[Id]
+    #[Column(type: "uuid_binary_ordered_time", unique: true)]
+    #[GeneratedValue(strategy: "CUSTOM")]
+    #[CustomIdGenerator(class: UuidOrderedTimeGenerator::class)]
+    protected UuidInterface $id;
 
-    public function getId()
+    public function getId(): UuidInterface
     {
         return $this->id;
     }
@@ -293,28 +259,22 @@ doctrine:
             # uuid_binary: binary
 ```
 
-Then, in your models, you may annotate properties by setting the `@Column`
+Then, in your models, you may annotate properties by setting the `#[Column]`
 type to `uuid_binary`, and defining a custom generator of
 `Ramsey\Uuid\UuidV7Generator`. Doctrine will handle the rest.
 
 ``` php
-/**
- * @Entity
- * @Table(name="products")
- */
+#[Entity]
+#[Table(name: "products")]
 class Product
 {
-    /**
-     * @var \Ramsey\Uuid\UuidInterface
-     *
-     * @Id
-     * @Column(type="uuid_binary", unique=true)
-     * @GeneratedValue(strategy="CUSTOM")
-     * @CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidV7Generator")
-     */
-    protected $id;
+    #[Id]
+    #[Column(type: "uuid_binary", unique: true)]
+    #[GeneratedValue(strategy: "CUSTOM")]
+    #[CustomIdGenerator(class: UuidV7Generator::class)]
+    protected UuidInterface $id;
 
-    public function getId()
+    public function getId(): UuidInterface
     {
         return $this->id;
     }
@@ -328,6 +288,31 @@ If you use the XML Mapping instead of PHP annotations.
     <generator strategy="CUSTOM"/>
     <custom-id-generator class="Ramsey\Uuid\Doctrine\UuidV7Generator"/>
 </id>
+```
+
+### PostgreSQL considerations
+
+
+If you are using PostgreSQL, Doctrine uses PostgreSQL's `uuid` for the `Ramsey\Uuid\Doctrine\UuidType` (`uuid`).
+Therefor you don't need to use the `uuid_binary` / `uuid_binary_ordered_time` types when using PostgreSQL.
+You can still use `UuidV7Generator::class` to optimize indexing though.
+
+``` php
+#[Entity]
+#[Table(name: "products")]
+class Product
+{
+    #[Id]
+    #[Column(type: "uuid", unique: true)]
+    #[GeneratedValue(strategy: "CUSTOM")]
+    #[CustomIdGenerator(class: UuidV7Generator::class)]
+    protected UuidInterface $id;
+
+    public function getId(): UuidInterface
+    {
+        return $this->id;
+    }
+}
 ```
 
 ### Working with binary identifiers
