@@ -15,7 +15,7 @@ on:
 # Cancels all previous workflow runs for the same branch that have not yet completed.
 concurrency:
   # The concurrency group contains the workflow name and the branch name.
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: "${{ github.workflow }}-${{ github.ref }}"
   cancel-in-progress: true
 
 env:
@@ -65,36 +65,6 @@ jobs:
 
       - name: "Statically analyze code (PHPStan)"
         run: "composer dev:analyze:phpstan"
-
-      - name: "Statically analyze code (Psalm)"
-        run: "composer dev:analyze:psalm -- --shepherd"
-
-  security-analysis:
-    name: "Security analysis"
-    needs: ["coding-standards", "static-analysis"]
-    runs-on: "ubuntu-latest"
-
-    steps:
-      - name: "Checkout repository"
-        uses: "actions/checkout@v4.1.6"
-
-      - name: "Install PHP"
-        uses: "shivammathur/setup-php@2.30.4"
-        with:
-          php-version: "latest"
-          extensions: "bcmath, ctype, gmp"
-          coverage: "none"
-
-      - name: "Install dependencies (Composer)"
-        uses: "ramsey/composer-install@3.0.0"
-
-      - name: "Analyze security of code (Psalm)"
-        run: "./vendor/bin/psalm --taint-analysis --report=build/logs/psalm.sarif"
-
-      - name: "Upload security analysis results to GitHub"
-        uses: "github/codeql-action/upload-sarif@v3"
-        with:
-          sarif_file: "build/logs/psalm.sarif"
 
   code-coverage:
     name: "Code coverage"
