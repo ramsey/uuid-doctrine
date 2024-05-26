@@ -14,6 +14,7 @@ use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
 
 use function hex2bin;
+use function method_exists;
 
 class UuidBinaryOrderedTimeTypeTest extends TestCase
 {
@@ -47,7 +48,14 @@ class UuidBinaryOrderedTimeTypeTest extends TestCase
 
     public function testGetName(): void
     {
-        $this->assertSame('uuid_binary_ordered_time', $this->getType()::lookupName($this->getType()));
+        $type = $this->getType();
+
+        if (method_exists($type, 'lookupName')) {
+            $this->assertSame('uuid_binary_ordered_time', $type::lookupName($type));
+        } else {
+            /** @phpstan-ignore method.notFound */
+            $this->assertSame('uuid_binary_ordered_time', $type->getName());
+        }
     }
 
     public function testUuidConvertsToDatabaseValue(): void

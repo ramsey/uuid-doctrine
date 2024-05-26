@@ -123,7 +123,14 @@ class UuidBinaryTypeTest extends TestCase
 
     public function testGetName(): void
     {
-        $this->assertSame('uuid_binary', $this->getType()::lookupName($this->getType()));
+        $type = $this->getType();
+
+        if (method_exists($type, 'lookupName')) {
+            $this->assertSame('uuid_binary', $type::lookupName($type));
+        } else {
+            /** @phpstan-ignore method.notFound */
+            $this->assertSame('uuid_binary', $type->getName());
+        }
     }
 
     public function testGetGuidTypeDeclarationSQL(): void
