@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## 2.1.0 - 2024-05-26
+
+### Added
+
+* Support doctrine/dbal version 4 ([#247](https://github.com/ramsey/uuid-doctrine/pull/247)).
+
+### Changed
+
+* Minimum version of PHP is now 8.1.
+
+### Fixed
+
+* Support PostgreSQL binary resources ([#229](https://github.com/ramsey/uuid-doctrine/pull/229),
+  fixes [#225](https://github.com/ramsey/uuid-doctrine/issues/225)).
+
 ## 2.0.0 - 2022-12-20
 
 ### Added
