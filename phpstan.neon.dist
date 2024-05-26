@@ -5,3 +5,13 @@ parameters:
     paths:
         - ./src
         - ./tests
+    ignoreErrors:
+        # That class no longer holds methods in DBAL 4, but needs to be called with DBAL 3
+        - message: '#Call to an undefined static method Doctrine\\DBAL\\Types\\ConversionException::.*#'
+          reportUnmatched: false
+
+        # Necessary type hint for testing methods that no longer exist in the parent class with DBAL 4
+        - message: '#Method.*getBindingType.*should return .*#'
+          reportUnmatched: false
+        - message: '#Return type.*getBindingType.*should be compatible .*#'
+          reportUnmatched: false
