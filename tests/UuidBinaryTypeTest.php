@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Ramsey\Uuid\Doctrine;
 
+use Doctrine\DBAL\ParameterType;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\Type;
@@ -140,7 +141,14 @@ class UuidBinaryTypeTest extends TestCase
 
     public function testGetName(): void
     {
-        $this->assertSame('uuid_binary', $this->getType()->getName());
+        $type = $this->getType();
+
+        if (method_exists($type, 'lookupName')) {
+            $this->assertSame('uuid_binary', $type::lookupName($type));
+        } else {
+            /** @phpstan-ignore method.notFound */
+            $this->assertSame('uuid_binary', $type->getName());
+        }
     }
 
     public function testGetGuidTypeDeclarationSQL(): void
@@ -151,13 +159,8 @@ class UuidBinaryTypeTest extends TestCase
         );
     }
 
-    public function testRequiresSQLCommentHint(): void
-    {
-        $this->assertTrue($this->getType()->requiresSQLCommentHint($this->getPlatform()));
-    }
-
     public function testItReturnsAppropriateBindingType(): void
     {
-        $this->assertEquals(16, $this->getType()->getBindingType());
+        $this->assertEquals(ParameterType::BINARY, $this->getType()->getBindingType());
     }
 }

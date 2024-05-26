@@ -15,7 +15,7 @@ on:
 # Cancels all previous workflow runs for the same branch that have not yet completed.
 concurrency:
   # The concurrency group contains the workflow name and the branch name.
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: "${{ github.workflow }}-${{ github.ref }}"
   cancel-in-progress: true
 
 env:
@@ -27,17 +27,17 @@ jobs:
     runs-on: "ubuntu-latest"
     steps:
       - name: "Checkout repository"
-        uses: "actions/checkout@v4.1.1"
+        uses: "actions/checkout@v4.1.6"
 
       - name: "Install PHP"
-        uses: "shivammathur/setup-php@2.27.0"
+        uses: "shivammathur/setup-php@2.30.4"
         with:
           php-version: "latest"
           extensions: "bcmath, ctype, gmp"
           coverage: "none"
 
       - name: "Install dependencies (Composer)"
-        uses: "ramsey/composer-install@2.2.0"
+        uses: "ramsey/composer-install@3.0.0"
 
       - name: "Check syntax (php-parallel-lint)"
         run: "composer dev:lint:syntax"
@@ -51,50 +51,20 @@ jobs:
 
     steps:
       - name: "Checkout repository"
-        uses: "actions/checkout@v4.1.1"
+        uses: "actions/checkout@v4.1.6"
 
       - name: "Install PHP"
-        uses: "shivammathur/setup-php@2.27.0"
+        uses: "shivammathur/setup-php@2.30.4"
         with:
           php-version: "latest"
           extensions: "bcmath, ctype, gmp"
           coverage: "none"
 
       - name: "Install dependencies (Composer)"
-        uses: "ramsey/composer-install@2.2.0"
+        uses: "ramsey/composer-install@3.0.0"
 
       - name: "Statically analyze code (PHPStan)"
         run: "composer dev:analyze:phpstan"
-
-      - name: "Statically analyze code (Psalm)"
-        run: "composer dev:analyze:psalm -- --shepherd"
-
-  security-analysis:
-    name: "Security analysis"
-    needs: ["coding-standards", "static-analysis"]
-    runs-on: "ubuntu-latest"
-
-    steps:
-      - name: "Checkout repository"
-        uses: "actions/checkout@v4.1.1"
-
-      - name: "Install PHP"
-        uses: "shivammathur/setup-php@2.27.0"
-        with:
-          php-version: "latest"
-          extensions: "bcmath, ctype, gmp"
-          coverage: "none"
-
-      - name: "Install dependencies (Composer)"
-        uses: "ramsey/composer-install@2.2.0"
-
-      - name: "Analyze security of code (Psalm)"
-        run: "./vendor/bin/psalm --taint-analysis --report=build/logs/psalm.sarif"
-
-      - name: "Upload security analysis results to GitHub"
-        uses: "github/codeql-action/upload-sarif@v2"
-        with:
-          sarif_file: "build/logs/psalm.sarif"
 
   code-coverage:
     name: "Code coverage"
@@ -103,10 +73,10 @@ jobs:
 
     steps:
       - name: "Checkout repository"
-        uses: "actions/checkout@v4.1.1"
+        uses: "actions/checkout@v4.1.6"
 
       - name: "Install PHP"
-        uses: "shivammathur/setup-php@2.27.0"
+        uses: "shivammathur/setup-php@2.30.4"
         with:
           php-version: "latest"
           extensions: "bcmath, ctype, gmp"
@@ -114,13 +84,16 @@ jobs:
           ini-values: "memory_limit=-1"
 
       - name: "Install dependencies (Composer)"
-        uses: "ramsey/composer-install@2.2.0"
+        uses: "ramsey/composer-install@3.0.0"
 
       - name: "Run unit tests (PHPUnit)"
         run: "composer dev:test:coverage:ci"
 
       - name: "Publish coverage report to Codecov"
-        uses: "codecov/codecov-action@v3.1.4"
+        uses: "codecov/codecov-action@v4.4.1"
+        with:
+          fail_ci_if_error: true
+          token: ${{ secrets.CODECOV_TOKEN }}
 
   unit-tests:
     name: "Unit tests"
@@ -131,25 +104,24 @@ jobs:
       fail-fast: false
       matrix:
         php:
-          - "7.4"
-          - "8.0"
           - "8.1"
           - "8.2"
+          - "8.3"
         composer-deps: ["lowest", "highest"]
 
     steps:
       - name: "Checkout repository"
-        uses: "actions/checkout@v4.1.1"
+        uses: "actions/checkout@v4.1.6"
 
       - name: "Install PHP"
-        uses: "shivammathur/setup-php@2.27.0"
+        uses: "shivammathur/setup-php@2.30.4"
         with:
           php-version: "${{ matrix.php }}"
           extensions: "bcmath, ctype, gmp"
           coverage: "none"
 
       - name: "Install dependencies (Composer)"
-        uses: "ramsey/composer-install@2.2.0"
+        uses: "ramsey/composer-install@3.0.0"
         with:
           dependency-versions: "${{ matrix.composer-deps }}"
 

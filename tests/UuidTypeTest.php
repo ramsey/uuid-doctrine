@@ -13,6 +13,8 @@ use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 
+use function method_exists;
+
 class UuidTypeTest extends TestCase
 {
     protected function setUp(): void
@@ -127,7 +129,14 @@ class UuidTypeTest extends TestCase
 
     public function testGetName(): void
     {
-        $this->assertSame('uuid', $this->getType()->getName());
+        $type = $this->getType();
+
+        if (method_exists($type, 'lookupName')) {
+            $this->assertSame('uuid', $type::lookupName($type));
+        } else {
+            /** @phpstan-ignore method.notFound */
+            $this->assertSame('uuid', $type->getName());
+        }
     }
 
     public function testGetGuidTypeDeclarationSQL(): void
@@ -136,11 +145,6 @@ class UuidTypeTest extends TestCase
             'DUMMYVARCHAR()',
             $this->getType()->getSqlDeclaration(['length' => 36], $this->getPlatform()),
         );
-    }
-
-    public function testRequiresSQLCommentHint(): void
-    {
-        $this->assertTrue($this->getType()->requiresSQLCommentHint($this->getPlatform()));
     }
 
     public function testGetMappedDatabaseTypes(): void
