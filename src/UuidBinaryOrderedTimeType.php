@@ -169,7 +169,6 @@ class UuidBinaryOrderedTimeType extends Type
      */
     private function assertUuidV1(UuidInterface $value): void
     {
-        /** @psalm-suppress DeprecatedMethod */
         if ($value->getVersion() !== 1) {
             throw class_exists(InvalidFormat::class) ?
                 InvalidFormat::new(
