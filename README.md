@@ -132,7 +132,7 @@ use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Ramsey\Uuid\UuidInterface;
 
 #[ORM\Entity]
-#[ORM\Table(name: "products")
+#[ORM\Table(name: "products")]
 class Product
 {
     #[ORM\Id]
