@@ -14,8 +14,11 @@ use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 
+use function fopen;
+use function fwrite;
 use function hex2bin;
 use function method_exists;
+use function rewind;
 
 class UuidBinaryTypeTest extends TestCase
 {
@@ -103,6 +106,21 @@ class UuidBinaryTypeTest extends TestCase
     public function testNullConversionForPHPValue(): void
     {
         $this->assertNull($this->getType()->convertToPHPValue(null, $this->getPlatform()));
+    }
+
+    public function testResourceConvertsToPHPValue(): void
+    {
+        /** @var resource $stream */
+        $stream = fopen('php://memory', 'r+b');
+        /** @var string $binaryId */
+        $binaryId = hex2bin('ff6f8cb0c57d11e19b210800200c9a66');
+
+        fwrite($stream, $binaryId);
+        rewind($stream);
+
+        $uuid = $this->getType()->convertToPHPValue($stream, $this->getPlatform());
+        $this->assertInstanceOf(UuidInterface::class, $uuid);
+        $this->assertSame('ff6f8cb0-c57d-11e1-9b21-0800200c9a66', $uuid->toString());
     }
 
     public function testReturnValueIfUuid4ForPHPValue(): void
