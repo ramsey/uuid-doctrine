@@ -91,6 +91,9 @@ jobs:
 
       - name: "Publish coverage report to Codecov"
         uses: "codecov/codecov-action@v4.4.1"
+        with:
+          fail_ci_if_error: true
+          token: ${{ secrets.CODECOV_TOKEN }}
 
   unit-tests:
     name: "Unit tests"
